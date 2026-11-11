@@ -87,3 +87,52 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+/* How-it-works engine diagrams (src/components/ui/engine-steps.tsx). */
+:root {
+  --line-strong: #2a2b36;
+}
+.ne-hatch {
+  background-image: repeating-linear-gradient(135deg, rgb(255 255 255 / 0.022) 0 1px, transparent 1px 11px);
+}
+.ne-caption { font: 500 10px var(--font-geist-mono), ui-monospace, monospace; letter-spacing: 0.12em; text-transform: uppercase; fill: var(--muted); }
+.ne-label { font: 500 12px var(--font-geist-sans), system-ui, sans-serif; fill: var(--fg); transition: fill 0.3s; }
+.ne-label-dim { fill: var(--muted); }
+.ne-brand { font: 600 12px var(--font-geist-sans), system-ui, sans-serif; letter-spacing: 0.22em; fill: var(--fg); }
+.ne-status { font: 400 8.5px var(--font-geist-mono), ui-monospace, monospace; fill: var(--muted); }
+.ne-flow { fill: none; stroke: var(--line-strong); stroke-width: 1.2; transition: stroke 0.3s; }
+.ne-flow-on { stroke: rgb(var(--glow) / 0.75); }
+.ne-dash { stroke-dasharray: 3 4; animation: ne-dash 1.2s linear infinite; }
+.ne-pkt { fill: var(--accent); filter: drop-shadow(0 0 4px rgb(var(--glow) / 0.9)); }
+.ne-node { fill: var(--bg-raised); stroke: var(--line-strong); transition: stroke 0.3s; }
+.ne-node-on { stroke: rgb(var(--glow) / 0.8); }
+.ne-hub { fill: #171822; stroke: rgb(var(--glow) / 0.55); filter: drop-shadow(0 8px 18px rgb(var(--glow) / 0.18)); }
+.ne-ring { animation: ne-pulse 2.4s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.ne-live { animation: ne-pulse 2.2s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.ne-clip-pass { animation: ne-pass 6s linear infinite; }
+.ne-clip-fail { animation: ne-fail 6s linear infinite; }
+.ne-ok { animation: ne-ok 6s linear infinite; }
+.ne-no { animation: ne-no 6s linear infinite; }
+@keyframes ne-dash { to { stroke-dashoffset: -14; } }
+@keyframes ne-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(1.06); }
+}
+@keyframes ne-pass {
+  0% { transform: translate(0, 0); opacity: 0; }
+  6% { opacity: 1; }
+  38%, 52% { transform: translate(126px, 0); }
+  92% { transform: translate(236px, 0); opacity: 1; }
+  100% { transform: translate(250px, 0); opacity: 0; }
+}
+@keyframes ne-fail {
+  0% { transform: translate(0, 0); opacity: 0; }
+  6% { opacity: 1; }
+  38%, 52% { transform: translate(126px, 0); opacity: 1; }
+  72%, 100% { transform: translate(126px, 40px); opacity: 0; }
+}
+@keyframes ne-ok { 0%, 50% { opacity: 0; } 54%, 100% { opacity: 1; } }
+@keyframes ne-no { 0%, 48% { opacity: 0; } 52%, 100% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .ne-dash, .ne-ring, .ne-live { animation: none; }
+}

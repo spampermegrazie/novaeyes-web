@@ -9,24 +9,30 @@ import { CampaignCard } from "@/components/campaign-card";
 import { Cta } from "@/components/cta";
 import { JsonLd, faqJsonLd } from "@/components/json-ld";
 import { ClipCurtainHero } from "@/components/ui/clip-curtain-hero";
+import { EngineSteps, type EngineStep } from "@/components/ui/engine-steps";
 
 // Every word on this page is in the server HTML. The hero animates its text in,
 // but never injects it, so crawlers and AI tools read the full page.
 
-const steps = [
+const steps: [EngineStep, EngineStep, EngineStep] = [
   {
     title: "Set up",
     body: "We brief our clippers on your brand, the clip formats and the rules for the campaign, and set the payouts to match your budget. Every clip points people where you want them: Spotify, YouTube, your socials or your website.",
   },
   {
     title: "Distribute",
-    body: `Clippers find the best moments, cut them into short clips and post them across ${facts.platforms.join(", ")}, hundreds of times a day. They only get paid when a clip is approved and earns views.`,
+    body: `Clippers find the best moments, cut them into short clips and post them across ${facts.platforms.join(", ")}, hundreds of times a day.`,
   },
   {
     title: "Optimize",
-    body: "We check results every day and put more budget behind the clips and formats that win. You can watch it all in a live dashboard.",
+    body: "We check results every day and move budget to the clips and formats that win. You can watch it all in a live dashboard.",
   },
 ];
+
+const rule: EngineStep = {
+  title: "Paid per verified view",
+  body: "Every clip is reviewed before it can earn. Views are pulled from the platforms, and only verified views on approved clips get paid. Clips that break the rules earn nothing.",
+};
 
 const verticalBlurbs: Record<string, string> = {
   "/combat-sports-clipping": "Fight footage cut into thousands of highlight clips.",
@@ -100,22 +106,24 @@ export default function Home() {
         </p>
       </section>
 
-      {/* Stage 2: the network */}
-      <section id="how-it-works" className="border-y border-line bg-bg-raised">
+      {/* Stage 2: the engine */}
+      <section id="how-it-works" className="ne-hatch border-y border-line bg-bg-raised/40">
         <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6">
-          <h2 className="max-w-3xl text-3xl font-semibold tracking-tight sm:text-5xl">How a campaign works</h2>
-          <p className="mt-4 max-w-2xl text-lg text-muted">
-            This is distribution, not a video editing service. Three steps, and you only pay for what performs.
-          </p>
-          <ol className="mt-14 grid gap-6 md:grid-cols-3">
-            {steps.map((s, i) => (
-              <li key={s.title} className="rounded-2xl border border-line bg-bg p-6">
-                <p className="font-mono text-sm text-accent">0{i + 1}</p>
-                <h3 className="mt-4 text-lg font-medium">{s.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted">{s.body}</p>
-              </li>
-            ))}
-          </ol>
+          <div className="text-center">
+            <p className="inline-block rounded-full border border-line bg-bg px-3 py-1 font-mono text-[11px] tracking-[0.18em] text-muted uppercase">
+              The engine
+            </p>
+            <h2 className="mt-5 text-3xl font-semibold tracking-tight text-balance sm:text-5xl">
+              How a campaign works
+              <span className="block text-muted">One video in, thousands of clips out.</span>
+            </h2>
+            <p className="mx-auto mt-5 max-w-xl text-lg text-muted">
+              This is distribution, not a video editing service. You only pay for what performs.
+            </p>
+          </div>
+          <div className="mt-16">
+            <EngineSteps steps={steps} rule={rule} />
+          </div>
         </div>
       </section>
 
