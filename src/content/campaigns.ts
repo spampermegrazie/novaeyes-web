@@ -15,6 +15,8 @@ export type Campaign = {
   clips?: number;
   timeframe?: string;
   outcomes: string[];
+  // One short result line, shown with the blue dot on the homepage.
+  highlight: string;
   // Whether the client has approved naming them with figures in public material.
   // The live site already names the approved ones; new ones need approval first.
   publicApproved: boolean;
@@ -34,6 +36,7 @@ export const campaigns: Campaign[] = [
     clips: 2_444,
     timeframe: "4 months",
     outcomes: ["Spotify monthly listeners grew from 170K to 650K"],
+    highlight: "Spotify monthly listeners from 170K to 650K",
     publicApproved: true,
   },
   {
@@ -48,6 +51,7 @@ export const campaigns: Campaign[] = [
     clips: 5_247,
     timeframe: "6 weeks",
     outcomes: ["$700K in attributed revenue impact"],
+    highlight: "An estimated $700K in revenue impact",
     publicApproved: true,
   },
   {
@@ -60,7 +64,8 @@ export const campaigns: Campaign[] = [
     viewsLabel: "21M",
     timeframe: "2 weeks",
     outcomes: [],
-    // New case study: needs client approval before it goes live.
+    // TODO: final numbers and result line from Andrea, plus Patrick's OK to show it.
+    highlight: "",
     publicApproved: false,
   },
   {
@@ -72,7 +77,10 @@ export const campaigns: Campaign[] = [
       "We built Rob The Bank a fully branded content engine from scratch: dedicated pages, curated clips and a funnel that turned attention into digital product sales.",
     views: 9_000_000,
     viewsLabel: "9M+",
+    clips: 430,
+    timeframe: "4 months",
     outcomes: ["$186K to $267K in revenue impact"],
+    highlight: "$186K to $267K in revenue impact",
     publicApproved: true,
   },
   {
@@ -89,6 +97,7 @@ export const campaigns: Campaign[] = [
     clips: 1_706,
     timeframe: "20 days",
     outcomes: [],
+    highlight: "A dormant YouTube catalog put back to work in 20 days",
     publicApproved: true,
   },
   {
@@ -97,12 +106,13 @@ export const campaigns: Campaign[] = [
     category: "Entertainment, podcast",
     vertical: "podcast",
     summary: "We clipped 5 episodes of the Family Ties podcast, with Tobi Brown of the Sidemen, and generated millions of views.",
-    views: 7_200_000,
+    views: 7_235_433,
     viewsLabel: "7.2M",
     cpmUsd: 0.41,
     spendUsd: 3_000,
     clips: 843,
     outcomes: ["2M+ additional YouTube views"],
+    highlight: "2M+ additional YouTube views",
     publicApproved: true,
   },
   {
@@ -112,14 +122,28 @@ export const campaigns: Campaign[] = [
     vertical: "music",
     summary:
       "We took two singles from Sparkle's comeback EP and ran a focused audio clipping campaign across TikTok, Instagram Reels and YouTube Shorts.",
-    views: 4_700_000,
+    views: 4_686_637,
     viewsLabel: "4.7M",
     cpmUsd: 0.21,
     spendUsd: 1_000,
     clips: 119,
     timeframe: "3 days",
     outcomes: [],
+    highlight: "39,383 average views per clip",
     publicApproved: true,
+  },
+  {
+    // TODO: numbers, result line and OK to show from Andrea. Hidden until then.
+    slug: "dardan",
+    client: "Dardan",
+    category: "Music, German rap",
+    vertical: "music",
+    summary: "Music clipping campaign for Erinnerung, the single and music video by German rapper Dardan.",
+    views: 0,
+    viewsLabel: "",
+    outcomes: [],
+    highlight: "",
+    publicApproved: false,
   },
 ];
 

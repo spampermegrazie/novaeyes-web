@@ -23,7 +23,6 @@ function stats(c: Campaign) {
   if (c.cpmUsd !== undefined) out.push({ label: "Per 1,000 views", value: `$${c.cpmUsd.toFixed(2)}` });
   if (c.clips !== undefined) out.push({ label: "Clips", value: c.clips.toLocaleString("en-US") });
   if (c.timeframe) out.push({ label: "Timeframe", value: c.timeframe });
-  if (c.spendUsd !== undefined) out.push({ label: "Budget", value: `$${c.spendUsd.toLocaleString("en-US")}` });
   return out;
 }
 
@@ -127,10 +126,10 @@ export function ResultsShowcase({ campaigns }: { campaigns: Campaign[] }) {
               <p className="mt-3 font-label text-[10px] tracking-[0.14em] text-muted uppercase">Verified views</p>
 
               {s.length > 0 && (
-                <dl className="mt-10 grid grid-cols-2 gap-y-6 border-y border-line py-6 sm:grid-cols-4">
+                <dl className="mt-10 grid grid-cols-3 gap-y-6 border-y border-line py-6">
                   {s.map((x) => (
-                    <div key={x.label} className="pr-4">
-                      <dd className="font-display text-2xl font-bold tabular-nums">{x.value}</dd>
+                    <div key={x.label} className="pr-3">
+                      <dd className="font-display text-xl font-bold tabular-nums sm:text-2xl">{x.value}</dd>
                       <dt className="mt-1 font-label text-[9px] tracking-[0.12em] text-muted uppercase">{x.label}</dt>
                     </div>
                   ))}
@@ -138,16 +137,10 @@ export function ResultsShowcase({ campaigns }: { campaigns: Campaign[] }) {
               )}
 
               <div className={`${s.length > 0 ? "mt-6" : "mt-10 border-t border-line pt-6"} flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between`}>
-                <div className="max-w-md">
-                  {c.outcomes[0] ? (
-                    <p className="flex gap-3 leading-relaxed">
-                      <span aria-hidden className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent shadow-[0_0_8px_rgb(var(--glow))]" />
-                      {c.outcomes[0]}
-                    </p>
-                  ) : (
-                    <p className="leading-relaxed text-muted">{c.summary}</p>
-                  )}
-                </div>
+                <p className="flex max-w-md gap-3 leading-relaxed">
+                  <span aria-hidden className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent shadow-[0_0_8px_rgb(var(--glow))]" />
+                  {c.highlight}
+                </p>
                 <Link
                   href={`/case-studies/${c.slug}`}
                   tabIndex={on ? 0 : -1}
