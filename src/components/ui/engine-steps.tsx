@@ -17,6 +17,7 @@ export type EngineStep = { title: string; body: string };
 type Stage = 0 | 1 | 2 | "all";
 
 const PLATFORMS = ["TikTok", "Reels", "Shorts", "X"];
+const BACK_LABEL = "Feedback loop";
 // Clippers whose clips win in step 3, so budget visibly moves to them.
 const WINNERS = [0, 3];
 
@@ -353,14 +354,14 @@ function Pipeline({
         <path d={L.back.d} className={`ne-flow ne-dash${litBack ? " ne-flow-back" : ""}`} />
         {orient === "h" ? (
           <g>
-            {numbered && <Badge x={L.back.label.x - 66} y={L.back.label.y - 4} n={3} on={litBack} />}
+            {numbered && <Badge x={L.back.label.x + 8 - (BACK_LABEL.length * 7.1) / 2 - 14} y={L.back.label.y - 4} n={3} on={litBack} />}
             <text x={L.back.label.x + 8} y={L.back.label.y} textAnchor="middle" className="ne-caption">
-              Views come back
+              {BACK_LABEL}
             </text>
           </g>
         ) : (
           <text x={L.back.label.x} y={L.back.label.y} textAnchor="middle" className="ne-caption">
-            Views come back
+            {BACK_LABEL}
           </text>
         )}
       </g>
