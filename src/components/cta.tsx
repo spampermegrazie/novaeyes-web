@@ -8,7 +8,7 @@ export function Cta({
   body?: string;
 }) {
   return (
-    <section className="mx-auto max-w-6xl px-4 py-24 sm:px-6">
+    <section className="mx-auto max-w-6xl px-6 py-24 sm:px-10 lg:px-12">
       <div className="rounded-3xl border border-line bg-bg-raised px-6 py-14 text-center sm:px-12">
         <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h2>
         <p className="mx-auto mt-4 max-w-xl text-muted">{body}</p>

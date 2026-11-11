@@ -5,7 +5,7 @@ import { Logo } from "./brand";
 export function SiteFooter() {
   return (
     <footer className="border-t border-line">
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-4">
+      <div className="mx-auto grid max-w-6xl gap-10 px-6 py-14 sm:px-10 lg:px-12 md:grid-cols-4">
         <div className="md:col-span-2">
           <Logo />
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted">{facts.oneLiner}</p>

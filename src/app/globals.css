@@ -127,3 +127,7 @@ h2, h3, h4 { font-weight: 600; }
 @media (prefers-reduced-motion: reduce) {
   .ne-dash, .ne-ring, .ne-live { animation: none; }
 }
+
+/* Story-style progress line in the homepage results list. */
+.ne-story { animation-name: ne-story; animation-timing-function: linear; animation-fill-mode: forwards; transform: scaleX(0); }
+@keyframes ne-story { to { transform: scaleX(1); } }

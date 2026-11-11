@@ -5,10 +5,10 @@ import { publicCampaigns } from "@/content/campaigns";
 import { verticals } from "@/content/verticals";
 import { homeFaqs } from "@/content/faqs";
 import { heroClips } from "@/content/hero-clips";
-import { CampaignCard } from "@/components/campaign-card";
 import { Cta } from "@/components/cta";
 import { JsonLd, faqJsonLd } from "@/components/json-ld";
 import { ClipCurtainHero } from "@/components/ui/clip-curtain-hero";
+import { ResultsShowcase } from "@/components/ui/results-showcase";
 import { CountUp } from "@/components/ui/count-up";
 import { EngineSteps, type EngineStep } from "@/components/ui/engine-steps";
 
@@ -45,7 +45,6 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
-  const featured = publicCampaigns.slice(0, 3);
 
   return (
     <>
@@ -78,7 +77,7 @@ export default function Home() {
         </div>
       </ClipCurtainHero>
 
-      <section aria-label="NovaEyes in numbers" className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
+      <section aria-label="NovaEyes in numbers" className="mx-auto max-w-6xl px-6 pb-24 sm:px-10 lg:px-12">
         <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line md:grid-cols-4">
           {facts.stats.map((s, i) => (
             <div key={s.label} className="bg-bg px-6 py-8">
@@ -91,7 +90,7 @@ export default function Home() {
         </dl>
       </section>
 
-      <section id="what-is-a-clipping-agency" className="mx-auto max-w-3xl px-4 pb-24 sm:px-6">
+      <section id="what-is-a-clipping-agency" className="mx-auto max-w-6xl px-6 pb-24 sm:px-10 lg:px-12 *:max-w-3xl">
         <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">What is a clipping agency?</h2>
         <p className="mt-6 text-lg leading-relaxed text-muted">
           A clipping agency takes your long videos, cuts the best moments into short clips and gets them posted by a large
@@ -121,22 +120,25 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Stage 3: telemetry */}
-      <section id="results" className="mx-auto max-w-6xl px-4 py-24 sm:px-6">
-        <div className="flex items-end justify-between gap-6">
-          <h2 className="text-3xl font-semibold tracking-tight sm:text-5xl">Results, in views</h2>
-          <Link href="/case-studies" className="hidden font-display text-sm font-medium text-muted hover:text-fg sm:inline">
-            All case studies
-          </Link>
-        </div>
-        <div className="mt-10 grid gap-4 md:grid-cols-3">
-          {featured.map((c) => (
-            <CampaignCard key={c.slug} campaign={c} />
-          ))}
+      {/* Stage 3: telemetry. Real campaigns, one at a time. */}
+      <section id="results">
+        <div className="mx-auto max-w-6xl px-6 py-24 sm:px-10 lg:px-12">
+          <div className="mb-14 flex items-end justify-between gap-6">
+            <div>
+              <p className="font-label text-[10px] tracking-[0.14em] text-muted uppercase">Results</p>
+              <h2 className="mt-4 max-w-3xl text-3xl tracking-tight text-balance sm:text-4xl">
+                Results, in views. <span className="text-muted">Real campaigns, counted on the platforms.</span>
+              </h2>
+            </div>
+            <Link href="/case-studies" className="hidden shrink-0 font-display text-sm font-medium text-muted hover:text-fg sm:inline">
+              All case studies →
+            </Link>
+          </div>
+          <ResultsShowcase campaigns={publicCampaigns} />
         </div>
       </section>
 
-      <section id="who-we-clip-for" className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
+      <section id="who-we-clip-for" className="mx-auto max-w-6xl px-6 pb-24 sm:px-10 lg:px-12">
         <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Who we clip for</h2>
         <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {verticals.map((v) => (
@@ -150,7 +152,7 @@ export default function Home() {
         </ul>
       </section>
 
-      <section id="clipping-vs-influencers" className="mx-auto max-w-3xl px-4 pb-24 sm:px-6">
+      <section id="clipping-vs-influencers" className="mx-auto max-w-6xl px-6 pb-24 sm:px-10 lg:px-12 *:max-w-3xl">
         <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">How is clipping different from influencer marketing?</h2>
         <p className="mt-6 text-lg leading-relaxed text-muted">
           An influencer deal pays a fixed fee for one post from one creator, whether it works or not. A clipping campaign
@@ -160,7 +162,7 @@ export default function Home() {
       </section>
 
       <section id="founder" className="border-y border-line bg-bg-raised">
-        <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6">
+        <div className="mx-auto max-w-6xl px-6 py-24 sm:px-10 lg:px-12">
           <p className="font-label text-[11px] tracking-[0.14em] text-muted uppercase">Built by operators, not spectators</p>
           <h2 className="mt-4 text-3xl font-semibold tracking-tight sm:text-5xl">{facts.founder}</h2>
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted">
@@ -178,7 +180,7 @@ export default function Home() {
       </section>
 
       {/* Stage 4: control panel */}
-      <section id="faq" className="mx-auto max-w-3xl px-4 py-24 sm:px-6">
+      <section id="faq" className="mx-auto max-w-6xl px-6 py-24 sm:px-10 lg:px-12 *:max-w-3xl">
         <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Questions buyers ask</h2>
         <dl className="mt-10 divide-y divide-line border-y border-line">
           {homeFaqs.map((f) => (
