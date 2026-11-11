@@ -17,6 +17,9 @@ export type Campaign = {
   outcomes: string[];
   // One short result line, shown with the blue dot on the homepage.
   highlight: string;
+  // Homepage visual: a tinted cut-out portrait for people, a white logo for brands.
+  // Files live in public/clients. avatar is the small round image in the list.
+  visual?: { kind: "portrait" | "logo"; src: string; avatar: string; width: number; height: number };
   // Whether the client has approved naming them with figures in public material.
   // The live site already names the approved ones; new ones need approval first.
   publicApproved: boolean;
@@ -37,6 +40,7 @@ export const campaigns: Campaign[] = [
     timeframe: "4 months",
     outcomes: ["Spotify monthly listeners grew from 170K to 650K"],
     highlight: "Spotify monthly listeners from 170K to 650K",
+    visual: { kind: "portrait", src: "/clients/alex.webp", avatar: "/clients/alex-avatar.webp", width: 670, height: 900 },
     publicApproved: true,
   },
   {
@@ -52,6 +56,7 @@ export const campaigns: Campaign[] = [
     timeframe: "6 weeks",
     outcomes: ["$700K in attributed revenue impact"],
     highlight: "An estimated $700K in revenue impact",
+    visual: { kind: "logo", src: "/clients/brave-logo.png", avatar: "/clients/brave-avatar.webp", width: 1200, height: 268 },
     publicApproved: true,
   },
   {
@@ -66,6 +71,7 @@ export const campaigns: Campaign[] = [
     outcomes: [],
     // TODO: final numbers and result line from Andrea, plus Patrick's OK to show it.
     highlight: "",
+    visual: { kind: "logo", src: "/clients/oktagon-logo.png", avatar: "/clients/oktagon-avatar.webp", width: 600, height: 600 },
     publicApproved: false,
   },
   {
@@ -81,6 +87,7 @@ export const campaigns: Campaign[] = [
     timeframe: "4 months",
     outcomes: ["$186K to $267K in revenue impact"],
     highlight: "$186K to $267K in revenue impact",
+    visual: { kind: "portrait", src: "/clients/robthebank.webp", avatar: "/clients/robthebank-avatar.webp", width: 778, height: 542 },
     publicApproved: true,
   },
   {
@@ -98,6 +105,7 @@ export const campaigns: Campaign[] = [
     timeframe: "20 days",
     outcomes: [],
     highlight: "A dormant YouTube catalog put back to work in 20 days",
+    visual: { kind: "portrait", src: "/clients/ahmed.webp", avatar: "/clients/ahmed-avatar.webp", width: 785, height: 900 },
     publicApproved: true,
   },
   {
@@ -113,6 +121,7 @@ export const campaigns: Campaign[] = [
     clips: 843,
     outcomes: ["2M+ additional YouTube views"],
     highlight: "2M+ additional YouTube views",
+    visual: { kind: "portrait", src: "/clients/familyties.webp", avatar: "/clients/familyties-avatar.webp", width: 900, height: 581 },
     publicApproved: true,
   },
   {
@@ -130,6 +139,7 @@ export const campaigns: Campaign[] = [
     timeframe: "3 days",
     outcomes: [],
     highlight: "39,383 average views per clip",
+    visual: { kind: "portrait", src: "/clients/sparkle.webp", avatar: "/clients/sparkle-avatar.webp", width: 356, height: 510 },
     publicApproved: true,
   },
   {
@@ -143,6 +153,7 @@ export const campaigns: Campaign[] = [
     viewsLabel: "",
     outcomes: [],
     highlight: "",
+    visual: { kind: "portrait", src: "/clients/dardan.webp", avatar: "/clients/dardan-avatar.webp", width: 640, height: 571 },
     publicApproved: false,
   },
 ];
