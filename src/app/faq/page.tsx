@@ -17,7 +17,7 @@ export default function Faq() {
     <>
       <JsonLd data={faqJsonLd(allFaqs)} />
       <section className="mx-auto max-w-3xl px-4 pt-24 pb-12 sm:px-6">
-        <h1 className="text-5xl font-semibold tracking-tight">FAQ</h1>
+        <h1 className="text-5xl font-bold tracking-tight">FAQ</h1>
         <nav aria-label="FAQ sections" className="mt-8 flex flex-wrap gap-2">
           {faqGroups.map((g) => (
             <a key={g.title} href={`#${slug(g.title)}`} className="rounded-full border border-line px-4 py-1.5 text-sm text-muted hover:text-fg">
@@ -31,7 +31,7 @@ export default function Faq() {
             <dl className="mt-6 divide-y divide-line border-y border-line">
               {g.items.map((f) => (
                 <div key={f.q} className="py-6">
-                  <dt className="font-medium">{f.q}</dt>
+                  <dt className="font-display font-semibold">{f.q}</dt>
                   <dd className="mt-2 text-muted">{f.a}</dd>
                 </div>
               ))}

@@ -33,7 +33,7 @@ export default function About() {
             </Link>{" "}
             / <span>About</span>
           </nav>
-          <h1 className="mt-6 text-5xl font-semibold tracking-tight sm:text-6xl">About NovaEyes</h1>
+          <h1 className="mt-6 text-5xl font-bold tracking-tight sm:text-6xl">About NovaEyes</h1>
           <p className="mt-6 text-lg leading-relaxed text-muted">
             NovaEyes is a clipping agency that gets videos seen. We run a network of {facts.clippersLabel} clippers who post
             short clips of our clients&apos; content on TikTok, Instagram Reels, YouTube Shorts and X. We get paid on views,
@@ -78,7 +78,7 @@ export default function About() {
           </section>
 
           <section className="py-10">
-            <blockquote className="border-l-2 border-accent pl-6 text-2xl font-medium sm:text-3xl">
+            <blockquote className="border-l-2 border-accent pl-6 text-2xl font-display font-semibold sm:text-3xl">
               Anyone can make content. We decide who sees it.
             </blockquote>
           </section>
@@ -97,7 +97,7 @@ export default function About() {
             <dl className="mt-6 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line">
               {facts.stats.map((s) => (
                 <div key={s.label} className="bg-bg px-6 py-6">
-                  <dd className="font-mono text-2xl font-semibold tracking-tight">{s.value}</dd>
+                  <dd className="font-display text-2xl font-bold tracking-tight">{s.value}</dd>
                   <dt className="mt-1 text-sm text-muted">{s.label}</dt>
                 </div>
               ))}
@@ -116,7 +116,7 @@ export default function About() {
                     <span>
                       {c.client} <span className="text-sm text-muted">{c.category}</span>
                     </span>
-                    <span className="font-mono text-sm">{c.viewsLabel} views</span>
+                    <span className="font-display text-sm font-semibold tabular-nums">{c.viewsLabel} views</span>
                   </Link>
                 </li>
               ))}

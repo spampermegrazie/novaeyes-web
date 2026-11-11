@@ -15,11 +15,11 @@ export function Cta({
         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <Link
             href="/book"
-            className="rounded-full bg-accent px-6 py-3 text-sm font-medium text-accent-ink hover:opacity-90"
+            className="font-display font-semibold rounded-full bg-accent px-6 py-3 text-sm text-accent-ink hover:opacity-90"
           >
             Book a 15-minute reach audit
           </Link>
-          <Link href="/reach-estimator" className="rounded-full border border-line px-6 py-3 text-sm hover:border-muted/50">
+          <Link href="/reach-estimator" className="font-display font-semibold rounded-full border border-line px-6 py-3 text-sm hover:border-muted/50">
             Estimate your reach
           </Link>
         </div>

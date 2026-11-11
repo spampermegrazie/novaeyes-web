@@ -15,7 +15,7 @@ export default function CaseStudies() {
   return (
     <>
       <section className="mx-auto max-w-6xl px-4 pt-24 pb-12 sm:px-6">
-        <h1 className="text-5xl font-semibold tracking-tight sm:text-6xl">Case studies</h1>
+        <h1 className="text-5xl font-bold tracking-tight sm:text-6xl">Case studies</h1>
         <p className="mt-6 max-w-2xl text-lg text-muted">
           {formatCompact(totalPublicViews)} views across {publicCampaigns.length} published campaigns. Every figure comes from
           the campaign dashboard.

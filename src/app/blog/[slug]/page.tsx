@@ -61,7 +61,7 @@ export default async function BlogPostPage(props: PageProps<"/blog/[slug]">) {
         <p className="text-sm text-muted">
           {formatDate(post.published_at)} · {post.author?.name ?? post.author_name}
         </p>
-        <h1 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">{post.title}</h1>
+        <h1 className="mt-4 text-4xl font-bold tracking-tight sm:text-5xl">{post.title}</h1>
         <p className="mt-6 text-lg text-muted">{post.excerpt}</p>
         {post.cover_image_url && (
           // eslint-disable-next-line @next/next/no-img-element

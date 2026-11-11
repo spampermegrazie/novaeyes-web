@@ -44,8 +44,8 @@ export default async function CaseStudy(props: PageProps<"/case-studies/[slug]">
       />
       <article>
         <header className="mx-auto max-w-6xl px-4 pt-24 pb-12 sm:px-6">
-          <p className="text-sm tracking-widest text-muted uppercase">Case study</p>
-          <h1 className="mt-4 text-5xl font-semibold tracking-tight sm:text-6xl">{c.client}</h1>
+          <p className="font-label text-[11px] tracking-[0.14em] text-muted uppercase">Case study</p>
+          <h1 className="mt-4 text-5xl font-bold tracking-tight sm:text-6xl">{c.client}</h1>
           <p className="mt-6 max-w-2xl text-lg text-muted">{c.summary}</p>
         </header>
         <section className="mx-auto max-w-6xl px-4 sm:px-6">
@@ -53,7 +53,7 @@ export default async function CaseStudy(props: PageProps<"/case-studies/[slug]">
             {stats.map((s) => (
               <div key={s.label} className="rounded-2xl border border-line bg-bg-raised p-6">
                 <dt className="text-sm text-muted">{s.label}</dt>
-                <dd className="mt-2 font-mono text-3xl font-semibold tracking-tight">{s.value}</dd>
+                <dd className="mt-2 font-display text-3xl font-bold tracking-tight">{s.value}</dd>
               </div>
             ))}
           </dl>

@@ -1,13 +1,13 @@
 "use client";
 
 // How a campaign works, told as one loop through one engine.
-// Desktop: the section pins, all three steps stay on screen next to the diagram,
-// and scrolling moves through them, lighting each step's part of the engine. 1: what you send flows into NovaEyes.
-// 2: NovaEyes routes it through the clippers onto the platforms.
-// 3: views come back, get verified, and budget moves to the winners. Then it loops.
-// Mobile: the same diagram, cropped to each step, sits under that step's copy.
-// A rail with a scroll-linked fill connects the steps on every screen size.
-// All copy is in the server HTML; only the diagram animates.
+// Desktop: the section pins next to one diagram. Scrolling moves through the three
+// steps; the left side shows only the current step, and the diagram lights only
+// that step's part. 1 Set up: what you send flows into NovaEyes. 2 Distribute:
+// NovaEyes routes it through the clippers onto the platforms. 3 Feedback loop:
+// verified views come back and budget moves to the winning clips, then it loops.
+// Mobile: a rail joins the steps, each with its own crop of the same diagram.
+// All step copy is in the server HTML; only the diagram animates.
 
 import { useEffect, useId, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import { motion, useInView, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from "motion/react";
@@ -17,7 +17,8 @@ export type EngineStep = { title: string; body: string };
 type Stage = 0 | 1 | 2 | "all";
 
 const PLATFORMS = ["TikTok", "Reels", "Shorts", "X"];
-const BACK_LABEL = "Feedback loop";
+// Average width of one caption character in the label font at its set size.
+const CAP_CH = 8.1;
 // Clippers whose clips win in step 3, so budget visibly moves to them.
 const WINNERS = [0, 3];
 
@@ -34,78 +35,68 @@ export function EngineSteps({ steps }: { steps: [EngineStep, EngineStep, EngineS
   const pick = (v: number) => setActive(Math.min(2, Math.max(0, Math.floor(v * 3))));
   useMotionValueEvent(trackP, "change", (v) => desktop && pick(v));
   useMotionValueEvent(listP, "change", (v) => !desktop && pick(v));
-  // The rail between two steps fills while the first of them is active. Both
-  // progress values are read so the fill follows whichever layout is showing.
-  const desktopRef = useRef(false);
-  useEffect(() => {
-    desktopRef.current = desktop;
-  }, [desktop]);
-  const railAt = (i: number) => {
-    const t = trackP.get();
-    const l = listP.get();
-    return clamp01((desktopRef.current ? t : l) * 3 - i);
-  };
-  const fill0 = useTransform(() => (reduced ? 1 : railAt(0)));
-  const fill1 = useTransform(() => (reduced ? 1 : railAt(1)));
+  // Mobile rail: the line between two steps fills while the first of them is active.
+  const fill0 = useTransform(() => (reduced ? 1 : clamp01(listP.get() * 3)));
+  const fill1 = useTransform(() => (reduced ? 1 : clamp01(listP.get() * 3 - 1)));
   const fills = [fill0, fill1];
-  const current = reduced ? -1 : active;
-
-  const jumpTo = (i: number) => {
-    const el = trackRef.current;
-    if (!desktop || !el) return;
-    const top = el.getBoundingClientRect().top + window.scrollY - 64;
-    const span = el.offsetHeight - (window.innerHeight - 64);
-    window.scrollTo({ top: top + ((i + 0.5) / 3) * span, behavior: reduced ? "auto" : "smooth" });
-  };
+  // Desktop progress bar under the step number.
+  const bar = useTransform(trackP, [0, 1], [0, 1]);
 
   return (
     <div ref={trackRef} className="lg:h-[240vh]">
       <div className="lg:sticky lg:top-16 lg:flex lg:h-[calc(100vh-4rem)] lg:items-center">
         <div className="w-full lg:grid lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] lg:items-center lg:gap-14">
-          <ol ref={listRef}>
-            {steps.map((s, i) => {
-              const reached = current === -1 || i <= current;
-              const dim = current !== -1 && i !== current;
-              return (
-                <li
-                  key={s.title}
-                  onClick={() => jumpTo(i)}
-                  className="relative pb-20 pl-14 last:pb-2 lg:cursor-pointer lg:pb-10 lg:last:pb-0"
-                >
-                  {i < 2 && (
-                    <span aria-hidden className="absolute top-4 -bottom-4 left-[15.5px] w-px bg-line">
-                      <motion.span className="absolute inset-0 origin-top bg-accent" style={{ scaleY: fills[i] }} />
-                    </span>
-                  )}
-                  <span
-                    aria-hidden
-                    className={`absolute top-0 left-0 z-10 flex h-8 w-8 items-center justify-center rounded-full border font-mono text-xs transition-all duration-500 ${
-                      reached
-                        ? "border-accent bg-accent text-accent-ink shadow-[0_0_24px_rgb(var(--glow)/0.5)]"
-                        : "border-line bg-bg text-muted"
+          <div>
+            <ol ref={listRef} className="lg:grid">
+              {steps.map((s, i) => {
+                const reached = i <= active;
+                const shown = i === active;
+                return (
+                  <li
+                    key={s.title}
+                    className={`relative pb-20 pl-14 last:pb-2 lg:col-start-1 lg:row-start-1 lg:p-0 lg:transition-[opacity,translate] lg:duration-500 motion-reduce:transition-none ${
+                      shown ? "lg:translate-y-0 lg:opacity-100" : "lg:pointer-events-none lg:translate-y-3 lg:opacity-0"
                     }`}
                   >
-                    {i + 1}
-                  </span>
-                  <div className={`transition-opacity duration-500 ${dim ? "lg:opacity-35 lg:hover:opacity-70" : ""}`}>
-                    <p className="pt-1.5 font-mono text-xs tracking-widest text-accent uppercase">Step {i + 1}</p>
-                    <h3 className="mt-2 text-2xl font-semibold tracking-tight">{s.title}</h3>
-                    <p className="mt-3 max-w-md leading-relaxed text-muted lg:text-[15px]">{s.body}</p>
-                  </div>
-                  <div className="mt-8 max-w-md lg:hidden">
-                    <Frame>
-                      <Pipeline orient="v" stage={reduced ? "all" : (i as Stage)} crop={V_CROPS[i]} reduced={reduced} />
-                    </Frame>
-                  </div>
-                </li>
-              );
-            })}
-          </ol>
+                    {i < 2 && (
+                      <span aria-hidden className="absolute top-4 -bottom-4 left-[15.5px] w-px bg-line lg:hidden">
+                        <motion.span className="absolute inset-0 origin-top bg-accent" style={{ scaleY: fills[i] }} />
+                      </span>
+                    )}
+                    <span
+                      aria-hidden
+                      className={`absolute top-0 left-0 z-10 flex h-8 w-8 items-center justify-center rounded-full border font-label text-[11px] transition-all duration-500 lg:hidden ${
+                        reached || reduced
+                          ? "border-accent bg-accent text-accent-ink shadow-[0_0_24px_rgb(var(--glow)/0.5)]"
+                          : "border-line bg-bg text-muted"
+                      }`}
+                    >
+                      {i + 1}
+                    </span>
+                    <p className="pt-2 font-label text-[10px] tracking-[0.14em] text-accent uppercase lg:hidden">Step {i + 1}</p>
+                    <p aria-hidden className="hidden items-baseline gap-3 font-label lg:flex">
+                      <span className="text-5xl text-accent">0{i + 1}</span>
+                      <span className="text-sm text-muted">/ 03</span>
+                    </p>
+                    <h3 className="mt-2 text-2xl tracking-tight lg:mt-6 lg:text-4xl">{s.title}</h3>
+                    <p className="mt-3 max-w-md leading-relaxed text-muted lg:mt-4 lg:text-lg">{s.body}</p>
+                    <div className="mt-8 max-w-md lg:hidden">
+                      <Frame>
+                        <Pipeline orient="v" stage={i as Stage} crop={V_CROPS[i]} reduced={reduced} />
+                      </Frame>
+                    </div>
+                  </li>
+                );
+              })}
+            </ol>
+            <div aria-hidden className="mt-10 hidden h-px max-w-md bg-line lg:block">
+              <motion.div className="h-px origin-left bg-accent" style={{ scaleX: bar }} />
+            </div>
+          </div>
 
           <div className="hidden lg:block">
             <Frame>
-              <Pipeline orient="h" stage={reduced ? "all" : (active as Stage)} reduced={reduced} numbered />
-              <Legend />
+              <Pipeline orient="h" stage={active as Stage} reduced={reduced} numbered stepNames={steps.map((s) => s.title)} />
             </Frame>
           </div>
         </div>
@@ -141,21 +132,6 @@ function Frame({ children }: { children: ReactNode }) {
       <span aria-hidden className={`${corner} -bottom-1.5 -left-1.5 border-b-[1.5px] border-l-[1.5px] group-hover:-translate-x-[3px] group-hover:translate-y-[3px]`} />
       <span aria-hidden className={`${corner} -right-1.5 -bottom-1.5 border-r-[1.5px] border-b-[1.5px] group-hover:translate-x-[3px] group-hover:translate-y-[3px]`} />
       <div className="flex flex-col gap-4 rounded-md border border-line bg-gradient-to-b from-bg-raised to-bg p-4 sm:p-5">{children}</div>
-    </div>
-  );
-}
-
-function Legend() {
-  return (
-    <div className="flex flex-wrap gap-x-6 gap-y-2 px-1 font-mono text-[11px] text-muted">
-      <span className="flex items-center gap-2">
-        <span className="h-1.5 w-1.5 rounded-full bg-accent shadow-[0_0_6px_rgb(var(--glow))]" />
-        your content going out
-      </span>
-      <span className="flex items-center gap-2">
-        <span className="h-1.5 w-1.5 rounded-full bg-fg" />
-        verified views coming back
-      </span>
     </div>
   );
 }
@@ -224,12 +200,14 @@ function Pipeline({
   crop,
   reduced,
   numbered = false,
+  stepNames = ["Set up", "Distribute", "Feedback loop"],
 }: {
   orient: "h" | "v";
   stage: Stage;
   crop?: string;
   reduced: boolean;
   numbered?: boolean;
+  stepNames?: string[];
 }) {
   const L = orient === "h" ? H_LAYOUT : V_LAYOUT;
   const ref = useRef<SVGSVGElement>(null);
@@ -308,25 +286,27 @@ function Pipeline({
   const inOpacity = litIn ? 1 : 0.35;
   const outOpacity = litOut || optimizing ? 1 : 0.35;
 
-  const caption = (m: number, text: string, n?: number) => {
+  // Captions on the wide diagram carry the step number; text width follows the label font.
+  const caption = (m: number, text: string, n?: number, y = 18) => {
     if (orient === "h") {
-      const w = text.length * 7.1;
+      const w = text.length * CAP_CH;
       const on = n !== undefined && (all || stage === n - 1);
+      const withBadge = numbered && n !== undefined;
       return (
         <g className="pointer-events-none">
-          {numbered && n !== undefined && <Badge x={m + 11 - w / 2 - 14} y={14} n={n} on={on} />}
-          <text x={numbered && n !== undefined ? m + 11 : m} y="18" textAnchor="middle" className="ne-caption">
+          {withBadge && <Badge x={m + 11 - w / 2 - 14} y={y - 3} n={n} on={on} />}
+          <text x={withBadge ? m + 11 : m} y={y} textAnchor="middle" className="ne-caption" style={on ? { fill: "var(--fg)" } : undefined}>
             {text}
           </text>
         </g>
       );
     }
-    const w = text.length * 6.4 + 18;
-    const y = m - 34;
+    const w = text.length * CAP_CH + 18;
+    const py = m - 34;
     return (
       <g className="pointer-events-none">
-        <rect x={L.hub.c - w / 2} y={y - 10} width={w} height="17" rx="8.5" fill="var(--bg-raised)" stroke="var(--line-strong)" />
-        <text x={L.hub.c} y={y + 2} textAnchor="middle" className="ne-caption">
+        <rect x={L.hub.c - w / 2} y={py - 10} width={w} height="17" rx="8.5" fill="var(--bg-raised)" stroke="var(--line-strong)" />
+        <text x={L.hub.c} y={py + 2} textAnchor="middle" className="ne-caption">
           {text}
         </text>
       </g>
@@ -353,15 +333,10 @@ function Pipeline({
       <g style={{ opacity: litBack ? 1 : 0.22, transition: "opacity .5s" }}>
         <path d={L.back.d} className={`ne-flow ne-dash${litBack ? " ne-flow-back" : ""}`} />
         {orient === "h" ? (
-          <g>
-            {numbered && <Badge x={L.back.label.x + 8 - (BACK_LABEL.length * 7.1) / 2 - 14} y={L.back.label.y - 4} n={3} on={litBack} />}
-            <text x={L.back.label.x + 8} y={L.back.label.y} textAnchor="middle" className="ne-caption">
-              {BACK_LABEL}
-            </text>
-          </g>
+          caption(L.back.label.x, stepNames[2], 3, L.back.label.y)
         ) : (
           <text x={L.back.label.x} y={L.back.label.y} textAnchor="middle" className="ne-caption">
-            {BACK_LABEL}
+            {stepNames[2]}
           </text>
         )}
       </g>
@@ -386,7 +361,7 @@ function Pipeline({
             </g>
           );
         })}
-        {caption(L.inputs.m, "You send", 1)}
+        {orient === "h" ? caption(L.inputs.m, stepNames[0], 1) : caption(L.inputs.m, "You send")}
       </g>
 
       {/* step 2: through the clippers onto the platforms */}
@@ -440,8 +415,19 @@ function Pipeline({
             </g>
           );
         })}
-        {caption(L.clippers.m, `${facts.clippersLabel} clippers`, 2)}
-        {caption(L.platforms.m, "They post on")}
+        {orient === "h" ? (
+          <>
+            {caption((L.clippers.m + L.platforms.m) / 2, stepNames[1], 2)}
+            <text x={L.clippers.m} y={L.clippers.c[L.clippers.c.length - 1] + 34} textAnchor="middle" className="ne-caption">
+              {facts.clippersLabel} clippers
+            </text>
+          </>
+        ) : (
+          <>
+            {caption(L.clippers.m, `${facts.clippersLabel} clippers`)}
+            {caption(L.platforms.m, "They post on")}
+          </>
+        )}
       </g>
 
       {/* packets: blue is your content going out, white is verified views coming back */}

@@ -106,7 +106,7 @@ export default function AttentionMonopolySystem() {
             </Link>{" "}
             / <span>The Attention Monopoly System</span>
           </nav>
-          <h1 className="mt-6 text-5xl font-semibold tracking-tight sm:text-6xl">The Attention Monopoly System</h1>
+          <h1 className="mt-6 text-5xl font-bold tracking-tight sm:text-6xl">The Attention Monopoly System</h1>
           <p className="mt-6 text-lg leading-relaxed text-muted">
             This is how we run every NovaEyes campaign. Three steps: buy attention without ads, turn every strong moment into
             many clips, and post them on so many pages that your audience keeps running into you. The goal is steady
@@ -129,8 +129,8 @@ export default function AttentionMonopolySystem() {
             <ol className="mt-6 space-y-4">
               {steps.map((s, i) => (
                 <li key={s.title} className="rounded-2xl border border-line p-6">
-                  <p className="font-mono text-sm text-accent">Step {i + 1}</p>
-                  <h3 className="mt-3 text-xl font-medium">{s.title}</h3>
+                  <p className="font-label text-[11px] tracking-[0.14em] text-accent uppercase">Step {i + 1}</p>
+                  <h3 className="mt-3 text-xl font-semibold">{s.title}</h3>
                   <p className="mt-3 leading-relaxed text-muted">{s.body}</p>
                   <p className="mt-4 text-sm">
                     <span className="text-muted">Result:</span> {s.outcome}
@@ -154,7 +154,7 @@ export default function AttentionMonopolySystem() {
             <dl className="mt-6 grid gap-4 sm:grid-cols-3">
               {reasons.map((r) => (
                 <div key={r.title} className="rounded-2xl border border-line p-5">
-                  <dt className="font-medium">{r.title}</dt>
+                  <dt className="font-display font-semibold">{r.title}</dt>
                   <dd className="mt-2 text-sm leading-relaxed text-muted">{r.body}</dd>
                 </div>
               ))}
@@ -203,7 +203,7 @@ export default function AttentionMonopolySystem() {
             <dl className="mt-6 divide-y divide-line border-y border-line">
               {faqs.map((f) => (
                 <div key={f.q} className="py-6">
-                  <dt className="font-medium">{f.q}</dt>
+                  <dt className="font-display font-semibold">{f.q}</dt>
                   <dd className="mt-2 leading-relaxed text-muted">{f.a}</dd>
                 </div>
               ))}

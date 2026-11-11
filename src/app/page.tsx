@@ -24,7 +24,7 @@ const steps: [EngineStep, EngineStep, EngineStep] = [
     body: "Our clippers take that brief, cut the best moments into short clips and post them across TikTok, Instagram Reels, YouTube Shorts and X, hundreds of times a day. Every clip is reviewed before it can earn.",
   },
   {
-    title: "Optimize",
+    title: "Feedback loop",
     body: "The views come back from the platforms and we verify them. You pay only for verified views on approved clips. Every day the budget moves to the clips and formats that win, and the loop runs again. You can watch it all in a live dashboard.",
   },
 ];
@@ -52,8 +52,8 @@ export default function Home() {
 
       {/* Stage 1: ignition. The clips part like a curtain as you scroll. */}
       <ClipCurtainHero clips={heroClips}>
-        <p className="text-[11px] tracking-[0.18em] text-muted uppercase sm:text-sm sm:tracking-[0.3em]">{facts.tagline}</p>
-        <h1 className="mx-auto mt-6 text-5xl leading-[1.02] font-semibold tracking-tight text-balance sm:text-6xl lg:text-[64px]">
+        <p className="font-label text-[10px] tracking-[0.14em] text-muted uppercase sm:text-xs sm:tracking-[0.18em]">{facts.tagline}</p>
+        <h1 className="mx-auto mt-6 text-5xl leading-[1.02] font-bold tracking-tight text-balance sm:text-6xl lg:text-[64px]">
           Short-form reach, <br className="hidden md:block" />
           paid per verified view.
         </h1>
@@ -64,13 +64,13 @@ export default function Home() {
         <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <Link
             href="/book"
-            className="rounded-full bg-accent px-6 py-3 text-center text-sm font-medium text-accent-ink shadow-[0_0_32px_rgb(var(--glow)/0.35)] hover:opacity-90"
+            className="font-display font-semibold rounded-full bg-accent px-6 py-3 text-center text-sm text-accent-ink shadow-[0_0_32px_rgb(var(--glow)/0.35)] hover:opacity-90"
           >
             Book a 15-minute reach audit
           </Link>
           <Link
             href="/reach-estimator"
-            className="rounded-full border border-line bg-bg/60 px-6 py-3 text-center text-sm backdrop-blur hover:border-muted/50"
+            className="font-display font-semibold rounded-full border border-line bg-bg/60 px-6 py-3 text-center text-sm backdrop-blur hover:border-muted/50"
           >
             Estimate your reach
           </Link>
@@ -81,7 +81,7 @@ export default function Home() {
         <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line md:grid-cols-4">
           {facts.stats.map((s) => (
             <div key={s.label} className="bg-bg px-6 py-8">
-              <dd className="font-mono text-3xl font-semibold tracking-tight">{s.value}</dd>
+              <dd className="font-display text-3xl font-bold tracking-tight">{s.value}</dd>
               <dt className="mt-1 text-sm text-muted">{s.label}</dt>
             </div>
           ))}
@@ -105,7 +105,7 @@ export default function Home() {
       <section id="how-it-works" className="ne-hatch border-y border-line bg-bg-raised/40">
         <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6">
           <div className="text-center">
-            <p className="inline-block rounded-full border border-line bg-bg px-3 py-1 font-mono text-[11px] tracking-[0.18em] text-muted uppercase">
+            <p className="inline-block rounded-full border border-line bg-bg px-3 py-1 font-label text-[10px] tracking-[0.14em] text-muted uppercase">
               The engine
             </p>
             <h2 className="mt-5 text-3xl font-semibold tracking-tight text-balance sm:text-5xl">
@@ -126,7 +126,7 @@ export default function Home() {
       <section id="results" className="mx-auto max-w-6xl px-4 py-24 sm:px-6">
         <div className="flex items-end justify-between gap-6">
           <h2 className="text-3xl font-semibold tracking-tight sm:text-5xl">Results, in views</h2>
-          <Link href="/case-studies" className="hidden text-sm text-muted hover:text-fg sm:inline">
+          <Link href="/case-studies" className="hidden font-display text-sm font-medium text-muted hover:text-fg sm:inline">
             All case studies
           </Link>
         </div>
@@ -143,7 +143,7 @@ export default function Home() {
           {verticals.map((v) => (
             <li key={v.path}>
               <Link href={v.path} className="block h-full rounded-2xl border border-line p-6 transition-colors hover:border-muted/40">
-                <p className="font-medium">{v.h1}</p>
+                <p className="font-display font-semibold">{v.h1}</p>
                 <p className="mt-2 text-sm leading-relaxed text-muted">{verticalBlurbs[v.path]}</p>
               </Link>
             </li>
@@ -162,14 +162,14 @@ export default function Home() {
 
       <section id="founder" className="border-y border-line bg-bg-raised">
         <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6">
-          <p className="text-sm tracking-widest text-muted uppercase">Built by operators, not spectators</p>
+          <p className="font-label text-[11px] tracking-[0.14em] text-muted uppercase">Built by operators, not spectators</p>
           <h2 className="mt-4 text-3xl font-semibold tracking-tight sm:text-5xl">{facts.founder}</h2>
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted">
             Andrea built a media network past 500,000 followers before turning what he learned into NovaEyes. Today the
             network has {facts.clippersLabel} clippers and has delivered hundreds of millions of views for brands, artists
             and creators.
           </p>
-          <blockquote className="mt-10 border-l-2 border-accent pl-6 text-2xl font-medium sm:text-3xl">
+          <blockquote className="mt-10 border-l-2 border-accent pl-6 text-2xl font-display font-semibold sm:text-3xl">
             Anyone can make content. We decide who sees it.
           </blockquote>
           <Link href="/about" className="mt-8 inline-block text-sm text-accent">
@@ -184,7 +184,7 @@ export default function Home() {
         <dl className="mt-10 divide-y divide-line border-y border-line">
           {homeFaqs.map((f) => (
             <div key={f.q} className="py-6">
-              <dt className="font-medium">{f.q}</dt>
+              <dt className="font-display font-semibold">{f.q}</dt>
               <dd className="mt-2 leading-relaxed text-muted">{f.a}</dd>
             </div>
           ))}

@@ -28,17 +28,17 @@ export function VerticalPage({ vertical }: { vertical: Vertical }) {
             </Link>{" "}
             / <span>{vertical.h1}</span>
           </nav>
-          <h1 className="mt-6 text-5xl font-semibold tracking-tight sm:text-6xl">{vertical.h1}</h1>
+          <h1 className="mt-6 text-5xl font-bold tracking-tight sm:text-6xl">{vertical.h1}</h1>
           {vertical.lead.map((p) => (
             <p key={p} className="mt-6 text-lg leading-relaxed text-muted">
               {p}
             </p>
           ))}
           <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-            <Link href="/book" className="rounded-full bg-accent px-6 py-3 text-center text-sm font-medium text-accent-ink hover:opacity-90">
+            <Link href="/book" className="font-display font-semibold rounded-full bg-accent px-6 py-3 text-center text-sm text-accent-ink hover:opacity-90">
               Book a 15-minute reach audit
             </Link>
-            <Link href="/reach-estimator" className="rounded-full border border-line px-6 py-3 text-center text-sm hover:border-muted/50">
+            <Link href="/reach-estimator" className="font-display font-semibold rounded-full border border-line px-6 py-3 text-center text-sm hover:border-muted/50">
               Estimate your reach
             </Link>
           </div>
@@ -71,7 +71,7 @@ export function VerticalPage({ vertical }: { vertical: Vertical }) {
             <ol className="mt-6 space-y-4">
               {vertical.steps.map((step, i) => (
                 <li key={step} className="flex gap-4 rounded-2xl border border-line p-5">
-                  <span className="font-mono text-sm text-accent">0{i + 1}</span>
+                  <span className="font-label text-xs text-accent">0{i + 1}</span>
                   <span className="leading-relaxed">{step}</span>
                 </li>
               ))}
@@ -108,7 +108,7 @@ export function VerticalPage({ vertical }: { vertical: Vertical }) {
             <dl className="mt-6 divide-y divide-line border-y border-line">
               {faqs.map((f) => (
                 <div key={f.q} className="py-6">
-                  <dt className="font-medium">{f.q}</dt>
+                  <dt className="font-display font-semibold">{f.q}</dt>
                   <dd className="mt-2 leading-relaxed text-muted">{f.a}</dd>
                 </div>
               ))}
@@ -116,7 +116,7 @@ export function VerticalPage({ vertical }: { vertical: Vertical }) {
           </section>
 
           <nav aria-label="Other services" className="py-10">
-            <h2 className="text-sm tracking-widest text-muted uppercase">Other ways we clip</h2>
+            <h2 className="font-label text-[11px] tracking-[0.14em] text-muted uppercase">Other ways we clip</h2>
             <ul className="mt-4 flex flex-wrap gap-3">
               {others.map((v) => (
                 <li key={v.path}>

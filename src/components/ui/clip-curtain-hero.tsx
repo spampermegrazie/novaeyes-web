@@ -144,10 +144,10 @@ function ClipPlaceholder({ clip, index }: { clip: HeroClip; index: number }) {
       <span className="absolute top-2 left-2 rounded-full bg-black/55 px-2 py-0.5 text-[9px] font-medium text-white/80">
         {clip.platform}
       </span>
-      <span className="absolute inset-0 flex -rotate-12 items-center justify-center text-[10px] font-semibold tracking-[0.3em] text-white/20 uppercase select-none">
+      <span className="absolute inset-0 flex -rotate-12 items-center justify-center font-label text-[10px] tracking-[0.14em] text-white/20 uppercase select-none">
         NovaEyes
       </span>
-      <span className="absolute right-2 bottom-4 text-[8px] font-semibold tracking-[0.2em] text-white/45 uppercase select-none">
+      <span className="absolute right-2 bottom-4 font-label text-[7px] tracking-[0.1em] text-white/45 uppercase select-none">
         NovaEyes
       </span>
       <div className="absolute inset-x-2 bottom-2 h-0.5 overflow-hidden rounded-full bg-white/15">

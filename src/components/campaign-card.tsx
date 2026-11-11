@@ -8,25 +8,25 @@ export function CampaignCard({ campaign }: { campaign: Campaign }) {
       className="group flex flex-col rounded-2xl border border-line bg-bg-raised p-6 transition-colors hover:border-muted/40"
     >
       <p className="text-sm text-muted">{campaign.client}</p>
-      <p className="mt-3 font-mono text-4xl font-semibold tracking-tight">{campaign.viewsLabel}</p>
+      <p className="mt-3 font-display text-4xl font-bold tracking-tight">{campaign.viewsLabel}</p>
       <p className="text-sm text-muted">views</p>
       <dl className="mt-6 grid grid-cols-2 gap-3 text-sm">
         {campaign.cpmUsd !== undefined && (
           <div>
             <dt className="text-muted">CPM</dt>
-            <dd className="font-mono">${campaign.cpmUsd.toFixed(2)}</dd>
+            <dd className="font-display font-semibold tabular-nums">${campaign.cpmUsd.toFixed(2)}</dd>
           </div>
         )}
         {campaign.clips !== undefined && (
           <div>
             <dt className="text-muted">Clips</dt>
-            <dd className="font-mono">{campaign.clips.toLocaleString("en-US")}</dd>
+            <dd className="font-display font-semibold tabular-nums">{campaign.clips.toLocaleString("en-US")}</dd>
           </div>
         )}
         {campaign.timeframe && (
           <div>
             <dt className="text-muted">Timeframe</dt>
-            <dd className="font-mono">{campaign.timeframe}</dd>
+            <dd className="font-display font-semibold tabular-nums">{campaign.timeframe}</dd>
           </div>
         )}
       </dl>

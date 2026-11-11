@@ -87,7 +87,7 @@ export function ReachEstimator() {
                       setStepIndex(2);
                       setStep("input");
                     }}
-                    className={`rounded-full px-4 py-2 ${mode === m ? "bg-fg text-bg" : "text-muted hover:text-fg"}`}
+                    className={`rounded-full px-4 py-2 font-display font-semibold ${mode === m ? "bg-fg text-bg" : "text-muted hover:text-fg"}`}
                     aria-pressed={mode === m}
                   >
                     {m === "budget" ? "My budget" : "Views I want"}
@@ -100,7 +100,7 @@ export function ReachEstimator() {
               <label htmlFor="amount" className="text-sm text-muted">
                 {mode === "budget" ? "Campaign budget" : "Target views"}
               </label>
-              <p className="mt-2 font-mono text-4xl font-semibold tracking-tight">
+              <p className="mt-2 font-display text-4xl font-bold tracking-tight">
                 {mode === "budget" ? formatUsd(value) : formatCompact(value)}
               </p>
               <input
@@ -140,7 +140,7 @@ export function ReachEstimator() {
                 <div>
                   <p className="text-sm text-muted">Your estimate is ready</p>
                   {/* Placeholder digits, so the real figure isn't sitting in the page before the gate. */}
-                  <p className="mt-3 font-mono text-4xl font-semibold tracking-tight blur-sm select-none" aria-hidden>
+                  <p className="mt-3 font-display text-4xl font-bold tracking-tight blur-sm select-none" aria-hidden>
                     {mode === "budget" ? "00.0M to 00.0M" : "$00,000 to $00,000"}
                   </p>
                   <p className="mt-2 text-sm text-muted">Based on ranges from past campaigns.</p>
@@ -148,7 +148,7 @@ export function ReachEstimator() {
                 <button
                   type="button"
                   onClick={() => setStep("gate")}
-                  className="mt-8 rounded-full bg-accent px-6 py-3 text-sm font-medium text-accent-ink hover:opacity-90"
+                  className="font-display font-semibold mt-8 rounded-full bg-accent px-6 py-3 text-sm text-accent-ink hover:opacity-90"
                 >
                   Show my estimate
                 </button>
@@ -198,7 +198,7 @@ export function ReachEstimator() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full rounded-full bg-accent px-6 py-3 text-sm font-medium text-accent-ink hover:opacity-90 disabled:opacity-50"
+                  className="font-display font-semibold w-full rounded-full bg-accent px-6 py-3 text-sm text-accent-ink hover:opacity-90 disabled:opacity-50"
                 >
                   {submitting ? "Calculating" : "Show my estimate"}
                 </button>
@@ -212,7 +212,7 @@ export function ReachEstimator() {
         <div className="space-y-8">
           <div>
             <p className="text-sm text-muted">{result.niche.label}</p>
-            <h2 className="mt-2 font-mono text-4xl font-semibold tracking-tight sm:text-5xl">
+            <h2 className="mt-2 font-display text-4xl font-bold tracking-tight sm:text-5xl">
               {mode === "budget" ? formatRange(result.views, formatCompact) : formatRange(result.budgetUsd, formatUsd)}
             </h2>
             <p className="mt-1 text-muted">
@@ -222,11 +222,11 @@ export function ReachEstimator() {
           <dl className="grid gap-4 sm:grid-cols-3">
             <div className="rounded-2xl border border-line p-5">
               <dt className="text-sm text-muted">CPM range</dt>
-              <dd className="mt-1 font-mono text-xl">{formatRange(result.cpmUsd, formatUsd)}</dd>
+              <dd className="mt-1 font-display font-semibold tabular-nums text-xl">{formatRange(result.cpmUsd, formatUsd)}</dd>
             </div>
             <div className="rounded-2xl border border-line p-5">
               <dt className="text-sm text-muted">Estimated clips</dt>
-              <dd className="mt-1 font-mono text-xl">{formatRange(result.clips, (n) => n.toLocaleString("en-US"))}</dd>
+              <dd className="mt-1 font-display font-semibold tabular-nums text-xl">{formatRange(result.clips, (n) => n.toLocaleString("en-US"))}</dd>
             </div>
             <div className="rounded-2xl border border-line p-5">
               <dt className="text-sm text-muted">Platforms</dt>
@@ -238,7 +238,7 @@ export function ReachEstimator() {
             <button
               type="button"
               onClick={() => setShowBooking(true)}
-              className="rounded-full bg-accent px-6 py-3 text-sm font-medium text-accent-ink hover:opacity-90"
+              className="font-display font-semibold rounded-full bg-accent px-6 py-3 text-sm text-accent-ink hover:opacity-90"
             >
               Book a 15-minute reach audit
             </button>

@@ -13,7 +13,7 @@ export default async function Blog() {
 
   return (
     <section className="mx-auto max-w-6xl px-4 pt-24 pb-24 sm:px-6">
-      <h1 className="text-5xl font-semibold tracking-tight sm:text-6xl">Blog</h1>
+      <h1 className="text-5xl font-bold tracking-tight sm:text-6xl">Blog</h1>
       <p className="mt-6 max-w-2xl text-lg text-muted">
         Guides and breakdowns on clipping, short-form distribution and what moves views.
       </p>
@@ -30,7 +30,7 @@ export default async function Blog() {
                 )}
                 <div className="flex flex-1 flex-col p-6">
                   <p className="text-xs text-muted">{formatDate(p.published_at)}</p>
-                  <h2 className="mt-2 text-lg font-medium leading-snug group-hover:text-accent">{p.title}</h2>
+                  <h2 className="mt-2 text-lg font-semibold leading-snug group-hover:text-accent">{p.title}</h2>
                   <p className="mt-3 line-clamp-3 text-sm text-muted">{p.excerpt}</p>
                 </div>
               </Link>

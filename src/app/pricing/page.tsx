@@ -59,7 +59,7 @@ export default function Pricing() {
           </Link>{" "}
           / <span>Pricing</span>
         </nav>
-        <h1 className="mt-6 text-5xl font-semibold tracking-tight sm:text-6xl">Clipping pricing</h1>
+        <h1 className="mt-6 text-5xl font-bold tracking-tight sm:text-6xl">Clipping pricing</h1>
         <p className="mt-6 text-lg leading-relaxed text-muted">
           You pay per 1,000 verified views. Your budget goes into a view pool, and clippers are paid from it as their clips
           earn views. When the pool is spent, the campaign is done. Campaigns start at {facts.minimumBudgetLabel}.
@@ -148,9 +148,9 @@ export default function Pricing() {
                       </Link>
                     </td>
                     <td className="px-5 py-3 text-muted">{c.category}</td>
-                    <td className="px-5 py-3 font-mono">{c.viewsLabel}</td>
-                    <td className="px-5 py-3 font-mono">{c.spendUsd ? formatUsd(c.spendUsd) : "Not public"}</td>
-                    <td className="px-5 py-3 font-mono">${c.cpmUsd!.toFixed(2)}</td>
+                    <td className="px-5 py-3 font-display font-semibold tabular-nums">{c.viewsLabel}</td>
+                    <td className="px-5 py-3 font-display font-semibold tabular-nums">{c.spendUsd ? formatUsd(c.spendUsd) : "Not public"}</td>
+                    <td className="px-5 py-3 font-display font-semibold tabular-nums">${c.cpmUsd!.toFixed(2)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -170,7 +170,7 @@ export default function Pricing() {
           <dl className="mt-6 divide-y divide-line border-y border-line">
             {faqs.map((f) => (
               <div key={f.q} className="py-6">
-                <dt className="font-medium">{f.q}</dt>
+                <dt className="font-display font-semibold">{f.q}</dt>
                 <dd className="mt-2 leading-relaxed text-muted">{f.a}</dd>
               </div>
             ))}

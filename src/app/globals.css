@@ -24,7 +24,9 @@
   --color-line: var(--line);
   --color-accent: var(--accent);
   --color-accent-ink: var(--accent-ink);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-manrope);
+  --font-label: var(--font-label-face);
   --font-mono: var(--font-geist-mono);
 }
 
@@ -35,9 +37,17 @@ html {
 body {
   background: var(--bg);
   color: var(--fg);
-  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-weight: 400;
   -webkit-font-smoothing: antialiased;
 }
+
+/* Headings in Manrope: H1 bold, H2 and H3 semibold. */
+h1, h2, h3, h4 {
+  font-family: var(--font-manrope), system-ui, sans-serif;
+}
+h1 { font-weight: 700; }
+h2, h3, h4 { font-weight: 600; }
 
 ::selection {
   background: var(--accent);
@@ -68,8 +78,8 @@ body {
 /* Blog post body: HTML from the admin editor. */
 .post-body { font-size: 1.0625rem; line-height: 1.75; color: color-mix(in srgb, var(--fg) 88%, transparent); }
 .post-body > * + * { margin-top: 1.25em; }
-.post-body h2 { margin-top: 2em; font-size: 1.6rem; font-weight: 600; letter-spacing: -0.01em; color: var(--fg); }
-.post-body h3 { margin-top: 1.6em; font-size: 1.25rem; font-weight: 600; color: var(--fg); }
+.post-body h2 { margin-top: 2em; font-family: var(--font-manrope), sans-serif; font-size: 1.6rem; font-weight: 600; letter-spacing: -0.01em; color: var(--fg); }
+.post-body h3 { margin-top: 1.6em; font-family: var(--font-manrope), sans-serif; font-size: 1.25rem; font-weight: 600; color: var(--fg); }
 .post-body a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
 .post-body ul { list-style: disc; padding-left: 1.4em; }
 .post-body ol { list-style: decimal; padding-left: 1.4em; }
@@ -95,10 +105,10 @@ body {
 .ne-hatch {
   background-image: repeating-linear-gradient(135deg, rgb(255 255 255 / 0.022) 0 1px, transparent 1px 11px);
 }
-.ne-caption { font: 500 10px var(--font-geist-mono), ui-monospace, monospace; letter-spacing: 0.12em; text-transform: uppercase; fill: var(--muted); }
-.ne-label { font: 500 12px var(--font-geist-sans), system-ui, sans-serif; fill: var(--fg); transition: fill 0.3s; }
+.ne-caption { font: 400 8.5px var(--font-label-face), sans-serif; letter-spacing: 0.08em; text-transform: uppercase; fill: var(--muted); }
+.ne-label { font: 600 12px var(--font-manrope), system-ui, sans-serif; fill: var(--fg); transition: fill 0.3s; }
 .ne-label-dim { fill: var(--muted); }
-.ne-brand { font: 600 12px var(--font-geist-sans), system-ui, sans-serif; letter-spacing: 0.22em; fill: var(--fg); }
+.ne-brand { font: 400 11px var(--font-label-face), sans-serif; letter-spacing: 0.1em; fill: var(--fg); }
 .ne-status { font: 400 8.5px var(--font-geist-mono), ui-monospace, monospace; fill: var(--muted); }
 .ne-flow { fill: none; stroke: var(--line-strong); stroke-width: 1.2; transition: stroke 0.3s; }
 .ne-flow-on { stroke: rgb(var(--glow) / 0.75); }

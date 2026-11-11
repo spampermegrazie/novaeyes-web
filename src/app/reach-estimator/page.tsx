@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function ReachEstimatorPage() {
   return (
     <section className="mx-auto max-w-6xl px-4 pt-24 pb-24 sm:px-6">
-      <h1 className="text-5xl font-semibold tracking-tight sm:text-6xl">Estimate your reach</h1>
+      <h1 className="text-5xl font-bold tracking-tight sm:text-6xl">Estimate your reach</h1>
       <p className="mt-6 max-w-2xl text-lg text-muted">
         Start from your budget or from the views you want. Pick your niche and get a range based on past campaigns.
       </p>

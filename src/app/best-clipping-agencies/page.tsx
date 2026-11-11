@@ -39,7 +39,7 @@ export default function BestClippingAgencies() {
   return (
     <>
       <section className="mx-auto max-w-4xl px-4 pt-24 pb-12 sm:px-6">
-        <h1 className="text-5xl font-semibold tracking-tight">How to compare clipping agencies</h1>
+        <h1 className="text-5xl font-bold tracking-tight">How to compare clipping agencies</h1>
         <p className="mt-6 text-lg text-muted">
           Most rankings of clipping agencies are written by an agency that ranks itself first. This one shows its criteria, so
           you can check every row yourself.
@@ -50,7 +50,7 @@ export default function BestClippingAgencies() {
         <dl className="mt-6 space-y-4">
           {criteria.map((c) => (
             <div key={c.name} className="rounded-2xl border border-line p-5">
-              <dt className="font-medium">{c.name}</dt>
+              <dt className="font-display font-semibold">{c.name}</dt>
               <dd className="mt-1 text-muted">{c.body}</dd>
             </div>
           ))}
@@ -75,10 +75,10 @@ export default function BestClippingAgencies() {
                 <tr key={r.name}>
                   <td className="px-5 py-3 font-medium">{r.name}</td>
                   <td className="px-5 py-3">{r.model}</td>
-                  <td className="px-5 py-3 font-mono">{r.minimum}</td>
+                  <td className="px-5 py-3 font-display font-semibold tabular-nums">{r.minimum}</td>
                   <td className="px-5 py-3">{r.network}</td>
                   <td className="px-5 py-3">{r.proof}</td>
-                  <td className="px-5 py-3 font-mono text-muted">{r.verifiedOn}</td>
+                  <td className="px-5 py-3 font-display font-semibold tabular-nums text-muted">{r.verifiedOn}</td>
                 </tr>
               ))}
             </tbody>
