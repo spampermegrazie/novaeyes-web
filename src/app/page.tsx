@@ -5,6 +5,8 @@ import { CampaignCard } from "@/components/campaign-card";
 import { Cta } from "@/components/cta";
 import { JsonLd, faqJsonLd } from "@/components/json-ld";
 import { homeFaqs } from "@/content/faqs";
+import { heroClips } from "@/content/hero-clips";
+import { ClipCurtainHero } from "@/components/ui/clip-curtain-hero";
 
 // Every word on this page is in the server HTML. The scroll stages (task: design
 // pass) animate these sections; they never inject content, so crawlers read it all.
@@ -25,28 +27,32 @@ export default function Home() {
     <>
       <JsonLd data={faqJsonLd(homeFaqs)} />
 
-      {/* Stage 1: ignition */}
-      <section id="ignition" className="mx-auto max-w-6xl px-4 pt-28 pb-24 sm:px-6 sm:pt-36">
-        <p className="text-sm tracking-widest text-muted uppercase">{facts.tagline}</p>
-        <h1 className="mt-6 max-w-4xl text-5xl font-semibold tracking-tight sm:text-7xl">
-          Short-form reach, paid per verified view.
+      {/* Stage 1: ignition. Clips split from behind the headline, then drift as you scroll. */}
+      <ClipCurtainHero clips={heroClips}>
+        <p className="text-[11px] tracking-[0.18em] text-muted uppercase sm:text-sm sm:tracking-[0.3em]">{facts.tagline}</p>
+        <h1 className="mx-auto mt-6 text-5xl leading-[1.02] font-semibold tracking-tight text-balance sm:text-6xl lg:text-[64px]">
+          Short-form reach, <br className="hidden md:block" />
+          paid per verified view.
         </h1>
-        <p className="mt-8 max-w-2xl text-lg leading-relaxed text-muted">{facts.oneLiner}</p>
-        <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+        <p className="mx-auto mt-6 max-w-md text-base leading-relaxed text-muted sm:text-lg">
+          {facts.clippersLabel} clippers post your content across TikTok, Reels, Shorts and X. You pay only for the
+          views that are verified.
+        </p>
+        <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <Link
             href="/book"
-            className="rounded-full bg-accent px-6 py-3 text-center text-sm font-medium text-accent-ink hover:opacity-90"
+            className="rounded-full bg-accent px-6 py-3 text-center text-sm font-medium text-accent-ink shadow-[0_0_32px_rgb(var(--glow)/0.35)] hover:opacity-90"
           >
             Book a 15-minute reach audit
           </Link>
           <Link
             href="/reach-estimator"
-            className="rounded-full border border-line px-6 py-3 text-center text-sm hover:border-muted/50"
+            className="rounded-full border border-line bg-bg/60 px-6 py-3 text-center text-sm backdrop-blur hover:border-muted/50"
           >
             Estimate your reach
           </Link>
         </div>
-      </section>
+      </ClipCurtainHero>
 
       <section aria-label="NovaEyes in numbers" className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
         <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line md:grid-cols-4">

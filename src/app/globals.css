@@ -44,6 +44,27 @@ body {
   color: var(--accent-ink);
 }
 
+/* Hero clip placeholders: a moving sheen and a looping playback bar. */
+.clip-sheen {
+  background: linear-gradient(115deg, transparent 30%, rgb(var(--glow) / 0.16) 45%, rgb(255 255 255 / 0.06) 50%, transparent 65%);
+  background-size: 250% 100%;
+  animation: clip-sheen 3.6s linear infinite;
+}
+@keyframes clip-sheen {
+  from { background-position: 120% 0; }
+  to { background-position: -120% 0; }
+}
+.clip-progress {
+  width: 0;
+  animation-name: clip-progress;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+@keyframes clip-progress {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
 /* Blog post body: HTML from the admin editor. */
 .post-body { font-size: 1.0625rem; line-height: 1.75; color: color-mix(in srgb, var(--fg) 88%, transparent); }
 .post-body > * + * { margin-top: 1.25em; }
