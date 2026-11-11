@@ -101,24 +101,20 @@ export default function Home() {
         </p>
       </section>
 
-      {/* Stage 2: the engine */}
-      <section id="how-it-works" className="ne-hatch border-y border-line bg-bg-raised/40">
-        <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6">
-          <div className="text-center">
-            <p className="inline-block rounded-full border border-line bg-bg px-3 py-1 font-label text-[10px] tracking-[0.14em] text-muted uppercase">
-              The engine
-            </p>
-            <h2 className="mt-5 text-3xl font-semibold tracking-tight text-balance sm:text-5xl">
-              How a campaign works
-              <span className="block text-muted">One video in, thousands of clips out.</span>
-            </h2>
-            <p className="mx-auto mt-5 max-w-xl text-lg text-muted">
-              This is distribution, not a video editing service. You only pay for what performs.
-            </p>
-          </div>
-          <div className="mt-16">
-            <EngineSteps steps={steps} />
-          </div>
+      {/* Stage 2: the engine. Title, steps and diagram pin together as one unit. */}
+      <section id="how-it-works">
+        <div className="mx-auto max-w-6xl px-6 py-16 sm:px-10 lg:px-12 lg:py-8">
+          <EngineSteps
+            steps={steps}
+            intro={
+              <div>
+                <p className="font-label text-[10px] tracking-[0.14em] text-muted uppercase">The engine</p>
+                <h2 className="mt-4 max-w-3xl text-3xl tracking-tight text-balance sm:text-4xl">
+                  How a campaign works. <span className="text-muted">One video in, thousands of clips out.</span>
+                </h2>
+              </div>
+            }
+          />
         </div>
       </section>
 

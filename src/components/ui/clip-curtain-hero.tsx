@@ -20,6 +20,7 @@ import {
 } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import type { HeroClip } from "@/content/hero-clips";
+import { LogoMark, Wordmark } from "@/components/brand";
 
 const SPRING = { stiffness: 65, damping: 22, mass: 0.5 };
 const OPEN_AT = 0.55; // share of the scene's scroll distance it takes to fully open
@@ -144,11 +145,11 @@ function ClipPlaceholder({ clip, index }: { clip: HeroClip; index: number }) {
       <span className="absolute top-2 left-2 rounded-full bg-black/55 px-2 py-0.5 text-[9px] font-medium text-white/80">
         {clip.platform}
       </span>
-      <span className="absolute inset-0 flex -rotate-12 items-center justify-center font-label text-[10px] tracking-[0.14em] text-white/20 uppercase select-none">
-        NovaEyes
+      <span className="absolute inset-0 flex items-center justify-center text-white/15 select-none">
+        <LogoMark className="w-1/2" />
       </span>
-      <span className="absolute right-2 bottom-4 font-label text-[7px] tracking-[0.1em] text-white/45 uppercase select-none">
-        NovaEyes
+      <span className="absolute right-2 bottom-4 text-white/45 select-none">
+        <Wordmark className="h-[5px] w-auto" />
       </span>
       <div className="absolute inset-x-2 bottom-2 h-0.5 overflow-hidden rounded-full bg-white/15">
         <div

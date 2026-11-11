@@ -33,6 +33,7 @@ export const organizationJsonLd = {
       url: facts.url,
       description: facts.oneLiner,
       slogan: facts.tagline,
+      logo: { "@type": "ImageObject", url: `${facts.url}/brand/novaeyes-mark-512.png`, width: 512, height: 512 },
       foundingDate: String(facts.foundingYear),
       founder: { "@id": PERSON_ID },
       email: "andrea@nova-eyes.com",

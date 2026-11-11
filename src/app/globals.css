@@ -102,9 +102,6 @@ h2, h3, h4 { font-weight: 600; }
 :root {
   --line-strong: #2a2b36;
 }
-.ne-hatch {
-  background-image: repeating-linear-gradient(135deg, rgb(255 255 255 / 0.022) 0 1px, transparent 1px 11px);
-}
 .ne-caption { font: 400 8.5px var(--font-label-face), sans-serif; letter-spacing: 0.08em; text-transform: uppercase; fill: var(--muted); }
 .ne-label { font: 600 12px var(--font-manrope), system-ui, sans-serif; fill: var(--fg); transition: fill 0.3s; }
 .ne-label-dim { fill: var(--muted); }

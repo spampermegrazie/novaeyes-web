@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { facts, nav, verticalLinks } from "@/content/facts";
+import { Logo } from "./brand";
 
 export function SiteFooter() {
   return (
     <footer className="border-t border-line">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-4">
         <div className="md:col-span-2">
-          <p className="font-label text-[13px] tracking-[0.12em] uppercase">NovaEyes</p>
+          <Logo />
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted">{facts.oneLiner}</p>
           <p className="mt-4 text-sm text-muted">
             Founded {facts.foundingYear} in {facts.location}.

@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { nav } from "@/content/facts";
+import { Logo } from "./brand";
 
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 border-b border-line/60 bg-bg/70 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-        <Link href="/" className="font-label text-[13px] tracking-[0.12em] uppercase">
-          NovaEyes
+        <Link href="/" aria-label="NovaEyes home" className="text-fg">
+          <Logo />
         </Link>
         <nav aria-label="Main" className="hidden items-center gap-7 font-display text-sm font-medium text-muted md:flex">
           {nav.map((item) => (
