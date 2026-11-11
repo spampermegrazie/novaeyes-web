@@ -40,10 +40,9 @@ export function SiteFooter() {
               </Link>
             </li>
             <li>
-              {/* TODO: replace with the real contact address. */}
-              <a href="mailto:hello@nova-eyes.com" className="text-muted hover:text-fg">
-                Email us
-              </a>
+              <Link href="/book" className="text-muted hover:text-fg">
+                Book a call
+              </Link>
             </li>
           </ul>
         </div>

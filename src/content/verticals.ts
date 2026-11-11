@@ -80,12 +80,12 @@ export const verticals: Vertical[] = [
       "Logo clipping campaigns that place your brand on viral short-form clips across 20,000 creator pages. Pay per verified view.",
     h1: "Logo clipping",
     intro:
-      "Your logo rides on clips people already want to watch. Clippers add your brand to high-performing short-form content across their pages, giving you repeated exposure priced per verified view.",
-    whatWeClip: ["Brand overlays on trending formats", "Niche-matched creator pages", "Platform-native placements"],
+      "Logo clipping is for brands without original video content. Creators place your logo, promo code and website URL on existing high-performing short-form content, producing awareness and brand search lift at efficient CPMs.",
+    whatWeClip: ["Logo overlays on trending formats", "Promo codes and URLs on screen", "Niche-matched creator pages"],
     faqs: [
       {
-        q: "Which brands is logo clipping for?",
-        a: "Brands that want repeated, low-cost exposure with a specific audience, such as apps, gaming, supplements and streetwear.",
+        q: "Do I need my own video content?",
+        a: "No. Logo clipping runs on existing high-performing content, so you only provide your logo, promo code and URL.",
       },
     ],
   },

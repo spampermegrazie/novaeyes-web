@@ -1,9 +1,8 @@
 import { estimate, formatCompact, formatRange, formatUsd, type EstimateInput } from "@/lib/estimator";
 
 // Lead capture for the reach estimator.
-// Storage: a `leads` table in the existing Supabase / Lovable Cloud database,
-// written through the REST API with the service role key (server only).
-// Email: Resend. Both are configured through Vercel environment variables.
+// Storage: a `leads` table in the same database the Lovable app uses, written
+// through its REST API from the server. Email: Resend. Both configured in Vercel env.
 
 type Body = {
   email?: string;
@@ -63,7 +62,9 @@ export async function POST(request: Request) {
   };
 
   const supabaseUrl = process.env.SUPABASE_URL;
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  // The publishable key works because the leads table allows insert-only for anonymous
+  // requests (see supabase/leads.sql). A service role key is used instead when available.
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_PUBLISHABLE_KEY;
 
   if (!supabaseUrl || !serviceKey) {
     if (process.env.NODE_ENV !== "production") {

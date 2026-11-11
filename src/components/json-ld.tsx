@@ -16,7 +16,7 @@ export const organizationJsonLd = {
   url: facts.url,
   description: facts.oneLiner,
   foundingDate: String(facts.foundingYear),
-  founder: { "@type": "Person", name: facts.founder },
+  founder: { "@type": "Person", name: facts.founder, sameAs: facts.founderProfiles },
   address: { "@type": "PostalAddress", addressLocality: "Ferrara", addressCountry: "IT" },
   ...(facts.sameAs.length ? { sameAs: facts.sameAs } : {}),
 };

@@ -4,8 +4,8 @@ import Cal from "@calcom/embed-react";
 import { useMemo, useSyncExternalStore } from "react";
 import { getAttribution } from "@/lib/attribution";
 
-// Cal event link, e.g. "novaeyes/reach-audit". Set in Vercel env.
-const CAL_LINK = process.env.NEXT_PUBLIC_CAL_LINK ?? "";
+// Cal event link. Defaults to the event the live site uses today.
+const CAL_LINK = process.env.NEXT_PUBLIC_CAL_LINK || "novaeyes/novaeyes-intro-call";
 
 type Prefill = {
   email?: string;

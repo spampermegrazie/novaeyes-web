@@ -48,6 +48,17 @@ export default function Home() {
         </div>
       </section>
 
+      <section aria-label="NovaEyes in numbers" className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
+        <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line md:grid-cols-4">
+          {facts.stats.map((s) => (
+            <div key={s.label} className="bg-bg px-6 py-8">
+              <dd className="font-mono text-3xl font-semibold tracking-tight">{s.value}</dd>
+              <dt className="mt-1 text-sm text-muted">{s.label}</dt>
+            </div>
+          ))}
+        </dl>
+      </section>
+
       {/* Stage 2: the network */}
       <section id="network" className="border-y border-line bg-bg-raised">
         <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6">
@@ -92,6 +103,21 @@ export default function Home() {
             </li>
           ))}
         </ul>
+      </section>
+
+      <section id="founder" className="border-y border-line bg-bg-raised">
+        <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6">
+          <p className="text-sm tracking-widest text-muted uppercase">Built by operators, not spectators</p>
+          <h2 className="mt-4 text-3xl font-semibold tracking-tight sm:text-5xl">{facts.founder}</h2>
+          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted">
+            Andrea built a media network to over 500K followers before turning everything he learned into NovaEyes, a
+            distribution engine now powering {facts.clippersLabel}+ creators and hundreds of millions of views for the brands
+            and creators he works with.
+          </p>
+          <blockquote className="mt-10 border-l-2 border-accent pl-6 text-2xl font-medium sm:text-3xl">
+            Anyone can make content. We decide who sees it.
+          </blockquote>
+        </div>
       </section>
 
       {/* Stage 4: control panel */}

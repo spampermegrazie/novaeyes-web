@@ -1,27 +1,29 @@
-import { facts } from "./facts";
+import { faqGroups } from "./faq-groups";
 
+// Homepage FAQ, ported from the live homepage. The pricing answer leaves out the
+// fee structure until Andrea decides whether to publish it (see faq-groups.ts).
 export const homeFaqs = [
   {
-    q: "What is a clipping agency?",
-    a: "A clipping agency pays a network of creators, called clippers, to cut your long-form content into short clips and post them on their own pages. You get reach across many accounts at once instead of relying on your own.",
+    q: "How does pricing work?",
+    a: "NovaEyes operates on a pay-per-1,000-views model. Clients fund a view pool, a budget that gets distributed to clippers as their clips generate verified views. There are no retainers, no flat fees, and no charges for content that does not perform.",
   },
   {
-    q: "How does NovaEyes pricing work?",
-    a: `${facts.model} Campaigns start at ${facts.minimumBudgetLabel}.`,
+    q: "How is this different from influencer marketing?",
+    a: "Influencer marketing pays a fixed fee for a single post from one creator, regardless of performance. NovaEyes deploys hundreds of clippers simultaneously, each paid only when their clips generate real views. The result is a volume of distribution that a single influencer deal cannot replicate, at a cost that scales with actual results rather than guarantees.",
   },
   {
-    q: "Which platforms do clips go out on?",
-    a: `${facts.platforms.join(", ")}.`,
+    q: "What platforms does NovaEyes distribute content on?",
+    a: "NovaEyes distributes content across TikTok, Instagram Reels, YouTube Shorts, and X through its network of over 20,000 vetted clippers.",
   },
   {
-    q: "How do I see results?",
-    a: "Views are tracked per clip in a campaign dashboard you can open at any time, plus a report when the campaign ends.",
+    q: "How do you ensure clip quality and brand safety?",
+    a: "Every clip goes through an approval process before it is eligible for payout. Clippers operate within campaign rules set during the setup phase, which define tone, format, restricted topics, and any brand guidelines. Clips that do not meet the criteria do not get approved and the clipper does not earn from them.",
   },
   {
-    q: "What do I need to provide?",
-    a: "The source content: episodes, fight footage, a song, product shots. Clippers make the clips, and we set the brief, review quality and optimise the campaign every week.",
+    q: "How fast can a campaign go live?",
+    a: "Most campaigns are active within 48 hours of brief approval.",
   },
 ];
 
-// TODO: add the remaining FAQs from the current /faq page once the repo is connected.
-export const allFaqs = [...homeFaqs];
+export { faqGroups };
+export const allFaqs = faqGroups.flatMap((g) => g.items);

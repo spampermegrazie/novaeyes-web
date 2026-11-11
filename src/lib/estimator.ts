@@ -57,9 +57,10 @@ export function estimate(input: EstimateInput): Estimate {
     };
   }
 
+  const clipCap = (spend: number) => Math.round(spend * estimatorConfig.maxClipsPerDollar);
   const clips = {
-    low: Math.max(1, Math.round(views.low / niche.viewsPerClip)),
-    high: Math.max(1, Math.round(views.high / niche.viewsPerClip)),
+    low: Math.max(1, Math.min(Math.round(views.low / niche.viewsPerClip), clipCap(budgetUsd.low))),
+    high: Math.max(1, Math.min(Math.round(views.high / niche.viewsPerClip), clipCap(budgetUsd.high))),
   };
 
   return { mode: input.mode, niche, views, budgetUsd, cpmUsd: cpm, clips };

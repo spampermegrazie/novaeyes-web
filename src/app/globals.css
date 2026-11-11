@@ -1,18 +1,18 @@
 @import "tailwindcss";
 
 /*
-  Design tokens. PLACEHOLDER palette: swap --accent and friends for the
-  current NovaEyes palette once the Lovable repo is connected.
-  The site is dark by design, so there is no light theme.
+  Design tokens from the current NovaEyes palette (Lovable repo, src/index.css,
+  dark theme). The site is dark by design, so there is no light theme.
 */
 :root {
-  --bg: #050507;
-  --bg-raised: #0c0c10;
-  --fg: #f4f4f6;
-  --muted: #9a9aa6;
-  --line: #1f1f27;
-  --accent: #7c8cff;
-  --accent-ink: #050507;
+  --bg: #0d0d12; /* hsl(240 15% 6%) */
+  --bg-raised: #14141a; /* hsl(240 12% 9%) */
+  --fg: #f2f2f2; /* hsl(0 0% 95%) */
+  --muted: #757c8a; /* hsl(220 8% 50%) */
+  --line: #1b1b22; /* hsl(240 12% 12%) */
+  --accent: #3b82f6; /* the blue used across the live site and Cal */
+  --accent-ink: #ffffff;
+  --glow: 59 130 246; /* accent as RGB, for rgba() glows */
   color-scheme: dark;
 }
 
@@ -43,6 +43,19 @@ body {
   background: var(--accent);
   color: var(--accent-ink);
 }
+
+/* Blog post body: HTML from the admin editor. */
+.post-body { font-size: 1.0625rem; line-height: 1.75; color: color-mix(in srgb, var(--fg) 88%, transparent); }
+.post-body > * + * { margin-top: 1.25em; }
+.post-body h2 { margin-top: 2em; font-size: 1.6rem; font-weight: 600; letter-spacing: -0.01em; color: var(--fg); }
+.post-body h3 { margin-top: 1.6em; font-size: 1.25rem; font-weight: 600; color: var(--fg); }
+.post-body a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+.post-body ul { list-style: disc; padding-left: 1.4em; }
+.post-body ol { list-style: decimal; padding-left: 1.4em; }
+.post-body li + li { margin-top: 0.4em; }
+.post-body blockquote { border-left: 2px solid var(--accent); padding-left: 1.2em; color: var(--fg); }
+.post-body img { border-radius: 1rem; border: 1px solid var(--line); }
+.post-body strong { color: var(--fg); }
 
 @media (prefers-reduced-motion: reduce) {
   *,
