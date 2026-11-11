@@ -136,8 +136,8 @@ export const campaigns: Campaign[] = [
       },
     ],
     visual: { kind: "logo", src: "/clients/oktagon-logo.png", avatar: "/clients/oktagon-avatar.webp", width: 600, height: 600 },
-    // Hidden until Andrea confirms Patrick is fine with it being public.
-    publicApproved: false,
+    // Andrea confirmed Patrick's OK on Nov 12, 2026.
+    publicApproved: true,
   },
   {
     slug: "rob-the-bank",
