@@ -1,26 +1,55 @@
 @import "tailwindcss";
 
+/*
+  Design tokens. PLACEHOLDER palette: swap --accent and friends for the
+  current NovaEyes palette once the Lovable repo is connected.
+  The site is dark by design, so there is no light theme.
+*/
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #050507;
+  --bg-raised: #0c0c10;
+  --fg: #f4f4f6;
+  --muted: #9a9aa6;
+  --line: #1f1f27;
+  --accent: #7c8cff;
+  --accent-ink: #050507;
+  color-scheme: dark;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-bg: var(--bg);
+  --color-bg-raised: var(--bg-raised);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  background: var(--bg);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
