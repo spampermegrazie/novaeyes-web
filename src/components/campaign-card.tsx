@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { Campaign } from "@/content/campaigns";
+import { cpmText, type Campaign } from "@/content/campaigns";
 
 export function CampaignCard({ campaign }: { campaign: Campaign }) {
   return (
@@ -11,10 +11,10 @@ export function CampaignCard({ campaign }: { campaign: Campaign }) {
       <p className="mt-3 font-display text-4xl font-bold tracking-tight">{campaign.viewsLabel}</p>
       <p className="text-sm text-muted">views</p>
       <dl className="mt-6 grid grid-cols-2 gap-3 text-sm">
-        {campaign.cpmUsd !== undefined && (
+        {cpmText(campaign) && (
           <div>
             <dt className="text-muted">CPM</dt>
-            <dd className="font-display font-semibold tabular-nums">${campaign.cpmUsd.toFixed(2)}</dd>
+            <dd className="font-display font-semibold tabular-nums">{cpmText(campaign)}</dd>
           </div>
         )}
         {campaign.clips !== undefined && (

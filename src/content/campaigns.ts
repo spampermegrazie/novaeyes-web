@@ -2,6 +2,9 @@
 // Numbers come from NovaEyes campaign dashboards. Never add a number here
 // that isn't in a dashboard.
 
+// A case study section: a question as the heading, then plain paragraphs and/or short points.
+export type StorySection = { heading: string; body?: string[]; points?: string[] };
+
 export type Campaign = {
   slug: string;
   client: string;
@@ -11,12 +14,16 @@ export type Campaign = {
   views: number;
   viewsLabel: string;
   cpmUsd?: number;
+  // For campaigns billed in another currency, the cost per 1,000 views as shown (e.g. €0.36).
+  cpmLabel?: string;
   spendUsd?: number;
   clips?: number;
   timeframe?: string;
   outcomes: string[];
   // One short result line, shown with the blue dot on the homepage.
   highlight: string;
+  // Long-form case study, rendered on /case-studies/[slug].
+  story?: StorySection[];
   // Homepage visual: a tinted cut-out portrait for people, a white logo for brands.
   // Files live in public/clients. avatar is the small round image in the list.
   visual?: { kind: "portrait" | "logo"; src: string; avatar: string; width: number; height: number };
@@ -60,18 +67,76 @@ export const campaigns: Campaign[] = [
     publicApproved: true,
   },
   {
+    // Source: Oktagon 94 campaign report (Oct 19, 2026), same numbers as the dashboard.
+    // Never publish the budget or how it splits; the CPM below is on what went to creators.
     slug: "oktagon-mma",
     client: "Oktagon MMA",
     category: "Sports, combat sports",
     vertical: "combat-sports",
-    summary: "Event campaign around Oktagon 94 in Frankfurt.",
-    views: 21_000_000,
-    viewsLabel: "21M",
-    timeframe: "2 weeks",
-    outcomes: [],
-    // TODO: final numbers and result line from Andrea, plus Patrick's OK to show it.
-    highlight: "",
+    summary:
+      "We ran short-form distribution for Oktagon 94, the MMA stadium show at Deutsche Bank Park in Frankfurt. 5,297 clips across YouTube Shorts, TikTok and Instagram Reels brought in 20.8 million views in 19 days.",
+    views: 20_833_959,
+    viewsLabel: "20.8M",
+    cpmLabel: "€0.36",
+    clips: 5_297,
+    timeframe: "19 days",
+    outcomes: ["20.8M views, inside the 15M to 25M we projected before launch", "One YouTube Short reached 5,788,676 views on its own"],
+    highlight: "Inside the 15M to 25M views we projected before launch",
+    story: [
+      {
+        heading: "What did Oktagon want?",
+        body: [
+          "Oktagon 94 was a stadium show in Frankfurt and the biggest night on their calendar. The goal was reach, not ticket sales. They wanted the event to feel like a moment people talked about, with the Oktagon name in front of as many people as possible before and after fight night.",
+        ],
+      },
+      {
+        heading: "How did the campaign run?",
+        body: [
+          "Clippers started two days before fight night and kept going for sixteen days after it. They cut fights, walkouts and the biggest moments into short clips for YouTube Shorts, TikTok and Instagram Reels, with Oktagon tagged in every caption and named in the text hook.",
+          "The broadcaster kept the biggest fight footage to itself for the first seven days, so those moments could only go out from day 7. Every clip was reviewed before it could earn, and clippers were only paid on approved clips.",
+        ],
+      },
+      {
+        heading: "What were the results?",
+        points: [
+          "20,833,959 views across 5,297 clips",
+          "€0.36 per 1,000 views",
+          "454,813 likes, comments and shares",
+          "Inside the 15M to 25M views we projected before launch, with more clips than projected",
+          "Buying the same views as ads, at a typical €10 to €30 per 1,000, would have cost 21 to 63 times more",
+        ],
+      },
+      {
+        heading: "Where did the views come from?",
+        body: [
+          "YouTube Shorts brought 14.88 million views, 71% of the total. TikTok brought 5.27 million and had the best engagement at 4.3%, about twice the campaign average. Instagram Reels brought 0.68 million. On average a Short got ten times the views of a Reel.",
+        ],
+      },
+      {
+        heading: "What happened on day 7?",
+        body: [
+          "October 3 was the first day the fight footage was free to use. Clips posted that day brought in 6.49 million views, and 5.79 million of them came from a single YouTube Short. From day 7 on, the campaign added 10.94 million views in six days, more than half of the total.",
+        ],
+      },
+      {
+        heading: "Is it normal that a few clips get most of the views?",
+        body: [
+          "Yes. The top 100 clips made up 77% of all views. Most clips stay small and a few take off, and nobody can tell in advance which ones will. That is why a campaign posts a lot.",
+          "It also shows how paying per approved clip works out. Most of the payouts went to 258 approved clips. The other 5,039 clips were never paid and still brought in 6.92 million views.",
+        ],
+      },
+      {
+        heading: "What would we do differently?",
+        points: [
+          "Start five to seven days before the event, not two. The first two days brought 2% of the views.",
+          "Brief clippers on the day 7 footage before the event, so it goes out the moment the window ends.",
+          "Put fewer clips on Instagram and more on Shorts and TikTok.",
+          "Keep a budget running between events, so clippers stay on the campaign instead of moving on.",
+        ],
+      },
+    ],
     visual: { kind: "logo", src: "/clients/oktagon-logo.png", avatar: "/clients/oktagon-avatar.webp", width: 600, height: 600 },
+    // Hidden until Andrea confirms Patrick is fine with it being public.
     publicApproved: false,
   },
   {
@@ -165,3 +230,9 @@ export function getCampaign(slug: string) {
 }
 
 export const totalPublicViews = publicCampaigns.reduce((sum, c) => sum + c.views, 0);
+
+// Cost per 1,000 views as displayed: dollars by default, or the campaign's own label.
+export function cpmText(c: Campaign) {
+  if (c.cpmUsd !== undefined) return `$${c.cpmUsd.toFixed(2)}`;
+  return c.cpmLabel;
+}

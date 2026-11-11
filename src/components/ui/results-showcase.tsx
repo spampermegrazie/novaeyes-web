@@ -9,7 +9,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState } from "react";
 import { useInView, useReducedMotion } from "motion/react";
-import type { Campaign } from "@/content/campaigns";
+import { cpmText, type Campaign } from "@/content/campaigns";
 import { CountUp } from "./count-up";
 
 const SLIDE_MS = 7000;
@@ -21,7 +21,8 @@ function viewsText(c: Campaign) {
 
 function stats(c: Campaign) {
   const out: { label: string; value: string }[] = [];
-  if (c.cpmUsd !== undefined) out.push({ label: "Per 1,000 views", value: `$${c.cpmUsd.toFixed(2)}` });
+  const cpm = cpmText(c);
+  if (cpm) out.push({ label: "Per 1,000 views", value: cpm });
   if (c.clips !== undefined) out.push({ label: "Clips", value: c.clips.toLocaleString("en-US") });
   if (c.timeframe) out.push({ label: "Timeframe", value: c.timeframe });
   return out;

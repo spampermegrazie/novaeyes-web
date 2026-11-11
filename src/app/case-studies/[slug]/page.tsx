@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getCampaign, publicCampaigns } from "@/content/campaigns";
+import { cpmText, getCampaign, publicCampaigns } from "@/content/campaigns";
 import { Cta } from "@/components/cta";
+import { CountUp } from "@/components/ui/count-up";
 import { JsonLd, breadcrumbJsonLd } from "@/components/json-ld";
 
 // Unknown slugs fall through to notFound() below.
@@ -13,10 +16,10 @@ export async function generateMetadata(props: PageProps<"/case-studies/[slug]">)
   const { slug } = await props.params;
   const c = getCampaign(slug);
   if (!c) return {};
-  const cpm = c.cpmUsd !== undefined ? ` at $${c.cpmUsd.toFixed(2)} CPM` : "";
+  const cpm = cpmText(c);
   return {
     title: `${c.client} Clipping Case Study: ${c.viewsLabel} Views`,
-    description: `How NovaEyes delivered ${c.viewsLabel} short-form views for ${c.client}${cpm}.${c.outcomes[0] ? ` ${c.outcomes[0]}.` : ""}`,
+    description: `How NovaEyes delivered ${c.viewsLabel} short-form views for ${c.client}${cpm ? ` at ${cpm} per 1,000 views` : ""}. ${c.highlight}.`,
     alternates: { canonical: `/case-studies/${c.slug}` },
   };
 }
@@ -26,12 +29,18 @@ export default async function CaseStudy(props: PageProps<"/case-studies/[slug]">
   const c = getCampaign(slug);
   if (!c) notFound();
 
+  const cpm = cpmText(c);
   const stats = [
-    { label: "Views", value: c.views.toLocaleString("en-US") },
-    c.cpmUsd !== undefined ? { label: "CPM", value: `$${c.cpmUsd.toFixed(2)}` } : null,
+    cpm ? { label: "Per 1,000 views", value: cpm } : null,
     c.clips !== undefined ? { label: "Clips", value: c.clips.toLocaleString("en-US") } : null,
     c.timeframe ? { label: "Timeframe", value: c.timeframe } : null,
   ].filter((s): s is { label: string; value: string } => s !== null);
+  const exact = c.views % 100_000 !== 0 ? c.views.toLocaleString("en-US") : c.viewsLabel;
+  const v = c.visual;
+  const fade =
+    v?.kind === "portrait"
+      ? "linear-gradient(to bottom, #000 55%, transparent 95%), linear-gradient(to right, transparent 0%, #000 45%)"
+      : "linear-gradient(to right, transparent 0%, #000 50%)";
 
   return (
     <>
@@ -43,32 +52,97 @@ export default async function CaseStudy(props: PageProps<"/case-studies/[slug]">
         ])}
       />
       <article>
-        <header className="mx-auto max-w-6xl px-4 pt-24 pb-12 sm:px-6">
-          <p className="font-label text-[11px] tracking-[0.14em] text-muted uppercase">Case study</p>
-          <h1 className="mt-4 text-5xl font-bold tracking-tight sm:text-6xl">{c.client}</h1>
-          <p className="mt-6 max-w-2xl text-lg text-muted">{c.summary}</p>
+        <header className="relative isolate mx-auto max-w-6xl px-6 pt-20 pb-12 sm:px-10 lg:px-12">
+          {v && (
+            <div
+              aria-hidden
+              className={`pointer-events-none absolute right-6 -z-10 sm:right-10 lg:right-12 ${
+                v.kind === "portrait" ? "top-10 h-[300px] w-[60%] opacity-40 sm:h-[380px] lg:opacity-75" : "top-36 h-[180px] w-[60%] opacity-[0.13]"
+              }`}
+              style={{ maskImage: fade, WebkitMaskImage: fade, maskComposite: "intersect", WebkitMaskComposite: "source-in" }}
+            >
+              <Image
+                src={v.src}
+                alt=""
+                fill
+                priority
+                sizes="(min-width: 1024px) 560px, 60vw"
+                className={v.kind === "portrait" ? "object-contain object-right-bottom" : "object-contain object-right drop-shadow-[0_0_40px_rgb(59_130_246/0.6)]"}
+              />
+            </div>
+          )}
+          <nav aria-label="Breadcrumb" className="text-sm text-muted">
+            <Link href="/" className="hover:text-fg">
+              Home
+            </Link>{" "}
+            /{" "}
+            <Link href="/case-studies" className="hover:text-fg">
+              Case studies
+            </Link>{" "}
+            / <span>{c.client}</span>
+          </nav>
+          <p className="mt-8 font-label text-[10px] tracking-[0.14em] text-accent uppercase">{c.category}</p>
+          <h1 className="mt-3 text-5xl tracking-tight sm:text-6xl">{c.client}</h1>
+          <p className="mt-10 font-display text-5xl leading-none font-bold tracking-tight sm:text-7xl lg:text-8xl">
+            <CountUp value={exact} />
+          </p>
+          <p className="mt-3 font-label text-[10px] tracking-[0.14em] text-muted uppercase">Verified views</p>
+          <p className="mt-10 max-w-2xl text-lg leading-relaxed text-muted">{c.summary}</p>
         </header>
-        <section className="mx-auto max-w-6xl px-4 sm:px-6">
-          <dl className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {stats.map((s) => (
-              <div key={s.label} className="rounded-2xl border border-line bg-bg-raised p-6">
-                <dt className="text-sm text-muted">{s.label}</dt>
-                <dd className="mt-2 font-display text-3xl font-bold tracking-tight">{s.value}</dd>
-              </div>
-            ))}
-          </dl>
-        </section>
-        {c.outcomes.length > 0 && (
-          <section className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-            <h2 className="text-2xl font-semibold tracking-tight">Outcome</h2>
-            <ul className="mt-4 space-y-2 text-lg">
-              {c.outcomes.map((o) => (
-                <li key={o}>{o}</li>
+
+        <div className="mx-auto max-w-6xl px-6 sm:px-10 lg:px-12">
+          {stats.length > 0 && (
+            <dl className="grid grid-cols-3 border-y border-line py-6">
+              {stats.map((s) => (
+                <div key={s.label} className="pr-3">
+                  <dd className="font-display text-xl font-bold tabular-nums sm:text-3xl">{s.value}</dd>
+                  <dt className="mt-1 font-label text-[9px] tracking-[0.12em] text-muted uppercase">{s.label}</dt>
+                </div>
               ))}
-            </ul>
-          </section>
-        )}
-        {/* TODO: port the brief, approach and example clips from the current case study page. */}
+            </dl>
+          )}
+          <p className="mt-6 flex max-w-2xl gap-3 text-lg leading-relaxed">
+            <span aria-hidden className="mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-accent shadow-[0_0_8px_rgb(var(--glow))]" />
+            {c.highlight}
+          </p>
+
+          {c.story ? (
+            <div className="max-w-3xl py-10">
+              {c.story.map((section) => (
+                <section key={section.heading} className="py-8">
+                  <h2 className="text-2xl tracking-tight sm:text-3xl">{section.heading}</h2>
+                  {section.body?.map((p) => (
+                    <p key={p} className="mt-4 text-lg leading-relaxed text-muted">
+                      {p}
+                    </p>
+                  ))}
+                  {section.points && (
+                    <ul className="mt-5 space-y-3">
+                      {section.points.map((p) => (
+                        <li key={p} className="flex gap-3 text-lg leading-relaxed">
+                          <span aria-hidden className="mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+                          {p}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </section>
+              ))}
+            </div>
+          ) : (
+            c.outcomes.length > 1 && (
+              <ul className="max-w-3xl space-y-3 py-12">
+                {c.outcomes.slice(1).map((o) => (
+                  <li key={o} className="flex gap-3 text-lg leading-relaxed">
+                    <span aria-hidden className="mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+                    {o}
+                  </li>
+                ))}
+              </ul>
+            )
+          )}
+          {/* TODO: port the brief, approach and example clips from the live pages for the other campaigns. */}
+        </div>
       </article>
       <Cta />
     </>
