@@ -9,6 +9,7 @@ import { CampaignCard } from "@/components/campaign-card";
 import { Cta } from "@/components/cta";
 import { JsonLd, faqJsonLd } from "@/components/json-ld";
 import { ClipCurtainHero } from "@/components/ui/clip-curtain-hero";
+import { CountUp } from "@/components/ui/count-up";
 import { EngineSteps, type EngineStep } from "@/components/ui/engine-steps";
 
 // Every word on this page is in the server HTML. The hero animates its text in,
@@ -79,9 +80,11 @@ export default function Home() {
 
       <section aria-label="NovaEyes in numbers" className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
         <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line md:grid-cols-4">
-          {facts.stats.map((s) => (
+          {facts.stats.map((s, i) => (
             <div key={s.label} className="bg-bg px-6 py-8">
-              <dd className="font-display text-3xl font-bold tracking-tight">{s.value}</dd>
+              <dd className="font-display text-3xl font-bold tracking-tight">
+                <CountUp value={s.value} delay={i * 0.12} />
+              </dd>
               <dt className="mt-1 text-sm text-muted">{s.label}</dt>
             </div>
           ))}

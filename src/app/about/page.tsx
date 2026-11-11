@@ -4,6 +4,7 @@ import Link from "next/link";
 import { facts } from "@/content/facts";
 import { publicCampaigns } from "@/content/campaigns";
 import { Cta } from "@/components/cta";
+import { CountUp } from "@/components/ui/count-up";
 import { JsonLd, breadcrumbJsonLd, aboutPageJsonLd } from "@/components/json-ld";
 import founderPhoto from "../../../public/andrea-corindo.jpg";
 
@@ -95,9 +96,11 @@ export default function About() {
           <section className="py-10">
             <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">NovaEyes in numbers</h2>
             <dl className="mt-6 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line">
-              {facts.stats.map((s) => (
+              {facts.stats.map((s, i) => (
                 <div key={s.label} className="bg-bg px-6 py-6">
-                  <dd className="font-display text-2xl font-bold tracking-tight">{s.value}</dd>
+                  <dd className="font-display text-2xl font-bold tracking-tight">
+                    <CountUp value={s.value} delay={i * 0.12} />
+                  </dd>
                   <dt className="mt-1 text-sm text-muted">{s.label}</dt>
                 </div>
               ))}

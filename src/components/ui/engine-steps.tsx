@@ -389,19 +389,7 @@ function Pipeline({
               </g>
             );
           })}
-          {orient === "h" ? (
-            <>
-              {caption((L.clippers.m + L.platforms.m) / 2, stepNames[1], 2)}
-              <text x={L.clippers.m} y={L.clippers.c[L.clippers.c.length - 1] + 34} textAnchor="middle" className="ne-caption">
-                {facts.clippersLabel} clippers
-              </text>
-            </>
-          ) : (
-            <>
-              {caption(L.clippers.m, `${facts.clippersLabel} clippers`)}
-              {caption(L.platforms.m, "They post on")}
-            </>
-          )}
+          {orient === "h" ? caption((L.clippers.m + L.platforms.m) / 2, stepNames[1], 2) : caption(L.platforms.m, "They post on")}
         </g>
 
         {/* packets: blue is your content going out, white is verified views coming back */}
@@ -445,30 +433,32 @@ function Badge({ x, y, n, on }: { x: number; y: number; n: number; on: boolean }
   );
 }
 
+// Solid glyphs in the text colour; the cut-outs use the chip's own fill.
 function InputIcon({ kind }: { kind: "play" | "shield" | "coin" }) {
-  const common = { fill: "none", stroke: "var(--fg)", strokeWidth: 1.4, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
+  const cut = "var(--bg-raised)";
   if (kind === "play")
     return (
       <g>
-        <rect x="0" y="0" width="16" height="14" rx="3" {...common} />
-        <path d="M6.5 4.2v5.6L11 7z" fill="var(--accent)" />
+        <rect x="0" y="0" width="16" height="14" rx="3.5" fill="var(--fg)" />
+        <path d="M6.3 4v6l5-3z" fill={cut} />
       </g>
     );
   if (kind === "shield")
     return (
       <g>
-        <path d="M8 0.5 14.5 3v4.5c0 3.4-2.6 5.6-6.5 6.8C4.1 13.1 1.5 10.9 1.5 7.5V3z" {...common} />
-        <path d="M5 7.4 7.2 9.5 11 5.4" {...common} stroke="var(--accent)" />
+        <path d="M8 0 15 2.8v4.7c0 3.6-2.8 6-7 7.3C3.8 13.5 1 11.1 1 7.5V2.8z" fill="var(--fg)" />
+        <path d="M4.9 7.3 7.1 9.4 11.1 5.2" fill="none" stroke={cut} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
       </g>
     );
   return (
     <g>
-      <circle cx="8" cy="7" r="6.8" {...common} />
+      <circle cx="8" cy="7" r="7.2" fill="var(--fg)" />
       <path
-        d="M10 4.6c-.6-.6-1.3-.9-2.1-.9-1.2 0-2 .6-2 1.5 0 2.1 4.3 1.1 4.3 3.4 0 .9-.9 1.6-2.2 1.6-.9 0-1.8-.4-2.4-1M8 2.6v1.1M8 10.2v1.2"
-        {...common}
-        stroke="var(--accent)"
-        strokeWidth={1.2}
+        d="M10 4.6c-.6-.6-1.3-.9-2.1-.9-1.2 0-2 .6-2 1.5 0 2.1 4.3 1.1 4.3 3.4 0 .9-.9 1.6-2.2 1.6-.9 0-1.8-.4-2.4-1M8 2.4v1.3M8 10.2v1.4"
+        fill="none"
+        stroke={cut}
+        strokeWidth={1.4}
+        strokeLinecap="round"
       />
     </g>
   );
