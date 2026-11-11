@@ -22,7 +22,7 @@ export const verticals: Vertical[] = [
   {
     path: "/combat-sports-clipping",
     name: "Combat sports",
-    campaignSlugs: ["brave-cf"],
+    campaignSlugs: ["brave-cf", "oktagon-mma"],
     title: "Combat Sports Clipping for MMA and Boxing",
     description:
       "We turn fight footage into thousands of short clips across TikTok, Reels, Shorts and X. BRAVE CF got 52.1M views at $0.21 CPM. You pay per verified view.",
