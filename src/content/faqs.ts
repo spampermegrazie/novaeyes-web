@@ -1,27 +1,28 @@
+import { facts } from "./facts";
 import { faqGroups } from "./faq-groups";
 
-// Homepage FAQ, ported from the live homepage. The pricing answer leaves out the
-// fee structure until Andrea decides whether to publish it (see faq-groups.ts).
+// Homepage FAQ. Written to answer the question in the first sentence, in plain words.
+// The pricing answer leaves out the fee structure until Andrea decides whether to publish it.
 export const homeFaqs = [
   {
     q: "How does pricing work?",
-    a: "NovaEyes operates on a pay-per-1,000-views model. Clients fund a view pool, a budget that gets distributed to clippers as their clips generate verified views. There are no retainers, no flat fees, and no charges for content that does not perform.",
+    a: `You fund a view pool, and that budget is paid out to clippers per 1,000 verified views their clips earn. There are no retainers, and you never pay for a clip that doesn't perform. Campaigns start at ${facts.minimumBudgetLabel}.`,
   },
   {
-    q: "How is this different from influencer marketing?",
-    a: "Influencer marketing pays a fixed fee for a single post from one creator, regardless of performance. NovaEyes deploys hundreds of clippers simultaneously, each paid only when their clips generate real views. The result is a volume of distribution that a single influencer deal cannot replicate, at a cost that scales with actual results rather than guarantees.",
+    q: "Which platforms do the clips go out on?",
+    a: "TikTok, Instagram Reels, YouTube Shorts and X. The same network covers all four.",
   },
   {
-    q: "What platforms does NovaEyes distribute content on?",
-    a: "NovaEyes distributes content across TikTok, Instagram Reels, YouTube Shorts, and X through its network of over 20,000 vetted clippers.",
-  },
-  {
-    q: "How do you ensure clip quality and brand safety?",
-    a: "Every clip goes through an approval process before it is eligible for payout. Clippers operate within campaign rules set during the setup phase, which define tone, format, restricted topics, and any brand guidelines. Clips that do not meet the criteria do not get approved and the clipper does not earn from them.",
+    q: "How do you keep clips on brand?",
+    a: "Every clip is reviewed before it can earn anything. Clippers follow rules set at the start of the campaign, covering tone, format, topics to avoid and your brand guidelines. Clips that break the rules are not approved and not paid.",
   },
   {
     q: "How fast can a campaign go live?",
-    a: "Most campaigns are active within 48 hours of brief approval.",
+    a: facts.launchTime,
+  },
+  {
+    q: "How do I see the results?",
+    a: "You get a live dashboard with views for every clip, plus a weekly report and a final report when the campaign ends.",
   },
 ];
 

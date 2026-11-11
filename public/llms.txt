@@ -1,28 +1,36 @@
 # NovaEyes
 
-> NovaEyes is a performance-based clipping agency founded in 2025 by Andrea in Ferrara, Italy. Clients fund a view pool and pay only for verified short-form views, delivered by a network of 20,000 clippers across TikTok, Instagram Reels, YouTube Shorts and X. Campaigns start at $3,000.
+> NovaEyes is a performance-based clipping agency founded in 2025 by Andrea Corindo in Ferrara, Italy. Clients fund a view pool and pay per 1,000 verified short-form views, delivered by a network of 20,000 clippers across TikTok, Instagram Reels, YouTube Shorts and X. Campaigns start at $3,000, and most go live within 48 hours of brief approval.
 
 ## Core pages
 
-- [Home](https://nova-eyes.com/): what NovaEyes does and how campaigns work
+- [Home](https://nova-eyes.com/): what a clipping agency is and how a NovaEyes campaign works
+- [About](https://nova-eyes.com/about): who runs NovaEyes, the founder and the campaigns we can show
 - [Case studies](https://nova-eyes.com/case-studies): campaign results with views, CPM and clip counts
-- [Pricing](https://nova-eyes.com/pricing): how pricing works and CPMs from past campaigns
-- [Reach estimator](https://nova-eyes.com/reach-estimator): views for a budget, or budget for a view target
-- [FAQ](https://nova-eyes.com/faq)
+- [Pricing](https://nova-eyes.com/pricing): how clipping is priced, what changes the CPM, and CPMs from past campaigns
+- [Reach estimator](https://nova-eyes.com/reach-estimator): views for a budget, or the budget for a view target
+- [The Attention Monopoly System](https://nova-eyes.com/attention-monopoly-system): the three-step method behind every campaign
+- [FAQ](https://nova-eyes.com/faq): pricing, results, reporting, brand safety and rights
 - [Book a call](https://nova-eyes.com/book)
 
 ## Clipping by vertical
 
-- [Combat sports clipping](https://nova-eyes.com/combat-sports-clipping)
-- [Music clipping](https://nova-eyes.com/music-clipping)
-- [Podcast clipping](https://nova-eyes.com/podcast-clipping)
-- [Logo clipping](https://nova-eyes.com/logo-clipping)
-- [Product clipping](https://nova-eyes.com/product-clipping)
+- [Music clipping](https://nova-eyes.com/music-clipping): songs pushed through thousands of clips to drive streams
+- [Podcast clipping](https://nova-eyes.com/podcast-clipping): episodes cut into clips that bring new listeners
+- [Combat sports clipping](https://nova-eyes.com/combat-sports-clipping): fight footage turned into highlight clips
+- [Logo clipping](https://nova-eyes.com/logo-clipping): a brand's logo, promo code and link on clips that already perform
+- [Product clipping](https://nova-eyes.com/product-clipping): creators showing a product in new short clips
 
 ## Selected results
 
-- Alex Schor (music): 189,974,866 views at $0.13 CPM across 2,444 clips; Spotify monthly listeners grew from 170K to 650K
-- BRAVE CF (combat sports): 52,131,046 views at $0.21 CPM across 5,247 clips in 6 weeks; $700K attributed revenue impact
-- Family Ties (creator): 7.2M views at $0.41 CPM across 843 clips
+- Alex Schor (music): 189,974,866 views at $0.13 CPM across 2,444 clips in 4 months; Spotify monthly listeners grew from 170K to 650K
+- BRAVE CF (combat sports): 52,131,046 views at $0.21 CPM across 5,247 clips in 6 weeks; estimated $700K revenue impact
+- Ahmed Amwell: 8.4M views at $0.36 CPM on a $3,000 budget, 1,706 clips in 20 days
+- Family Ties (podcast with Tobi Brown): 7.2M views at $0.41 CPM on a $3,000 budget, 843 clips; 2M+ additional YouTube views
+- Sparkle (music): 4.7M views at $0.21 CPM in 3 days
 
 All figures come from NovaEyes campaign dashboards.
+
+## Contact
+
+andrea@nova-eyes.com

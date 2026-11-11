@@ -27,6 +27,16 @@ export function SiteFooter() {
         <div>
           <p className="text-xs font-medium tracking-widest text-muted uppercase">Company</p>
           <ul className="mt-4 space-y-2 text-sm">
+            <li>
+              <Link href="/about" className="text-muted hover:text-fg">
+                About
+              </Link>
+            </li>
+            <li>
+              <Link href="/attention-monopoly-system" className="text-muted hover:text-fg">
+                How we run campaigns
+              </Link>
+            </li>
             {nav.map((item) => (
               <li key={item.href}>
                 <Link href={item.href} className="text-muted hover:text-fg">

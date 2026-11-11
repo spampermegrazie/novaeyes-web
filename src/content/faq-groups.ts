@@ -1,5 +1,9 @@
-// Ported from the current /faq page (Lovable repo, src/pages/Faq.tsx).
-// Edits: founding year corrected to 2025; fee structure removed from the pricing answers.
+// Full FAQ, rewritten from the old /faq page in plain language.
+// Every answer starts with the direct answer, then adds detail.
+// Fixed from the old page: founded 2025, Alex Schor is music (not podcast), Family Ties is podcast (not music).
+// The fee structure stays off the site until Andrea decides whether to publish it.
+
+import { facts } from "./facts";
 
 export type FaqItem = { q: string; a: string };
 export type FaqGroup = { title: string; items: FaqItem[] };
@@ -10,56 +14,56 @@ export const faqGroups: FaqGroup[] = [
     items: [
       {
         q: "What is NovaEyes?",
-        a: "NovaEyes is a performance-based clipping agency. We turn long-form content and brand assets into short-form clips that get distributed across TikTok, Instagram Reels, YouTube Shorts, and X through a network of over 20,000 vetted creators. Clients pay per 1,000 verified views delivered.",
+        a: `NovaEyes is a clipping agency that works on performance. We turn your videos into short clips and get them posted by ${facts.clippersLabel} clippers across TikTok, Instagram Reels, YouTube Shorts and X. You pay for verified views, not for hours or deliverables.`,
       },
       {
         q: "When was NovaEyes founded?",
-        a: "NovaEyes was founded in 2025 by Andrea Corindo.",
+        a: `In ${facts.foundingYear}, by ${facts.founder}.`,
       },
       {
         q: "Where is NovaEyes based?",
-        a: "NovaEyes is headquartered in Ferrara, Italy. Our creator network is distributed globally.",
+        a: "Our team is in Ferrara, Italy. The clippers are all over the world, and we work with clients in English.",
       },
       {
-        q: "How big is the NovaEyes creator network?",
-        a: "Over 20,000 active clippers distribute content through the NovaEyes network across TikTok, Instagram Reels, YouTube Shorts, and X.",
+        q: "How big is the clipper network?",
+        a: `More than ${facts.clippersLabel} active clippers. They post on TikTok, Instagram Reels, YouTube Shorts and X.`,
       },
       {
-        q: "Who do you typically work with?",
-        a: "Podcasters, combat sports promotions, musicians, supplement and ecommerce brands, streetwear labels, fintech companies, gaming creators, and personal brands. Any client with a content library or a brand worth amplifying.",
+        q: "Who do you work with?",
+        a: "Anyone with something worth seeing and a budget to push it: musicians, podcasters, fight promotions, founders, creators, and brands selling a product or an app.",
       },
     ],
   },
   {
-    title: "Services and campaign formats",
+    title: "Services",
     items: [
       {
         q: "What is a clipping campaign?",
-        a: "A clipping campaign takes long-form video (podcast episodes, fight footage, interviews, gameplay, event highlights) and distributes short clips through a managed creator network. You get multi-platform organic reach without managing editors or creators in-house.",
+        a: "A clipping campaign takes your long videos, like podcast episodes, fights, interviews or streams, and turns them into hundreds or thousands of short clips posted by other creators. You get reach on four platforms without hiring editors or managing anyone.",
       },
       {
         q: "What is logo clipping?",
-        a: "Logo clipping is for brands without original video content. Creators place your logo, promo code, and website URL on existing high-performing short-form content. It produces awareness and brand search lift at efficient CPMs without requiring source content from you.",
+        a: "Logo clipping is for brands that don't have their own video. Clippers put your logo, promo code and link on short clips that already perform, and post them on their pages.",
       },
       {
         q: "What is content clipping?",
-        a: "Content clipping uses your existing video library. We cut, hook, caption, and distribute short clips designed for TikTok, Instagram Reels, YouTube Shorts, and X.",
+        a: "Content clipping uses the videos you already have. Clippers pick the best moments and turn them into short clips with hooks and captions made for each platform.",
       },
       {
-        q: "Do you handle editing?",
-        a: "Yes. Clippers in our network handle editing, hooks, captions, formatting, and platform-specific optimization. You approve the creative direction during setup.",
+        q: "Do you handle the editing?",
+        a: "Yes. The clippers do the cutting, hooks, captions and formatting. You agree on the creative direction with us at the start.",
       },
       {
-        q: "What platforms do you distribute on?",
-        a: "TikTok, Instagram Reels, YouTube Shorts, and X. All four platforms are covered by the same network.",
+        q: "Which platforms do you post on?",
+        a: "TikTok, Instagram Reels, YouTube Shorts and X. The same network covers all four.",
       },
       {
-        q: "Can I choose which platforms to focus on?",
-        a: "Yes. Platform mix is set during the strategy call and can be adjusted weekly based on what is performing.",
+        q: "Can I pick which platforms to focus on?",
+        a: "Yes. We set the platform mix on the first call and change it each week based on what is working.",
       },
       {
-        q: "Do you create content from scratch?",
-        a: "Our model is built around clipping existing content or branded assets. If you do not have source content, logo clipping is the right format.",
+        q: "Do you make content from scratch?",
+        a: "No. We clip content that already exists, or put your brand on clips that already perform. If you have no video yet, logo clipping is the place to start.",
       },
     ],
   },
@@ -68,216 +72,214 @@ export const faqGroups: FaqGroup[] = [
     items: [
       {
         q: "How does pricing work?",
-        // TODO (Andrea): the live site publishes the fee structure here. Kept private
-        // until you decide whether fee transparency is part of the positioning.
-        a: "NovaEyes operates on a pay-per-1,000-views model. You fund a view pool that gets distributed to clippers as their clips generate verified views. Your quote covers the view pool, campaign management and launch. There are no retainers and no charges for content that does not perform.",
+        a: "You pay per 1,000 verified views. You fund a view pool, and clippers are paid from it as their clips earn views. There is no retainer, and clips that don't get views cost you nothing.",
       },
       {
-        q: "What does campaign management cover?",
-        a: "Onboarding, creative briefing, creator coordination, clip approvals, weekly reporting and optimization.",
+        q: "Is the view pool the full cost?",
+        a: "The view pool is what pays the clippers. Your full cost, including our fee for running the campaign, is set out in writing before anything is signed.",
       },
       {
-        q: "Is there a minimum spend?",
-        a: "Yes. The minimum monthly clipping budget is $3,000 to make the campaign mathematically viable for both you and the network.",
+        q: "What does running the campaign include?",
+        a: "Onboarding, the creative brief, managing the clippers, approving clips, weekly reports and moving budget to what works.",
       },
       {
-        q: "Are there long-term contracts?",
-        a: "No. There is no retainer and no minimum monthly commitment beyond the campaign you fund. You can scale up, scale down, pause, or stop at any time.",
+        q: "Is there a minimum budget?",
+        a: `Yes, ${facts.minimumBudgetLabel}. Below that, there isn't enough budget for clippers to pick up the campaign and for us to learn what works.`,
+      },
+      {
+        q: "Do I have to sign a long contract?",
+        a: "No. There is no retainer and no monthly commitment beyond the campaign you fund. You can scale up, scale down, pause or stop.",
       },
       {
         q: "How are clippers paid?",
-        a: "Clippers are paid per 1,000 verified views their approved clips generate. They only earn from clips that get approved and that hit verified view milestones.",
+        a: "Per 1,000 verified views on clips we approved. A clip that isn't approved, or doesn't get views, earns nothing.",
       },
       {
-        q: "What payment methods do you accept?",
-        a: "Bank transfer and standard invoicing. Payment terms are agreed during onboarding.",
+        q: "How do I pay?",
+        a: "By bank transfer against an invoice. Payment terms are agreed during onboarding.",
       },
       {
         q: "Do you offer refunds?",
-        a: "The clipping budget is only spent against verified views. Any unspent budget at the end of a campaign cycle stays in your view pool or is refunded based on the agreement.",
+        a: "The view pool is only spent on verified views. If budget is left at the end of a campaign, it either rolls into the next one or is refunded, depending on your agreement.",
       },
     ],
   },
   {
-    title: "Performance and results",
+    title: "Results",
     items: [
       {
         q: "What CPMs have you delivered?",
-        a: "Documented case studies include $0.13 CPM on the Alex Schor podcast campaign (189,974,866 views), $0.21 CPM on the BRAVE CF combat sports campaign (52,131,046 views), $0.21 CPM on the Sparkle music campaign, and $0.36 CPM on the Ahmed Amwell campaign.",
+        a: "Our lowest was $0.13 per 1,000 views on the Alex Schor music campaign, which reached 189,974,866 views. BRAVE CF and Sparkle both came in at $0.21, Ahmed Amwell at $0.36 and Family Ties at $0.41.",
       },
       {
-        q: "What is the lowest CPM you have hit?",
-        a: "$0.13 CPM on the Alex Schor podcast campaign, delivering 189,974,866 verified views. This is among the lowest publicly documented CPMs in managed podcast distribution.",
+        q: "How fast can a campaign start?",
+        a: `${facts.launchTime} That assumes your content and creative direction are ready.`,
       },
       {
-        q: "How fast can a campaign launch?",
-        a: "Most campaigns are active within 48 hours of brief approval, assuming source content and creative direction are ready.",
+        q: "How quickly do views come in?",
+        a: "The first clips usually go up within 48 hours of launch. Views build over the first one to two weeks, as more clippers join the campaign and the best clips keep spreading.",
       },
       {
-        q: "How quickly do views show up?",
-        a: "First clips typically go live within 48 hours of launch. View velocity ramps over the first 7 to 14 days as more clippers pick up the brief and as top-performing clips compound.",
+        q: "Can you guarantee a number of views?",
+        a: "No. We aim for a CPM, not a fixed view count. Because clippers are paid per verified view, your budget turns into views at the agreed rate, but the final number depends on your content and the campaign settings.",
       },
       {
-        q: "Can you guarantee a specific view count?",
-        a: "We target a CPM, not a guaranteed view count. Because clippers are paid per verified view, the budget converts to views at the negotiated CPM. Final delivery depends on content quality and campaign settings, both of which we optimize weekly.",
+        q: "How do you count views?",
+        a: "We pull view counts from TikTok, Instagram, YouTube and X themselves, then total them per clip, per clipper and per platform. You see them in your dashboard and in a weekly report.",
       },
       {
-        q: "How do you measure views?",
-        a: "Verified views from the native platforms (TikTok, Instagram, YouTube, X). We aggregate per clip, per clipper, per platform, with weekly reporting inside your client dashboard.",
-      },
-      {
-        q: "Do views from clipping translate into followers or revenue?",
-        a: "Yes, when the campaign is structured for it. Documented downstream outcomes include Spotify listener growth from 170,000 to 650,000 for Alex Schor and YouTube subscriber growth of over 2,000,000 across campaigns. Revenue attribution depends on the funnel.",
+        q: "Do views turn into followers or sales?",
+        a: "They can, when the campaign is set up for it. Alex Schor went from 170,000 to 650,000 monthly listeners on Spotify, and the Family Ties podcast picked up more than 2 million extra YouTube views. Sales depend on your funnel and how well you can track it.",
       },
     ],
   },
   {
-    title: "Comparisons",
+    title: "Compared to other options",
     items: [
       {
         q: "How is this different from influencer marketing?",
-        a: "Influencer marketing pays a fixed fee for a single post from one creator, regardless of performance. NovaEyes deploys hundreds of clippers simultaneously, each paid only when their clips generate real views. The result is volume that a single influencer deal cannot replicate, at a cost that scales with results.",
+        a: "With an influencer, you pay a fixed fee for one post from one person, whether it works or not. With clipping, hundreds of creators post at once and each one only earns when their clip gets views. Your cost follows the results.",
       },
       {
         q: "How is this different from paid ads?",
-        a: "Paid ads cost $5 to $40 CPM on most major platforms. NovaEyes campaigns have delivered CPMs as low as $0.13 to $0.21 in documented case studies. Reach is delivered through organic creator distribution, not paid placements, which also produces algorithmic compounding that paid ads do not.",
+        a: "Paid social ads often cost several dollars per 1,000 impressions. Our past campaigns ran between $0.13 and $0.41 per 1,000 views. The clips are organic posts on real creator pages, so the best ones keep getting pushed by the algorithm after they go up.",
       },
       {
-        q: "How is this different from building an in-house clipping team?",
-        a: "In-house clipping requires hiring editors, recruiting and managing creators, building moderation workflows, and running weekly optimization. NovaEyes replaces all of that. You pay per verified view delivered, not for editorial labor or recruitment overhead.",
+        q: "Why not build a clipping team in house?",
+        a: "You would need to hire editors, find and manage creators, review every clip and keep optimizing each week. We already run all of that. You pay for verified views instead of salaries and recruiting.",
       },
       {
         q: "How is this different from a UGC agency?",
-        a: "UGC agencies usually deliver a fixed number of finished assets for you to run as ads. NovaEyes delivers organic distribution at scale through real creator accounts, where the views happen on the creator's platform rather than in your ad account.",
+        a: "A UGC agency usually hands you a set number of videos to run as ads. We get your content seen through organic posts on real creator pages, so the views happen on their accounts, not in your ad account.",
       },
       {
         q: "Can clipping work alongside paid ads?",
-        a: "Yes. Many clients use clipping for top-of-funnel reach and brand search lift, then retarget with paid ads. The two stack well.",
+        a: "Yes. A lot of clients use clipping for reach and brand searches, then retarget those people with ads.",
       },
     ],
   },
   {
-    title: "Process and onboarding",
+    title: "How it works",
     items: [
       {
-        q: "What happens after I book a strategy call?",
-        a: "1) Strategy call (30 minutes) to align on goals, creative angles, platform mix, and rollout. 2) Setup including content intake and creative briefing. 3) Launch within days once content and approvals are ready. 4) Weekly reporting with scale, revise, or retire decisions.",
+        q: "What happens after I book a call?",
+        a: "We talk through your goals, content, platforms and budget. Then we set up the brief and the rules, launch to the network, and send you a report every week with what to scale, change or drop.",
       },
       {
-        q: "What do I need to bring to the first call?",
-        a: "Your goals (views, downstream platform growth, revenue, awareness), your source content type if any, budget range, launch timing, and your vertical so we can map the right campaign format.",
+        q: "What should I bring to the first call?",
+        a: "What you want out of it, like views, listeners, subscribers or sales. The kind of content you have, a rough budget and when you want to launch.",
       },
       {
-        q: "What does setup look like?",
-        a: "Content intake, creative direction, brand safety rules, hook and format guidelines, and the campaign brief that goes out to the network. We finalize platform mix and CPM targets here.",
+        q: "What does setup involve?",
+        a: "We collect your content, agree on the creative direction, write the brand rules and the hook and format guidelines, and put together the brief the clippers work from. Platform mix and the CPM target are set here too.",
       },
       {
         q: "Do I get to approve clips?",
-        a: "Yes. Every clip goes through an approval process before it is eligible for payout. You can set approval rules upfront or review individually.",
+        a: "Yes. Every clip is reviewed before it can earn. You can set the rules up front or review clips yourself.",
       },
       {
         q: "How long does a campaign run?",
-        a: "Campaigns run as long as you fund them. Some clients run continuous always-on campaigns; others run focused 30 to 90 day sprints around launches.",
+        a: "As long as you fund it. Some clients run all year, others run 30 to 90 day pushes around a release or launch.",
       },
       {
-        q: "Can I run multiple campaigns at the same time?",
-        a: "Yes. Multiple campaigns can run in parallel for different products, artists, shows, or audiences.",
+        q: "Can I run more than one campaign at a time?",
+        a: "Yes. You can run separate campaigns for different products, songs, shows or audiences.",
       },
     ],
   },
   {
-    title: "Reporting and dashboard",
+    title: "Reporting",
     items: [
       {
-        q: "What metrics do you report on?",
-        a: "Verified view counts, CPM benchmarks, clip volume distributed, platform-by-platform breakdown, top-performing clips, and downstream outcomes where attribution is clear.",
+        q: "What do you report on?",
+        a: "Verified views, CPM, how many clips went out, results per platform, your top clips, and results further down the funnel when they can be tracked.",
       },
       {
         q: "Do I get a dashboard?",
-        a: "Yes. Every client gets access to a live dashboard with verified views, spend, CPM, clip count, platform distribution, and top performers. It updates as the network reports new data.",
+        a: "Yes. Every client gets a live dashboard with views, spend, CPM, clip count, platform split and top clips. It updates as new data comes in.",
       },
       {
         q: "How often do I get reports?",
-        a: "Live dashboard access plus a weekly report summarizing performance, what to scale, what to revise, and what to retire.",
+        a: "Every week, on top of the live dashboard. Each report says what to scale, what to change and what to drop.",
       },
       {
-        q: "How do you verify views?",
-        a: "Views are pulled from the native platforms. We deduplicate, validate against the clipper's account, and only count what the platform reports as real.",
+        q: "How do you check that views are real?",
+        a: "We take the numbers from the platforms, remove duplicates and check each clip against the account that posted it. Views that can't be verified are not paid.",
       },
     ],
   },
   {
-    title: "Creative, brand safety, and rights",
+    title: "Brand safety and rights",
     items: [
       {
-        q: "How do you ensure brand safety?",
-        a: "Brand safety rules are set during onboarding: tone, restricted topics, forbidden words, competitor mentions, off-limits formats. Every clip is reviewed against those rules before it is approved for payout.",
+        q: "How do you keep clips brand safe?",
+        a: "We agree on the rules before launch: tone, topics to avoid, words not to use, no competitor mentions, and formats that are off limits. Every clip is checked against them before it can be paid.",
       },
       {
-        q: "How do you ensure clip quality?",
-        a: "Approval gating, performance feedback loops to top clippers, and weekly creative briefs that surface what is working and what to drop.",
+        q: "How do you keep the quality up?",
+        a: "Clips have to be approved to earn. We also give the best clippers feedback and send out a fresh brief each week with what is working and what to stop doing.",
       },
       {
         q: "Who owns the clips?",
-        a: "You retain rights to your source content. Clippers retain the right to host clips on their accounts as agreed in the network terms. We document this clearly during setup.",
+        a: "You keep the rights to your content. Clippers can keep the clips up on their pages as agreed in the network terms, and we put this in writing during setup.",
       },
       {
         q: "Is clipping legal?",
-        a: "Yes, when the campaign has rights to the source content and follows platform, copyright, and disclosure requirements. We use either client-owned content (content clipping) or logo-overlay formats that do not require third-party content rights.",
+        a: "Yes, as long as the campaign has the rights to the content and follows the platform rules on copyright and ad disclosure. We only clip content our clients own or have the rights to.",
       },
       {
         q: "What about copyright takedowns?",
-        a: "Because we only clip from client-owned content or use logo overlays on approved formats, takedowns are rare. When they happen, we replace the clip and adjust the brief.",
+        a: "They are rare, because we only clip content we have the rights to. When one happens, we replace the clip and update the brief.",
       },
       {
-        q: "Can clippers post anything they want?",
-        a: "No. Clippers operate inside the campaign brief and the brand safety rules. Off-brief or unsafe clips do not get approved and do not earn.",
+        q: "Can clippers post whatever they want?",
+        a: "No. They work inside the brief and the brand rules. Clips that go off brief are not approved and not paid.",
       },
     ],
   },
   {
-    title: "Verticals and use cases",
+    title: "Who it is for",
     items: [
       {
-        q: "What verticals do you specialize in?",
-        a: "Podcasts, combat sports, music, creator entertainment, supplements, gaming, streetwear, and fintech. Documented case studies span podcasts (Alex Schor), combat sports (BRAVE CF), music (Family Ties, Sparkle), and ecommerce (Rob The Bank).",
-      },
-      {
-        q: "Do you work with podcasters?",
-        a: "Yes. Podcasts are one of our strongest verticals. The Alex Schor campaign delivered 189,974,866 verified views at $0.13 CPM and grew Spotify monthly listeners from 170,000 to 650,000.",
+        q: "Which industries do you work in?",
+        a: "Music, podcasts, combat sports, creators and personal brands, and brands selling a product or an app. Our case studies cover music (Alex Schor, Sparkle), podcasts (Family Ties), combat sports (BRAVE CF) and ecommerce (Rob The Bank).",
       },
       {
         q: "Do you work with musicians?",
-        a: "Yes. The Sparkle campaign delivered 4.7M views in 3 days at $0.21 CPM and the Family Ties campaign delivered 7.2M+ views at $0.41 CPM.",
+        a: "Yes. The Alex Schor campaign reached 189,974,866 views at $0.13 per 1,000 and took his Spotify monthly listeners from 170,000 to 650,000. Sparkle reached 4.7 million views in 3 days.",
       },
       {
-        q: "Do you work with combat sports promotions?",
-        a: "Yes. The BRAVE CF campaign delivered 52,131,046 verified views at $0.21 CPM.",
+        q: "Do you work with podcasts?",
+        a: "Yes. We clipped 5 episodes of Family Ties, the podcast with Tobi Brown, for 7.2 million views. The show also picked up more than 2 million extra views on YouTube.",
+      },
+      {
+        q: "Do you work with fight promotions?",
+        a: "Yes. The BRAVE CF campaign reached 52,131,046 views at $0.21 per 1,000.",
       },
       {
         q: "Do you work with ecommerce brands?",
-        a: "Yes. Logo clipping is built for ecommerce. Clippers attach your logo, promo code, and URL to top-performing short-form content to drive brand search and direct response.",
+        a: "Yes. Logo clipping and product clipping are both made for brands. Logo clipping puts your logo, code and link on clips that already perform. Product clipping has creators show the product itself.",
       },
       {
-        q: "Do you work with personal brands and founders?",
-        a: "Yes. Founders with podcasts, interview footage, or any consistent long-form output are an ideal fit.",
+        q: "Do you work with founders and personal brands?",
+        a: "Yes. If you put out podcasts, interviews or any long video regularly, you are a good fit.",
       },
     ],
   },
   {
-    title: "For creators and clippers",
+    title: "For clippers",
     items: [
       {
-        q: "How do I join the NovaEyes clipper network?",
-        a: "Apply through the contact form on nova-eyes.com. We review platform footprint, prior clipping work, and engagement before granting access to active campaigns.",
+        q: "How do I join the clipper network?",
+        a: "Email andrea@nova-eyes.com with links to your accounts and some clips you have made. We look at your pages, past work and engagement before giving you access to live campaigns.",
       },
       {
         q: "How much can a clipper earn?",
-        a: "Earnings depend on the campaign CPM and the verified views your approved clips generate. Top clippers earn from multiple campaigns simultaneously.",
+        a: "It depends on the campaign rate and how many verified views your approved clips get. The best clippers work several campaigns at the same time.",
       },
       {
         q: "When do clippers get paid?",
-        a: "On the campaign payout cycle once views are verified and clips are approved. Payout cadence is documented in the network terms.",
+        a: "On the campaign payout cycle, once your clips are approved and the views are verified. The schedule is in the network terms.",
       },
     ],
   },
@@ -286,19 +288,19 @@ export const faqGroups: FaqGroup[] = [
     items: [
       {
         q: "How do I start a campaign?",
-        a: "Book a strategy call at nova-eyes.com/contact or email andrea@nova-eyes.com. Response within 24 hours. Campaign setup typically completes within days when content assets are ready.",
+        a: "Book a call at nova-eyes.com/book or email andrea@nova-eyes.com. We reply within 24 hours, and setup usually takes a few days once your content is ready.",
       },
       {
-        q: "How long is the strategy call?",
-        a: "30 minutes. We cover goals, content, budget, platforms, and a rollout plan.",
+        q: "How long is the call?",
+        a: "15 minutes. We look at your content, goals and budget and tell you what a campaign could do for you.",
       },
       {
-        q: "How fast do you respond to inquiries?",
+        q: "How fast do you reply?",
         a: "Within 24 hours.",
       },
       {
-        q: "What if I do not have content yet?",
-        a: "Logo clipping is the right starting point. You bring brand assets, we handle distribution against existing high-performing short-form content.",
+        q: "What if I don't have any content yet?",
+        a: "Start with logo clipping. You send your brand assets, and we put them on clips that already perform.",
       },
     ],
   },

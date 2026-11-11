@@ -42,7 +42,7 @@ export default async function BlogPostPage(props: PageProps<"/blog/[slug]">) {
     datePublished: post.published_at ?? undefined,
     dateModified: post.updated_at,
     author: { "@type": "Person", name: post.author?.name ?? post.author_name },
-    publisher: { "@type": "Organization", name: facts.name, url: facts.url },
+    publisher: { "@id": `${facts.url}/#organization` },
     mainEntityOfPage: `${facts.url}/blog/${post.slug}`,
     ...(post.cover_image_url ? { image: post.cover_image_url } : {}),
   };
