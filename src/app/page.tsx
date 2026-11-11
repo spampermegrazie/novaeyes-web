@@ -17,22 +17,17 @@ import { EngineSteps, type EngineStep } from "@/components/ui/engine-steps";
 const steps: [EngineStep, EngineStep, EngineStep] = [
   {
     title: "Set up",
-    body: "We brief our clippers on your brand, the clip formats and the rules for the campaign, and set the payouts to match your budget. Every clip points people where you want them: Spotify, YouTube, your socials or your website.",
+    body: "You send us your video, your brand rules and your budget. We turn them into a brief for our clippers and set the payouts, so every clip sends people where you want them: Spotify, YouTube, your socials or your website.",
   },
   {
     title: "Distribute",
-    body: `Clippers find the best moments, cut them into short clips and post them across ${facts.platforms.join(", ")}, hundreds of times a day.`,
+    body: "Our clippers take that brief, cut the best moments into short clips and post them across TikTok, Instagram Reels, YouTube Shorts and X, hundreds of times a day. Every clip is reviewed before it can earn.",
   },
   {
     title: "Optimize",
-    body: "We check results every day and move budget to the clips and formats that win. You can watch it all in a live dashboard.",
+    body: "The views come back from the platforms and we verify them. You pay only for verified views on approved clips. Every day the budget moves to the clips and formats that win, and the loop runs again. You can watch it all in a live dashboard.",
   },
 ];
-
-const rule: EngineStep = {
-  title: "Paid per verified view",
-  body: "Every clip is reviewed before it can earn. Views are pulled from the platforms, and only verified views on approved clips get paid. Clips that break the rules earn nothing.",
-};
 
 const verticalBlurbs: Record<string, string> = {
   "/combat-sports-clipping": "Fight footage cut into thousands of highlight clips.",
@@ -108,7 +103,7 @@ export default function Home() {
 
       {/* Stage 2: the engine */}
       <section id="how-it-works" className="ne-hatch border-y border-line bg-bg-raised/40">
-        <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6">
+        <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6">
           <div className="text-center">
             <p className="inline-block rounded-full border border-line bg-bg px-3 py-1 font-mono text-[11px] tracking-[0.18em] text-muted uppercase">
               The engine
@@ -122,7 +117,7 @@ export default function Home() {
             </p>
           </div>
           <div className="mt-16">
-            <EngineSteps steps={steps} rule={rule} />
+            <EngineSteps steps={steps} />
           </div>
         </div>
       </section>

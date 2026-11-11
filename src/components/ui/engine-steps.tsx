@@ -1,90 +1,167 @@
 "use client";
 
-// How a campaign works, drawn as the engine it is: what you send flows into the
-// NovaEyes hub, out through the clippers and onto the four platforms. Below it,
-// how budget moves to what wins, and the rule that only verified views get paid.
-// Adapted from the ink-orbit features bento, rebuilt on the site's own tokens.
-// All copy is rendered on the server; only the diagrams animate.
+// How a campaign works, told as one loop through one engine.
+// Desktop: the section pins, all three steps stay on screen next to the diagram,
+// and scrolling moves through them, lighting each step's part of the engine. 1: what you send flows into NovaEyes.
+// 2: NovaEyes routes it through the clippers onto the platforms.
+// 3: views come back, get verified, and budget moves to the winners. Then it loops.
+// Mobile: the same diagram, cropped to each step, sits under that step's copy.
+// A rail with a scroll-linked fill connects the steps on every screen size.
+// All copy is in the server HTML; only the diagram animates.
 
-import { useEffect, useId, useRef, useState, type ReactNode } from "react";
-import { useInView, useReducedMotion } from "motion/react";
+import { useEffect, useId, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
+import { motion, useInView, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { facts } from "@/content/facts";
 
 export type EngineStep = { title: string; body: string };
-
-type Props = {
-  steps: [EngineStep, EngineStep, EngineStep];
-  rule: EngineStep;
-};
+type Stage = 0 | 1 | 2 | "all";
 
 const PLATFORMS = ["TikTok", "Reels", "Shorts", "X"];
+// Clippers whose clips win in step 3, so budget visibly moves to them.
+const WINNERS = [0, 3];
 
-export function EngineSteps({ steps, rule }: Props) {
+export function EngineSteps({ steps }: { steps: [EngineStep, EngineStep, EngineStep] }) {
   const reduced = useReducedMotion() ?? false;
-  const [side, setSide] = useState<"" | "in" | "out">("");
+  const desktop = useMediaQuery("(min-width: 1024px)");
+  const trackRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLOListElement>(null);
+  // Desktop: the section pins and the scroll through the track drives the steps.
+  // Mobile: the steps scroll normally and the one at the middle of the screen is active.
+  const { scrollYProgress: trackP } = useScroll({ target: trackRef, offset: ["start 64px", "end end"] });
+  const { scrollYProgress: listP } = useScroll({ target: listRef, offset: ["start center", "end center"] });
+  const [active, setActive] = useState(0);
+  const pick = (v: number) => setActive(Math.min(2, Math.max(0, Math.floor(v * 3))));
+  useMotionValueEvent(trackP, "change", (v) => desktop && pick(v));
+  useMotionValueEvent(listP, "change", (v) => !desktop && pick(v));
+  // The rail between two steps fills while the first of them is active. Both
+  // progress values are read so the fill follows whichever layout is showing.
+  const desktopRef = useRef(false);
+  useEffect(() => {
+    desktopRef.current = desktop;
+  }, [desktop]);
+  const railAt = (i: number) => {
+    const t = trackP.get();
+    const l = listP.get();
+    return clamp01((desktopRef.current ? t : l) * 3 - i);
+  };
+  const fill0 = useTransform(() => (reduced ? 1 : railAt(0)));
+  const fill1 = useTransform(() => (reduced ? 1 : railAt(1)));
+  const fills = [fill0, fill1];
+  const current = reduced ? -1 : active;
+
+  const jumpTo = (i: number) => {
+    const el = trackRef.current;
+    if (!desktop || !el) return;
+    const top = el.getBoundingClientRect().top + window.scrollY - 64;
+    const span = el.offsetHeight - (window.innerHeight - 64);
+    window.scrollTo({ top: top + ((i + 0.5) / 3) * span, behavior: reduced ? "auto" : "smooth" });
+  };
 
   return (
-    <div className="grid gap-8 md:grid-cols-2">
-      <Frame className="md:col-span-2">
-        <div className="pt-2">
-          <div className="hidden md:block">
-            <Pipeline orient="h" side={side} setSide={setSide} reduced={reduced} />
-          </div>
-          <div className="md:hidden">
-            <Pipeline orient="v" side={side} setSide={setSide} reduced={reduced} />
+    <div ref={trackRef} className="lg:h-[240vh]">
+      <div className="lg:sticky lg:top-16 lg:flex lg:h-[calc(100vh-4rem)] lg:items-center">
+        <div className="w-full lg:grid lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] lg:items-center lg:gap-14">
+          <ol ref={listRef}>
+            {steps.map((s, i) => {
+              const reached = current === -1 || i <= current;
+              const dim = current !== -1 && i !== current;
+              return (
+                <li
+                  key={s.title}
+                  onClick={() => jumpTo(i)}
+                  className="relative pb-20 pl-14 last:pb-2 lg:cursor-pointer lg:pb-10 lg:last:pb-0"
+                >
+                  {i < 2 && (
+                    <span aria-hidden className="absolute top-4 -bottom-4 left-[15.5px] w-px bg-line">
+                      <motion.span className="absolute inset-0 origin-top bg-accent" style={{ scaleY: fills[i] }} />
+                    </span>
+                  )}
+                  <span
+                    aria-hidden
+                    className={`absolute top-0 left-0 z-10 flex h-8 w-8 items-center justify-center rounded-full border font-mono text-xs transition-all duration-500 ${
+                      reached
+                        ? "border-accent bg-accent text-accent-ink shadow-[0_0_24px_rgb(var(--glow)/0.5)]"
+                        : "border-line bg-bg text-muted"
+                    }`}
+                  >
+                    {i + 1}
+                  </span>
+                  <div className={`transition-opacity duration-500 ${dim ? "lg:opacity-35 lg:hover:opacity-70" : ""}`}>
+                    <p className="pt-1.5 font-mono text-xs tracking-widest text-accent uppercase">Step {i + 1}</p>
+                    <h3 className="mt-2 text-2xl font-semibold tracking-tight">{s.title}</h3>
+                    <p className="mt-3 max-w-md leading-relaxed text-muted lg:text-[15px]">{s.body}</p>
+                  </div>
+                  <div className="mt-8 max-w-md lg:hidden">
+                    <Frame>
+                      <Pipeline orient="v" stage={reduced ? "all" : (i as Stage)} crop={V_CROPS[i]} reduced={reduced} />
+                    </Frame>
+                  </div>
+                </li>
+              );
+            })}
+          </ol>
+
+          <div className="hidden lg:block">
+            <Frame>
+              <Pipeline orient="h" stage={reduced ? "all" : (active as Stage)} reduced={reduced} numbered />
+              <Legend />
+            </Frame>
           </div>
         </div>
-        <div className="grid gap-6 sm:grid-cols-2">
-          <StepCopy n="01" step={steps[0]} onHover={(on) => setSide(on ? "in" : "")} />
-          <StepCopy n="02" step={steps[1]} onHover={(on) => setSide(on ? "out" : "")} />
-        </div>
-      </Frame>
-
-      <Frame>
-        <BudgetChart reduced={reduced} />
-        <StepCopy n="03" step={steps[2]} />
-      </Frame>
-
-      <Frame>
-        <ReviewGate reduced={reduced} />
-        <StepCopy n="Every clip" step={rule} />
-      </Frame>
-    </div>
-  );
-}
-
-/* ------------------------------------------------------------- framing */
-
-function Frame({ children, className = "" }: { children: ReactNode; className?: string }) {
-  const corner =
-    "pointer-events-none absolute h-3 w-3 border-[#2e2f3b] transition duration-300 group-hover:border-accent";
-  return (
-    <div className={`group relative ${className}`}>
-      <span aria-hidden className={`${corner} -top-1.5 -left-1.5 border-t-[1.5px] border-l-[1.5px] group-hover:-translate-x-[3px] group-hover:-translate-y-[3px]`} />
-      <span aria-hidden className={`${corner} -top-1.5 -right-1.5 border-t-[1.5px] border-r-[1.5px] group-hover:translate-x-[3px] group-hover:-translate-y-[3px]`} />
-      <span aria-hidden className={`${corner} -bottom-1.5 -left-1.5 border-b-[1.5px] border-l-[1.5px] group-hover:-translate-x-[3px] group-hover:translate-y-[3px]`} />
-      <span aria-hidden className={`${corner} -right-1.5 -bottom-1.5 border-r-[1.5px] border-b-[1.5px] group-hover:translate-x-[3px] group-hover:translate-y-[3px]`} />
-      <div className="flex h-full flex-col gap-6 rounded-md border border-line bg-gradient-to-b from-bg-raised to-bg p-5 transition-[border-color,box-shadow] duration-300 group-hover:border-[#2a2b36] group-hover:shadow-[0_20px_60px_-30px_rgb(var(--glow)/0.35)] sm:p-6">
-        {children}
       </div>
     </div>
   );
 }
 
-function StepCopy({ n, step, onHover }: { n: string; step: EngineStep; onHover?: (on: boolean) => void }) {
+function clamp01(v: number) {
+  return Math.min(1, Math.max(0, v));
+}
+
+function useMediaQuery(query: string) {
+  return useSyncExternalStore(
+    (cb) => {
+      const m = window.matchMedia(query);
+      m.addEventListener("change", cb);
+      return () => m.removeEventListener("change", cb);
+    },
+    () => window.matchMedia(query).matches,
+    () => false,
+  );
+}
+
+/* ------------------------------------------------------------- framing */
+
+function Frame({ children }: { children: ReactNode }) {
+  const corner = "pointer-events-none absolute h-3 w-3 border-[#2e2f3b] transition duration-300 group-hover:border-accent";
   return (
-    <div onMouseEnter={() => onHover?.(true)} onMouseLeave={() => onHover?.(false)}>
-      <p className="font-mono text-xs tracking-widest text-accent uppercase">{n}</p>
-      <h3 className="mt-2 text-lg font-medium">{step.title}</h3>
-      <p className="mt-2 max-w-md text-sm leading-relaxed text-muted">{step.body}</p>
+    <div className="group relative">
+      <span aria-hidden className={`${corner} -top-1.5 -left-1.5 border-t-[1.5px] border-l-[1.5px] group-hover:-translate-x-[3px] group-hover:-translate-y-[3px]`} />
+      <span aria-hidden className={`${corner} -top-1.5 -right-1.5 border-t-[1.5px] border-r-[1.5px] group-hover:translate-x-[3px] group-hover:-translate-y-[3px]`} />
+      <span aria-hidden className={`${corner} -bottom-1.5 -left-1.5 border-b-[1.5px] border-l-[1.5px] group-hover:-translate-x-[3px] group-hover:translate-y-[3px]`} />
+      <span aria-hidden className={`${corner} -right-1.5 -bottom-1.5 border-r-[1.5px] border-b-[1.5px] group-hover:translate-x-[3px] group-hover:translate-y-[3px]`} />
+      <div className="flex flex-col gap-4 rounded-md border border-line bg-gradient-to-b from-bg-raised to-bg p-4 sm:p-5">{children}</div>
+    </div>
+  );
+}
+
+function Legend() {
+  return (
+    <div className="flex flex-wrap gap-x-6 gap-y-2 px-1 font-mono text-[11px] text-muted">
+      <span className="flex items-center gap-2">
+        <span className="h-1.5 w-1.5 rounded-full bg-accent shadow-[0_0_6px_rgb(var(--glow))]" />
+        your content going out
+      </span>
+      <span className="flex items-center gap-2">
+        <span className="h-1.5 w-1.5 rounded-full bg-fg" />
+        verified views coming back
+      </span>
     </div>
   );
 }
 
 function Eye({ x, y, size }: { x: number; y: number; size: number }) {
-  const s = size / 24;
   return (
-    <g transform={`translate(${x - size / 2},${y - size / 2}) scale(${s})`}>
+    <g transform={`translate(${x - size / 2},${y - size / 2}) scale(${size / 24})`}>
       <path d="M1.5 12C4.6 6.6 8.1 4 12 4s7.4 2.6 10.5 8c-3.1 5.4-6.6 8-10.5 8S4.6 17.4 1.5 12z" fill="none" stroke="var(--fg)" strokeWidth="1.6" />
       <circle cx="12" cy="12" r="3.6" fill="var(--accent)" />
       <circle cx="13.3" cy="10.7" r="1.1" fill="var(--fg)" opacity=".85" />
@@ -94,7 +171,6 @@ function Eye({ x, y, size }: { x: number; y: number; size: number }) {
 
 /* -------------------------------------------------------- the pipeline */
 
-type Pt = { x: number; y: number };
 type Layout = {
   w: number;
   h: number;
@@ -102,25 +178,38 @@ type Layout = {
   hub: { m: number; c: number; w: number; h: number };
   clippers: { m: number; c: number[]; r: number };
   platforms: { m: number; c: number[]; w: number; h: number };
+  // The loop: verified views travel from the platforms back into the hub.
+  back: { d: string; label: { x: number; y: number } };
 };
 
 const H_LAYOUT: Layout = {
   w: 760,
-  h: 250,
+  h: 332,
   inputs: { m: 92, c: [70, 130, 190], w: 148, h: 40 },
   hub: { m: 372, c: 130, w: 184, h: 60 },
   clippers: { m: 548, c: [50, 90, 130, 170, 210], r: 11 },
   platforms: { m: 688, c: [70, 110, 150, 190], w: 104, h: 32 },
+  back: {
+    d: "M688,206 C688,266 652,290 592,290 L452,290 C398,290 372,262 372,165",
+    label: { x: 520, y: 318 },
+  },
 };
 
 const V_LAYOUT: Layout = {
-  w: 360,
-  h: 540,
+  w: 380,
+  h: 548,
   inputs: { m: 52, c: [60, 180, 300], w: 108, h: 40 },
   hub: { m: 200, c: 180, w: 184, h: 60 },
   clippers: { m: 336, c: [60, 120, 180, 240, 300], r: 11 },
   platforms: { m: 470, c: [45, 135, 225, 315], w: 80, h: 32 },
+  back: {
+    d: "M315,486 C315,514 368,514 368,484 L368,230 C368,210 350,200 277,200",
+    label: { x: 280, y: 536 },
+  },
 };
+
+// Each step on mobile shows only its part of the vertical diagram.
+const V_CROPS = ["0 0 380 248", "0 160 380 344", "0 160 380 388"];
 
 const INPUTS = [
   { label: "Your video", icon: "play" },
@@ -130,29 +219,48 @@ const INPUTS = [
 
 function Pipeline({
   orient,
-  side,
-  setSide,
+  stage,
+  crop,
   reduced,
+  numbered = false,
 }: {
   orient: "h" | "v";
-  side: "" | "in" | "out";
-  setSide: (s: "" | "in" | "out") => void;
+  stage: Stage;
+  crop?: string;
   reduced: boolean;
+  numbered?: boolean;
 }) {
   const L = orient === "h" ? H_LAYOUT : V_LAYOUT;
   const ref = useRef<SVGSVGElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.3 });
-  const [active, setActive] = useState(0);
+  const inView = useInView(ref, { amount: 0.25 });
+  const [tick, setTick] = useState(0);
   const uid = useId().replace(/[^a-zA-Z0-9]/g, "");
+  const live = inView && !reduced;
 
   useEffect(() => {
-    if (reduced || !inView) return;
-    const t = setInterval(() => setActive((a) => (a + 1) % PLATFORMS.length), 1500);
+    if (!live) return;
+    const t = setInterval(() => setTick((n) => n + 1), 1500);
     return () => clearInterval(t);
-  }, [reduced, inView]);
+  }, [live]);
 
-  const at = (m: number, c: number): Pt => (orient === "h" ? { x: m, y: c } : { x: c, y: m });
-  // Half the node's size along the main axis, so links start and end at its edge.
+  const all = stage === "all";
+  const litIn = all || stage === 0;
+  const litOut = all || stage === 1;
+  const litBack = all || stage === 2;
+  const optimizing = stage === 2;
+  const platformOn = live && litOut ? tick % PLATFORMS.length : -1;
+  const status =
+    stage === 0
+      ? "reading your brief"
+      : stage === 2
+        ? tick % 2
+          ? "budget → top clips"
+          : "verifying views"
+        : platformOn >= 0
+          ? `routing · ${PLATFORMS[platformOn].toLowerCase()}`
+          : "brief · review · payouts";
+
+  const at = (m: number, c: number) => (orient === "h" ? { x: m, y: c } : { x: c, y: m });
   const half = (w: number, h: number) => (orient === "h" ? w / 2 : h / 2);
   const link = (am: number, ac: number, ah: number, bm: number, bc: number, bh: number) => {
     const s = am + ah;
@@ -165,40 +273,59 @@ function Pipeline({
 
   const hubHalf = half(L.hub.w, L.hub.h);
   const inLinks = L.inputs.c.map((c) => link(L.inputs.m, c, half(L.inputs.w, L.inputs.h), L.hub.m, L.hub.c, hubHalf));
-  const outLinks = L.clippers.c.map((c) => link(L.hub.m, L.hub.c, hubHalf, L.clippers.m, c, L.clippers.r));
+  const outLinks = L.clippers.c.map((c, i) => ({
+    d: link(L.hub.m, L.hub.c, hubHalf, L.clippers.m, c, L.clippers.r),
+    win: WINNERS.includes(i),
+  }));
   const postLinks = L.clippers.c.flatMap((c, i) =>
     [i % 4, (i + 1) % 4].map((p, k) => ({
       d: link(L.clippers.m, c, L.clippers.r, L.platforms.m, L.platforms.c[p], half(L.platforms.w, L.platforms.h)),
       p,
       main: k === 0,
+      win: WINNERS.includes(i) && k === 0,
     })),
   );
 
   const hub = at(L.hub.m, L.hub.c);
   const glow = `${uid}glow`;
-  const status = !inView || reduced ? "brief · review · payouts" : `routing · ${PLATFORMS[active].toLowerCase()}`;
 
-  // Hover zones: everything before the hub is setup, everything after it is distribution.
-  const inZone = orient === "h" ? { x: 0, y: 0, w: L.hub.m - hubHalf, h: L.h } : { x: 0, y: 0, w: L.w, h: L.hub.m - hubHalf };
-  const outZone =
-    orient === "h"
-      ? { x: L.hub.m + hubHalf, y: 0, w: L.w - L.hub.m - hubHalf, h: L.h }
-      : { x: 0, y: L.hub.m + hubHalf, w: L.w, h: L.h - L.hub.m - hubHalf };
+  const packets: { d: string; dur: number; begin: number; back?: boolean }[] = [];
+  if (live) {
+    if (litIn) inLinks.forEach((d, i) => packets.push({ d, dur: 2.2 + (i % 2) * 0.5, begin: i * 0.4 }));
+    if (litOut) {
+      outLinks.forEach((l, i) => packets.push({ d: l.d, dur: 1.9 + (i % 3) * 0.35, begin: 0.5 + i * 0.3 }));
+      postLinks.filter((l) => l.main).forEach((l, i) => packets.push({ d: l.d, dur: 1.6 + (i % 2) * 0.4, begin: 1 + i * 0.3 }));
+    }
+    if (optimizing) {
+      outLinks.filter((l) => l.win).forEach((l, i) => packets.push({ d: l.d, dur: 1.4, begin: i * 0.5 }));
+      postLinks.filter((l) => l.win).forEach((l, i) => packets.push({ d: l.d, dur: 1.2, begin: 0.6 + i * 0.5 }));
+    }
+    if (litBack) [0, 1, 2].forEach((i) => packets.push({ d: L.back.d, dur: 3, begin: i, back: true }));
+  }
 
-  // Column labels. In the stacked mobile layout they sit on the wires as small pills.
-  const caption = (m: number, text: string) => {
-    if (orient === "h")
+  // Dim what the current step isn't about, so the eye follows the step.
+  const inOpacity = litIn ? 1 : 0.35;
+  const outOpacity = litOut || optimizing ? 1 : 0.35;
+
+  const caption = (m: number, text: string, n?: number) => {
+    if (orient === "h") {
+      const w = text.length * 7.1;
+      const on = n !== undefined && (all || stage === n - 1);
       return (
-        <text x={m} y="18" textAnchor="middle" className="ne-caption">
-          {text}
-        </text>
+        <g className="pointer-events-none">
+          {numbered && n !== undefined && <Badge x={m + 11 - w / 2 - 14} y={14} n={n} on={on} />}
+          <text x={numbered && n !== undefined ? m + 11 : m} y="18" textAnchor="middle" className="ne-caption">
+            {text}
+          </text>
+        </g>
       );
+    }
     const w = text.length * 6.4 + 18;
     const y = m - 34;
     return (
       <g className="pointer-events-none">
-        <rect x={L.w / 2 - w / 2} y={y - 10} width={w} height="17" rx="8.5" fill="var(--bg-raised)" stroke="var(--line-strong)" />
-        <text x={L.w / 2} y={y + 2} textAnchor="middle" className="ne-caption">
+        <rect x={L.hub.c - w / 2} y={y - 10} width={w} height="17" rx="8.5" fill="var(--bg-raised)" stroke="var(--line-strong)" />
+        <text x={L.hub.c} y={y + 2} textAnchor="middle" className="ne-caption">
           {text}
         </text>
       </g>
@@ -208,71 +335,123 @@ function Pipeline({
   return (
     <svg
       ref={ref}
-      viewBox={`0 0 ${L.w} ${L.h}`}
-      className="h-auto w-full overflow-visible"
+      viewBox={crop ?? `0 0 ${L.w} ${L.h}`}
+      className={`h-auto w-full ${crop ? "overflow-hidden" : "overflow-visible"}`}
       role="img"
-      aria-label={`Your video, brand rules and view pool go into NovaEyes, which briefs ${facts.clippersLabel} clippers who post clips on TikTok, Instagram Reels, YouTube Shorts and X.`}
+      aria-label={`Your video, brand rules and view pool go into NovaEyes. NovaEyes briefs ${facts.clippersLabel} clippers, who post clips on TikTok, Instagram Reels, YouTube Shorts and X. Verified views come back to NovaEyes, and budget moves to the clips that win.`}
     >
       <defs>
-        <radialGradient id={glow} cx={hub.x} cy={hub.y} r={orient === "h" ? 260 : 220} gradientUnits="userSpaceOnUse">
+        <radialGradient id={glow} cx={hub.x} cy={hub.y} r={orient === "h" ? 270 : 230} gradientUnits="userSpaceOnUse">
           <stop offset="0" stopColor="rgb(59 130 246)" stopOpacity=".16" />
           <stop offset="1" stopColor="rgb(59 130 246)" stopOpacity="0" />
         </radialGradient>
       </defs>
       <rect width={L.w} height={L.h} fill={`url(#${glow})`} />
 
-
-      <rect {...rectOf(inZone)} fill="transparent" onMouseEnter={() => setSide("in")} onMouseLeave={() => setSide("")} />
-      <rect {...rectOf(outZone)} fill="transparent" onMouseEnter={() => setSide("out")} onMouseLeave={() => setSide("")} />
-
-      {/* links */}
-      {inLinks.map((d, i) => (
-        <path key={d} d={d} className={`ne-flow pointer-events-none${side === "in" ? " ne-flow-on" : ""}${i === 1 ? " ne-dash" : ""}`} />
-      ))}
-      {outLinks.map((d, i) => (
-        <path key={d} d={d} className={`ne-flow pointer-events-none${side === "out" ? " ne-flow-on" : ""}${i % 2 ? " ne-dash" : ""}`} />
-      ))}
-      {postLinks.map((l) => (
-        <path
-          key={l.d}
-          d={l.d}
-          className={`ne-flow pointer-events-none${side === "out" || (inView && !reduced && l.p === active && l.main) ? " ne-flow-on" : ""}`}
-          opacity={l.main ? 1 : 0.5}
-        />
-      ))}
-
-      {/* packets */}
-      {inView &&
-        !reduced &&
-        [
-          ...inLinks.map((d, i) => ({ d, dur: 2.4 + (i % 2) * 0.5, begin: i * 0.4 })),
-          ...outLinks.map((d, i) => ({ d, dur: 2 + (i % 3) * 0.35, begin: 0.9 + i * 0.3 })),
-          ...postLinks.filter((l) => l.main).map((l, i) => ({ d: l.d, dur: 1.6 + (i % 2) * 0.4, begin: 1.6 + i * 0.35 })),
-        ].map((p, i) => (
-          <circle key={i} r="2.6" className="ne-pkt pointer-events-none">
-            <animateMotion dur={`${p.dur}s`} begin={`${p.begin}s`} repeatCount="indefinite" path={p.d} />
-          </circle>
-        ))}
-
-      {/* inputs */}
-      {L.inputs.c.map((c, i) => {
-        const p = at(L.inputs.m, c);
-        const { w, h } = L.inputs;
-        return (
-          <g key={i} transform={`translate(${p.x - w / 2},${p.y - h / 2})`} className="pointer-events-none">
-            <rect width={w} height={h} rx="7" className={`ne-node${side === "in" ? " ne-node-on" : ""}`} />
-            <g transform={`translate(${orient === "h" ? 14 : 10},${h / 2 - 7})`}>
-              <InputIcon kind={INPUTS[i].icon} />
-            </g>
-            <text x={orient === "h" ? 38 : 30} y={h / 2 + 4} className="ne-label">
-              {INPUTS[i].label}
+      {/* step 3: the loop back */}
+      <g style={{ opacity: litBack ? 1 : 0.22, transition: "opacity .5s" }}>
+        <path d={L.back.d} className={`ne-flow ne-dash${litBack ? " ne-flow-back" : ""}`} />
+        {orient === "h" ? (
+          <g>
+            {numbered && <Badge x={L.back.label.x - 66} y={L.back.label.y - 4} n={3} on={litBack} />}
+            <text x={L.back.label.x + 8} y={L.back.label.y} textAnchor="middle" className="ne-caption">
+              Views come back
             </text>
           </g>
-        );
-      })}
+        ) : (
+          <text x={L.back.label.x} y={L.back.label.y} textAnchor="middle" className="ne-caption">
+            Views come back
+          </text>
+        )}
+      </g>
 
-      {/* hub */}
-      <g transform={`translate(${hub.x - L.hub.w / 2},${hub.y - L.hub.h / 2})`} className="pointer-events-none">
+      {/* step 1: what you send */}
+      <g style={{ opacity: inOpacity, transition: "opacity .5s" }}>
+        {inLinks.map((d, i) => (
+          <path key={d} d={d} className={`ne-flow${litIn ? " ne-flow-on" : ""}${i === 1 ? " ne-dash" : ""}`} />
+        ))}
+        {L.inputs.c.map((c, i) => {
+          const p = at(L.inputs.m, c);
+          const { w, h } = L.inputs;
+          return (
+            <g key={i} transform={`translate(${p.x - w / 2},${p.y - h / 2})`}>
+              <rect width={w} height={h} rx="7" className={`ne-node${litIn ? " ne-node-on" : ""}`} />
+              <g transform={`translate(${orient === "h" ? 14 : 10},${h / 2 - 7})`}>
+                <InputIcon kind={INPUTS[i].icon} />
+              </g>
+              <text x={orient === "h" ? 38 : 30} y={h / 2 + 4} className="ne-label">
+                {INPUTS[i].label}
+              </text>
+            </g>
+          );
+        })}
+        {caption(L.inputs.m, "You send", 1)}
+      </g>
+
+      {/* step 2: through the clippers onto the platforms */}
+      <g style={{ opacity: outOpacity, transition: "opacity .5s" }}>
+        {outLinks.map((l, i) => (
+          <path
+            key={l.d}
+            d={l.d}
+            className={`ne-flow${litOut ? " ne-flow-on" : ""}${optimizing && l.win ? " ne-flow-win" : ""}${i % 2 && !optimizing ? " ne-dash" : ""}`}
+            opacity={optimizing && !l.win ? 0.3 : 1}
+          />
+        ))}
+        {postLinks.map((l) => (
+          <path
+            key={l.d}
+            d={l.d}
+            className={`ne-flow${(litOut && l.p === platformOn && l.main) || (stage === "all" && l.main) ? " ne-flow-on" : ""}${optimizing && l.win ? " ne-flow-win" : ""}`}
+            opacity={optimizing ? (l.win ? 1 : 0.25) : l.main ? 1 : 0.5}
+          />
+        ))}
+        {L.clippers.c.map((c, i) => {
+          const p = at(L.clippers.m, c);
+          const on = litOut || (optimizing && WINNERS.includes(i));
+          return (
+            <g key={i} opacity={optimizing && !WINNERS.includes(i) ? 0.45 : 1} style={{ transition: "opacity .5s" }}>
+              <circle cx={p.x} cy={p.y} r={L.clippers.r} className={`ne-node${on ? " ne-node-on" : ""}`} />
+              <circle cx={p.x} cy={p.y - 2.5} r="3" fill="var(--muted)" />
+              <path d={`M${p.x - 5.5},${p.y + 6.5} a5.5,4.5 0 0 1 11,0`} fill="var(--muted)" />
+              <circle
+                cx={p.x + 8}
+                cy={p.y - 8}
+                r="2.6"
+                fill="#22c55e"
+                stroke="var(--bg-raised)"
+                className={reduced ? undefined : "ne-live"}
+                style={{ animationDelay: `${i * 0.37}s` }}
+              />
+            </g>
+          );
+        })}
+        {L.platforms.c.map((c, i) => {
+          const p = at(L.platforms.m, c);
+          const { w, h } = L.platforms;
+          const on = i === platformOn || all;
+          return (
+            <g key={PLATFORMS[i]} transform={`translate(${p.x - w / 2},${p.y - h / 2})`}>
+              <rect width={w} height={h} rx="6" className={`ne-node${on ? " ne-node-on" : ""}`} />
+              <text x={w / 2} y={h / 2 + 4} textAnchor="middle" className={on ? "ne-label" : "ne-label ne-label-dim"}>
+                {PLATFORMS[i]}
+              </text>
+            </g>
+          );
+        })}
+        {caption(L.clippers.m, `${facts.clippersLabel} clippers`, 2)}
+        {caption(L.platforms.m, "They post on")}
+      </g>
+
+      {/* packets: blue is your content going out, white is verified views coming back */}
+      {packets.map((p, i) => (
+        <circle key={`${stage}-${i}`} r={p.back ? 2.4 : 2.6} className={p.back ? "ne-pkt-back" : "ne-pkt"}>
+          <animateMotion dur={`${p.dur}s`} begin={`${p.begin}s`} repeatCount="indefinite" path={p.d} />
+        </circle>
+      ))}
+
+      {/* the hub sits on top of everything */}
+      <g transform={`translate(${hub.x - L.hub.w / 2},${hub.y - L.hub.h / 2})`}>
         <rect
           x="-5"
           y="-5"
@@ -292,52 +471,19 @@ function Pipeline({
           {status}
         </text>
       </g>
-
-      {/* clippers */}
-      {L.clippers.c.map((c, i) => {
-        const p = at(L.clippers.m, c);
-        return (
-          <g key={i} className="pointer-events-none">
-            <circle cx={p.x} cy={p.y} r={L.clippers.r} className={`ne-node${side === "out" ? " ne-node-on" : ""}`} />
-            <circle cx={p.x} cy={p.y - 2.5} r="3" fill="var(--muted)" />
-            <path d={`M${p.x - 5.5},${p.y + 6.5} a5.5,4.5 0 0 1 11,0`} fill="var(--muted)" />
-            <circle
-              cx={p.x + 8}
-              cy={p.y - 8}
-              r="2.6"
-              fill="#22c55e"
-              stroke="var(--bg-raised)"
-              className={reduced ? undefined : "ne-live"}
-              style={{ animationDelay: `${i * 0.37}s` }}
-            />
-          </g>
-        );
-      })}
-
-      {/* platforms */}
-      {L.platforms.c.map((c, i) => {
-        const p = at(L.platforms.m, c);
-        const { w, h } = L.platforms;
-        const on = side === "out" || (inView && !reduced && i === active);
-        return (
-          <g key={PLATFORMS[i]} transform={`translate(${p.x - w / 2},${p.y - h / 2})`} className="pointer-events-none">
-            <rect width={w} height={h} rx="6" className={`ne-node${on ? " ne-node-on" : ""}`} />
-            <text x={w / 2} y={h / 2 + 4} textAnchor="middle" className={on ? "ne-label" : "ne-label ne-label-dim"}>
-              {PLATFORMS[i]}
-            </text>
-          </g>
-        );
-      })}
-
-      {caption(L.inputs.m, "You send")}
-      {caption(L.clippers.m, `${facts.clippersLabel} clippers`)}
-      {caption(L.platforms.m, "They post on")}
     </svg>
   );
 }
 
-function rectOf(z: { x: number; y: number; w: number; h: number }) {
-  return { x: z.x, y: z.y, width: Math.max(0, z.w), height: Math.max(0, z.h) };
+function Badge({ x, y, n, on }: { x: number; y: number; n: number; on: boolean }) {
+  return (
+    <g style={{ transition: "opacity .4s" }}>
+      <circle cx={x} cy={y} r="8.5" fill={on ? "var(--accent)" : "var(--bg)"} stroke={on ? "var(--accent)" : "var(--line-strong)"} />
+      <text x={x} y={y + 3.2} textAnchor="middle" className="ne-status" style={{ fill: on ? "#fff" : "var(--muted)", fontSize: 9 }}>
+        {n}
+      </text>
+    </g>
+  );
 }
 
 function InputIcon({ kind }: { kind: "play" | "shield" | "coin" }) {
@@ -359,153 +505,12 @@ function InputIcon({ kind }: { kind: "play" | "shield" | "coin" }) {
   return (
     <g>
       <circle cx="8" cy="7" r="6.8" {...common} />
-      <path d="M10 4.6c-.6-.6-1.3-.9-2.1-.9-1.2 0-2 .6-2 1.5 0 2.1 4.3 1.1 4.3 3.4 0 .9-.9 1.6-2.2 1.6-.9 0-1.8-.4-2.4-1M8 2.6v1.1M8 10.2v1.2" {...common} stroke="var(--accent)" strokeWidth={1.2} />
+      <path
+        d="M10 4.6c-.6-.6-1.3-.9-2.1-.9-1.2 0-2 .6-2 1.5 0 2.1 4.3 1.1 4.3 3.4 0 .9-.9 1.6-2.2 1.6-.9 0-1.8-.4-2.4-1M8 2.6v1.1M8 10.2v1.2"
+        {...common}
+        stroke="var(--accent)"
+        strokeWidth={1.2}
+      />
     </g>
-  );
-}
-
-/* ---------------------------------------------------- 03: budget moves */
-
-// Illustration of the weekly rebalance, not campaign data.
-const WEEKS = [
-  [25, 25, 25, 25],
-  [34, 28, 22, 16],
-  [45, 27, 17, 11],
-  [56, 26, 11, 7],
-];
-const SEG = ["var(--accent)", "rgb(59 130 246 / .42)", "#363c4d", "#292d3a"];
-
-function BudgetChart({ reduced }: { reduced: boolean }) {
-  const ref = useRef<SVGSVGElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.4 });
-  const [hover, setHover] = useState(-1);
-  const shown = reduced || inView;
-  const row = hover >= 0 ? hover : WEEKS.length - 1;
-  const X0 = 46;
-  const BW = 238;
-  const y = (i: number) => 26 + i * 27;
-
-  return (
-    <svg
-      ref={ref}
-      viewBox="0 0 300 160"
-      className="h-auto w-full cursor-crosshair overflow-visible"
-      role="img"
-      aria-label="Illustration: each week, more of the budget moves to the clip format that gets the most views."
-      onPointerMove={(e) => {
-        const r = e.currentTarget.getBoundingClientRect();
-        const vy = ((e.clientY - r.top) / r.height) * 160;
-        const i = Math.round((vy - 26) / 27);
-        setHover(i >= 0 && i < WEEKS.length ? i : -1);
-      }}
-      onPointerLeave={() => setHover(-1)}
-    >
-      <text x="284" y="10" textAnchor="end" className="ne-status">
-        illustration
-      </text>
-      {WEEKS.map((week, i) => {
-        let x = X0;
-        return (
-          <g key={i} opacity={row === i ? 1 : 0.55} style={{ transition: "opacity .25s" }}>
-            <text x={X0 - 8} y={y(i) + 4} textAnchor="end" className="ne-status">
-              wk {i + 1}
-            </text>
-            <g
-              style={{
-                transform: shown ? "scaleX(1)" : "scaleX(0)",
-                transformBox: "fill-box",
-                transformOrigin: "left",
-                transition: reduced ? "none" : `transform .9s cubic-bezier(.2,.8,.2,1) ${i * 0.18}s`,
-              }}
-            >
-              {week.map((v, k) => {
-                const w = (v / 100) * BW;
-                const seg = <rect key={k} x={x} y={y(i) - 7} width={Math.max(0, w - 2)} height="14" rx="2" fill={SEG[k]} />;
-                x += w;
-                return seg;
-              })}
-            </g>
-          </g>
-        );
-      })}
-      <text x={X0} y="146" className="ne-label" style={{ fontSize: 10 }}>
-        wk {row + 1} · <tspan fill="var(--accent)">{WEEKS[row][0]}%</tspan>
-        <tspan className="ne-label-dim"> of budget on the top format</tspan>
-      </text>
-    </svg>
-  );
-}
-
-/* ------------------------------------------- every clip: review gate */
-
-const CLIPS: ("pass" | "fail")[] = ["pass", "pass", "fail", "pass", "fail"];
-
-function ReviewGate({ reduced }: { reduced: boolean }) {
-  const ref = useRef<SVGSVGElement>(null);
-  const inView = useInView(ref, { amount: 0.2 });
-  const playing = inView && !reduced;
-  // Where each clip sits when motion is off: two through, one rejected.
-  const still = ["translate(212px,0)", "translate(176px,0)", "translate(126px,36px)", "translate(36px,0)", "translate(0px,0)"];
-
-  return (
-    <svg
-      ref={ref}
-      viewBox="0 0 300 160"
-      className="h-auto w-full overflow-visible"
-      role="img"
-      aria-label="Every clip passes through NovaEyes review. Approved clips earn on verified views. Clips that break the rules earn nothing."
-    >
-      <path d="M8 66H292" className="ne-flow ne-dash" />
-      <path d="M150 92v28" className="ne-flow" strokeDasharray="2 3" />
-
-      {CLIPS.map((kind, i) => (
-        <g key={i} transform="translate(24,66)">
-          <g
-            className={reduced ? undefined : kind === "pass" ? "ne-clip-pass" : "ne-clip-fail"}
-            style={
-              reduced
-                ? { transform: still[i], opacity: i > 2 ? 0.35 : 1 }
-                : { animationDelay: `${-i * 1.2}s`, animationPlayState: playing ? "running" : "paused" }
-            }
-          >
-            <rect x="-8" y="-13" width="16" height="26" rx="2.5" fill="var(--bg)" stroke="#2e2f3b" />
-            <path d="M-2.2 -4v8l6-4z" fill="var(--muted)" />
-            {kind === "pass" ? (
-              <g
-                className={reduced ? undefined : "ne-ok"}
-                style={reduced ? { opacity: i < 2 ? 1 : 0 } : { animationDelay: `${-i * 1.2}s`, animationPlayState: playing ? "running" : "paused" }}
-              >
-                <circle cx="8" cy="-13" r="5.2" fill="var(--accent)" />
-                <path d="M5.6 -13.2 7.4 -11.4 10.5 -14.8" fill="none" stroke="#fff" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
-              </g>
-            ) : (
-              <g
-                className={reduced ? undefined : "ne-no"}
-                style={reduced ? { opacity: 1 } : { animationDelay: `${-i * 1.2}s`, animationPlayState: playing ? "running" : "paused" }}
-              >
-                <circle cx="8" cy="-13" r="5.2" fill="#ef4444" />
-                <path d="M6 -15l4 4M10 -15l-4 4" stroke="#fff" strokeWidth="1.3" strokeLinecap="round" />
-              </g>
-            )}
-          </g>
-        </g>
-      ))}
-
-      <g transform="translate(130,38)">
-        <rect x="-4" y="-4" width="48" height="64" rx="11" fill="none" stroke="rgb(59 130 246 / .4)" className={reduced ? undefined : "ne-ring"} />
-        <rect width="40" height="56" rx="8" className="ne-node ne-hub" />
-        <Eye x={20} y={28} size={22} />
-      </g>
-
-      <text x="34" y="108" textAnchor="middle" className="ne-status">
-        submitted
-      </text>
-      <text x="150" y="134" textAnchor="middle" className="ne-status">
-        off brief · not paid
-      </text>
-      <text x="254" y="108" textAnchor="middle" className="ne-status">
-        verified · paid
-      </text>
-    </svg>
   );
 }

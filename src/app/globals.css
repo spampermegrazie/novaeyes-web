@@ -109,30 +109,14 @@ body {
 .ne-hub { fill: #171822; stroke: rgb(var(--glow) / 0.55); filter: drop-shadow(0 8px 18px rgb(var(--glow) / 0.18)); }
 .ne-ring { animation: ne-pulse 2.4s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
 .ne-live { animation: ne-pulse 2.2s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
-.ne-clip-pass { animation: ne-pass 6s linear infinite; }
-.ne-clip-fail { animation: ne-fail 6s linear infinite; }
-.ne-ok { animation: ne-ok 6s linear infinite; }
-.ne-no { animation: ne-no 6s linear infinite; }
+.ne-flow-win { stroke: var(--accent); stroke-width: 2.4; }
+.ne-flow-back { stroke: rgb(242 242 242 / 0.45); }
+.ne-pkt-back { fill: var(--fg); filter: drop-shadow(0 0 4px rgb(255 255 255 / 0.7)); }
 @keyframes ne-dash { to { stroke-dashoffset: -14; } }
 @keyframes ne-pulse {
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.4; transform: scale(1.06); }
 }
-@keyframes ne-pass {
-  0% { transform: translate(0, 0); opacity: 0; }
-  6% { opacity: 1; }
-  38%, 52% { transform: translate(126px, 0); }
-  92% { transform: translate(236px, 0); opacity: 1; }
-  100% { transform: translate(250px, 0); opacity: 0; }
-}
-@keyframes ne-fail {
-  0% { transform: translate(0, 0); opacity: 0; }
-  6% { opacity: 1; }
-  38%, 52% { transform: translate(126px, 0); opacity: 1; }
-  72%, 100% { transform: translate(126px, 40px); opacity: 0; }
-}
-@keyframes ne-ok { 0%, 50% { opacity: 0; } 54%, 100% { opacity: 1; } }
-@keyframes ne-no { 0%, 48% { opacity: 0; } 52%, 100% { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) {
   .ne-dash, .ne-ring, .ne-live { animation: none; }
 }
