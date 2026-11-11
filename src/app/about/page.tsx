@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { facts } from "@/content/facts";
 import { publicCampaigns } from "@/content/campaigns";
 import { Cta } from "@/components/cta";
+import { FounderPortrait } from "@/components/founder-portrait";
 import { CountUp } from "@/components/ui/count-up";
 import { JsonLd, breadcrumbJsonLd, aboutPageJsonLd } from "@/components/json-ld";
-import founderPhoto from "../../../public/andrea-corindo.jpg";
 
 export const metadata: Metadata = {
   title: "About NovaEyes and Founder Andrea Corindo",
@@ -46,14 +45,8 @@ export default function About() {
         </header>
 
         <div className="mx-auto max-w-3xl px-4 sm:px-6">
-          <section className="grid gap-8 py-10 sm:grid-cols-[200px_1fr] sm:items-start">
-            <Image
-              src={founderPhoto}
-              alt={`${facts.founder}, founder of NovaEyes`}
-              sizes="(min-width: 640px) 200px, 100vw"
-              className="w-full max-w-[240px] rounded-2xl border border-line object-cover"
-              placeholder="blur"
-            />
+          <section className="grid gap-10 py-10 sm:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] sm:items-center">
+            <FounderPortrait />
             <div>
               <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Who started NovaEyes?</h2>
               <p className="mt-4 text-lg leading-relaxed text-muted">
