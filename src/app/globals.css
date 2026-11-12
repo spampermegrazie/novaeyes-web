@@ -258,6 +258,22 @@ h2, h3, h4 { font-weight: 600; }
   .shiny-cta span::before { animation: none !important; }
 }
 
+/* Founder section (src/components/founder-section.tsx): the giant name behind Andrea drifts a
+   little slower than the page, so he reads as standing in front of it. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .founder-name {
+      animation: founder-drift linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
+    }
+  }
+}
+@keyframes founder-drift {
+  from { translate: 0 -22%; }
+  to { translate: 0 22%; }
+}
+
 /* Reach estimator slider: thin line, blue fill up to the thumb, glowing thumb. */
 .ne-range { appearance: none; -webkit-appearance: none; height: 28px; background: transparent; cursor: pointer; }
 .ne-range:focus-visible { outline: none; }
