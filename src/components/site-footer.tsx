@@ -1,63 +1,60 @@
-import Link from "next/link";
-import { facts, nav, verticalLinks } from "@/content/facts";
-import { Logo } from "./brand";
+import { facts, verticalLinks } from "@/content/facts";
+import BeamWordmarkFooter, { type FooterColumn, type FooterSocial } from "@/components/ui/beam-wordmark-footer";
+
+// Site footer: link columns over a giant novaeyes wordmark that a slow beam of light runs through.
+const columns: FooterColumn[] = [
+  { title: "Clipping for", links: verticalLinks.map((v) => ({ label: v.label, href: v.href })) },
+  {
+    title: "Company",
+    links: [
+      { label: "About", href: "/about" },
+      { label: "How we run campaigns", href: "/attention-monopoly-system" },
+      { label: "Case studies", href: "/case-studies" },
+      { label: "Pricing", href: "/pricing" },
+      { label: "Book a call", href: "/book" },
+    ],
+  },
+  {
+    title: "Resources",
+    links: [
+      { label: "Estimate reach", href: "/reach-estimator" },
+      { label: "Blog", href: "/blog" },
+      { label: "FAQ", href: "/faq" },
+      { label: "Best clipping agencies", href: "/best-clipping-agencies" },
+    ],
+  },
+];
+
+// The founder's public profiles (the same ones in the site schema). Swap for company accounts once they exist.
+const profile = (host: string) => facts.founderProfiles.find((u) => u.includes(host));
+const socials: FooterSocial[] = [
+  { label: "Andrea on Instagram", href: profile("instagram.com"), icon: "instagram" },
+  { label: "Andrea on X", href: profile("x.com"), icon: "x" },
+  { label: "Andrea on LinkedIn", href: profile("linkedin.com"), icon: "linkedin" },
+].filter((s) => s.href) as FooterSocial[];
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-line">
-      <div className="mx-auto grid max-w-6xl gap-10 px-6 py-14 sm:px-10 lg:px-12 md:grid-cols-4">
-        <div className="md:col-span-2">
-          <Logo />
-          <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted">{facts.oneLiner}</p>
-          <p className="mt-4 text-sm text-muted">
-            Founded {facts.foundingYear} in {facts.location}.
-          </p>
-        </div>
-        <div>
-          <p className="font-label text-[10px] tracking-[0.14em] text-muted uppercase">Clipping for</p>
-          <ul className="mt-4 space-y-2 text-sm">
-            {verticalLinks.map((v) => (
-              <li key={v.href}>
-                <Link href={v.href} className="text-muted hover:text-fg">
-                  {v.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <p className="font-label text-[10px] tracking-[0.14em] text-muted uppercase">Company</p>
-          <ul className="mt-4 space-y-2 text-sm">
-            <li>
-              <Link href="/about" className="text-muted hover:text-fg">
-                About
-              </Link>
-            </li>
-            <li>
-              <Link href="/attention-monopoly-system" className="text-muted hover:text-fg">
-                How we run campaigns
-              </Link>
-            </li>
-            {nav.map((item) => (
-              <li key={item.href}>
-                <Link href={item.href} className="text-muted hover:text-fg">
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-            <li>
-              <Link href="/best-clipping-agencies" className="text-muted hover:text-fg">
-                Best clipping agencies
-              </Link>
-            </li>
-            <li>
-              <Link href="/book" className="text-muted hover:text-fg">
-                Book a call
-              </Link>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </footer>
+    <BeamWordmarkFooter
+      brand={facts.name}
+      wordmark="novaeyes"
+      company={facts.name}
+      blurb={facts.oneLiner}
+      credits={[
+        { lead: `Founded in ${facts.foundingYear} in `, label: facts.location },
+        { lead: "Led by ", label: facts.founder, href: "/about" },
+      ]}
+      socials={socials}
+      columns={columns}
+      background="#0d0d12"
+      ink="#f2f2f2"
+      muted="#757c8a"
+      accent="#3b82f6"
+      wordTop="#1e40af"
+      wordFoot="#070a18"
+      fontSans='var(--font-inter), ui-sans-serif, system-ui, sans-serif'
+      wordFont='var(--font-manrope), ui-sans-serif, system-ui, sans-serif'
+      wordWeight={600}
+    />
   );
 }

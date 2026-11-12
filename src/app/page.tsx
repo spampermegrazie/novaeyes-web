@@ -13,6 +13,7 @@ import { StudioTour } from "@/components/studio-tour";
 import { FounderPortrait } from "@/components/founder-portrait";
 import { CountUp } from "@/components/ui/count-up";
 import { EngineSteps, type EngineStep } from "@/components/ui/engine-steps";
+import { ShinyButton } from "@/components/ui/shiny-button";
 
 // Every word on this page is in the server HTML. The hero animates its text in,
 // but never injects it, so crawlers and AI tools read the full page.
@@ -64,12 +65,7 @@ export default function Home() {
           that are verified.
         </p>
         <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Link
-            href="/book"
-            className="font-display font-semibold rounded-full bg-accent px-6 py-3 text-center text-sm text-accent-ink shadow-[0_0_32px_rgb(var(--glow)/0.35)] hover:opacity-90"
-          >
-            Book a 15-minute reach audit
-          </Link>
+          <ShinyButton href="/book">Book a 15-minute reach audit</ShinyButton>
           <Link
             href="/reach-estimator"
             className="font-display font-semibold rounded-full border border-line bg-bg/60 px-6 py-3 text-center text-sm backdrop-blur hover:border-muted/50"

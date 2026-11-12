@@ -5,6 +5,7 @@ import { facts } from "@/content/facts";
 import { CampaignCard } from "./campaign-card";
 import { Cta } from "./cta";
 import { JsonLd, faqJsonLd, serviceJsonLd, breadcrumbJsonLd } from "./json-ld";
+import { ShinyButton } from "@/components/ui/shiny-button";
 
 export function VerticalPage({ vertical }: { vertical: Vertical }) {
   const proof = vertical.campaignSlugs.map((slug) => getCampaign(slug)).filter((c) => c !== undefined);
@@ -35,9 +36,7 @@ export function VerticalPage({ vertical }: { vertical: Vertical }) {
             </p>
           ))}
           <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-            <Link href="/book" className="font-display font-semibold rounded-full bg-accent px-6 py-3 text-center text-sm text-accent-ink hover:opacity-90">
-              Book a 15-minute reach audit
-            </Link>
+            <ShinyButton href="/book">Book a 15-minute reach audit</ShinyButton>
             <Link href="/reach-estimator" className="font-display font-semibold rounded-full border border-line px-6 py-3 text-center text-sm hover:border-muted/50">
               Estimate your reach
             </Link>

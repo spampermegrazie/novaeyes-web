@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ShinyButton } from "@/components/ui/shiny-button";
 
 export function Cta({
   title = "See what your budget buys",
@@ -13,12 +14,7 @@ export function Cta({
         <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h2>
         <p className="mx-auto mt-4 max-w-xl text-muted">{body}</p>
         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Link
-            href="/book"
-            className="font-display font-semibold rounded-full bg-accent px-6 py-3 text-sm text-accent-ink hover:opacity-90"
-          >
-            Book a 15-minute reach audit
-          </Link>
+          <ShinyButton href="/book">Book a 15-minute reach audit</ShinyButton>
           <Link href="/reach-estimator" className="font-display font-semibold rounded-full border border-line px-6 py-3 text-sm hover:border-muted/50">
             Estimate your reach
           </Link>
