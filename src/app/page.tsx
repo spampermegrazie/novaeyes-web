@@ -9,6 +9,7 @@ import { Cta } from "@/components/cta";
 import { JsonLd, faqJsonLd } from "@/components/json-ld";
 import { ClipCurtainHero } from "@/components/ui/clip-curtain-hero";
 import { ResultsShowcase } from "@/components/ui/results-showcase";
+import { StudioTour } from "@/components/studio-tour";
 import { FounderPortrait } from "@/components/founder-portrait";
 import { CountUp } from "@/components/ui/count-up";
 import { EngineSteps, type EngineStep } from "@/components/ui/engine-steps";
@@ -136,6 +137,17 @@ export default function Home() {
             </Link>
           </div>
           <ResultsShowcase campaigns={publicCampaigns} />
+        </div>
+      </section>
+
+      {/* Stage 4: the studio. The whole operation in one picture, with a stop at every station. */}
+      <section id="the-team">
+        <div className="mx-auto max-w-6xl px-6 pb-24 sm:px-10 lg:px-12">
+          <p className="font-label text-[10px] tracking-[0.14em] text-muted uppercase">The team</p>
+          <h2 className="mt-4 mb-10 max-w-3xl text-3xl tracking-tight text-balance sm:text-4xl">
+            See your new distribution team at work. <span className="text-muted">Eight stations, one loop.</span>
+          </h2>
+          <StudioTour />
         </div>
       </section>
 
