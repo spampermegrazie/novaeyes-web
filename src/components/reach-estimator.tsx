@@ -13,8 +13,8 @@ import { estimatorConfig } from "@/content/estimator-config";
 import { estimate, formatCompact, formatRange, formatUsd } from "@/lib/estimator";
 import { BUDGET_SCALE, VIEWS_SCALE, parseAmount, positionOf, stepFrom, valueAt } from "@/lib/scale";
 import { getAttribution } from "@/lib/attribution";
-import { MARK_PATH, MARK_VIEWBOX } from "./brand";
 import { BookCall } from "./book-call";
+import { EstimatorFlow } from "./estimator-flow";
 import { CountUp } from "./ui/count-up";
 
 type Mode = "budget" | "views";
@@ -294,24 +294,23 @@ export function ReachEstimator() {
         </div>
       </div>
 
-      {/* Right: the engine and what you picked so far. It spans the full height of the steps
-          (engine level with the step counter, summary level with the buttons), and once the
-          left side grows past the screen (the booking calendar) it stays in view instead. */}
+      {/* Right: the whole campaign as one flow, filling in as you go. It spans the height of the
+          steps, and once the left side grows past the screen (the booking calendar) it stays in
+          view instead. */}
       <aside aria-label="Your campaign" className="relative isolate hidden lg:block">
-        <div className="sticky top-28 flex min-h-[min(100%,calc(100vh-9rem))] flex-col justify-between gap-12">
-          <div className="relative">
-            <div
-              aria-hidden
-              className="pointer-events-none absolute top-1/2 left-1/2 -z-10 aspect-square w-[115%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgb(59_130_246/0.16),rgb(59_130_246/0.05)_45%,transparent)]"
-            />
-            <MiniEngine mode={m} value={mode ? value : null} result={unlocked ? headline : null} />
-          </div>
-          <dl className="divide-y divide-line border-y border-line">
-            <SummaryRow label="Starting from" value={mode ? (mode === "budget" ? "A budget" : "A view target") : null} />
-            <SummaryRow label={m === "budget" ? "Budget" : "Target views"} value={mode ? (m === "budget" ? formatUsd(value) : `${formatCompact(value)} views`) : null} />
-            <SummaryRow label="Niche" value={niche?.label ?? null} />
-            <SummaryRow label={m === "budget" ? "Estimated views" : "Estimated budget"} value={unlocked ? headline : null} locked={!unlocked && !!niche} />
-          </dl>
+        <div className="sticky top-28 flex min-h-[min(100%,calc(100vh-9rem))] flex-col justify-center">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute top-[32%] left-1/2 -z-10 aspect-square w-[110%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgb(59_130_246/0.14),rgb(59_130_246/0.04)_45%,transparent)]"
+          />
+          <EstimatorFlow
+            mode={mode}
+            value={value}
+            nicheLabel={niche?.label ?? null}
+            result={unlocked ? headline : null}
+            locked={!unlocked && !!niche}
+            reduced={reduced}
+          />
         </div>
       </aside>
     </div>
@@ -389,26 +388,6 @@ function Nav({ onBack, onNext }: { onBack: () => void; onNext?: () => void }) {
           Continue
         </button>
       )}
-    </div>
-  );
-}
-
-function SummaryRow({ label, value, locked = false }: { label: string; value: string | null; locked?: boolean }) {
-  return (
-    <div className="flex items-baseline justify-between gap-6 py-4">
-      <dt className="font-label text-[9px] tracking-[0.12em] text-muted uppercase">{label}</dt>
-      <dd className="text-right font-display font-semibold tabular-nums">
-        {value ? (
-          <span className="flex items-center gap-2">
-            <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-accent shadow-[0_0_8px_rgb(var(--glow))]" />
-            {value}
-          </span>
-        ) : locked ? (
-          <span className="text-muted">Locked</span>
-        ) : (
-          <span className="text-muted/50">Not set</span>
-        )}
-      </dd>
     </div>
   );
 }
@@ -539,64 +518,3 @@ function CountUpRange({ text }: { text: string }) {
   );
 }
 
-// NovaEyes in the middle, the budget on the left, views on the right. The packets flow from
-// what you picked to what you get: from a budget they run right, toward views; from a view
-// target they run left, toward the budget. The bigger the amount, the more and faster the
-// packets. Negative begin times start every packet mid-path.
-function MiniEngine({ mode, value, result }: { mode: Mode; value: number | null; result: string | null }) {
-  const scale = mode === "budget" ? BUDGET_SCALE : VIEWS_SCALE;
-  const level = value === null ? 0 : Math.round(positionOf(scale, value) * 7);
-  const count = 3 + level;
-  const speed = 2.4 - level * 0.18;
-  const left = "M150,60 C190,60 200,60 236,60";
-  const right = "M324,60 C360,60 370,60 410,60";
-  // the same two wires, drawn in the direction the packets travel
-  const [into, outOf] =
-    mode === "budget" ? [left, right] : ["M410,60 C370,60 360,60 324,60", "M236,60 C200,60 190,60 150,60"];
-  const known = value === null ? "• • •" : fmt(mode, value);
-  return (
-    <svg
-      viewBox="0 0 560 120"
-      className="h-auto w-full overflow-visible"
-      role="img"
-      aria-label={mode === "budget" ? "Your budget runs through NovaEyes and comes out as views" : "Your view target runs through NovaEyes and comes out as a budget"}
-    >
-      <path d={left} className="ne-flow ne-flow-on" />
-      <path d={right} className="ne-flow ne-flow-on" />
-      {value !== null &&
-        Array.from({ length: count }).flatMap((_, i) => [
-          <circle key={`a-${mode}-${level}-${i}`} r="2.4" className="ne-pkt">
-            <animateMotion dur={`${speed}s`} begin={`-${(i * speed) / count}s`} repeatCount="indefinite" path={into} />
-          </circle>,
-          <circle key={`b-${mode}-${level}-${i}`} r="2.4" className="ne-pkt">
-            <animateMotion dur={`${speed}s`} begin={`-${(i * speed) / count + speed / 2}s`} repeatCount="indefinite" path={outOf} />
-          </circle>,
-        ])}
-      <g transform="translate(10,40)">
-        <rect width="140" height="40" rx="10" className="ne-node ne-node-on" />
-        <text x="70" y="17" textAnchor="middle" className="ne-caption" style={{ fontSize: 7 }}>
-          Budget
-        </text>
-        <text x="70" y="31" textAnchor="middle" className="ne-label">
-          {mode === "budget" ? known : (result ?? "• • •")}
-        </text>
-      </g>
-      <g transform="translate(236,28)">
-        <rect x="-5" y="-5" width="98" height="74" rx="19" fill="none" stroke="rgb(59 130 246 / .45)" className="ne-ring" />
-        <rect width="88" height="64" rx="14" className="ne-node ne-hub" />
-        <svg x="17" y="20" width="54" height="18.4" viewBox={MARK_VIEWBOX}>
-          <path fillRule="evenodd" d={MARK_PATH} fill="var(--fg)" />
-        </svg>
-      </g>
-      <g transform="translate(410,40)">
-        <rect width="140" height="40" rx="10" className="ne-node ne-node-on" />
-        <text x="70" y="17" textAnchor="middle" className="ne-caption" style={{ fontSize: 7 }}>
-          Views
-        </text>
-        <text x="70" y="31" textAnchor="middle" className="ne-label">
-          {mode === "views" ? known : (result ?? "• • •")}
-        </text>
-      </g>
-    </svg>
-  );
-}
