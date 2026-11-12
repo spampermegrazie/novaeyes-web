@@ -1,81 +1,52 @@
 import Link from "next/link";
 import { facts } from "@/content/facts";
 import { FounderPortrait } from "@/components/founder-portrait";
-import { CountUp } from "@/components/ui/count-up";
 
-// Homepage founder block, in the site's own language: eyebrow and two-tone heading like the
-// other sections, a raised panel with the hero's dot grid and blue glow, stats that count up
-// like the numbers band, and Andrea's cut-out standing on the bottom edge of the panel the way
-// the featured client stands in the results showcase.
-const views = facts.stats.find((s) => s.label === "Views delivered")?.value ?? "600M+";
-const stats = [
-  { value: "500K+", label: "Followers built" },
-  { value: `${facts.clippersLabel}+`, label: "Clippers" },
-  { value: views, label: "Views delivered" },
-];
-
+// Homepage founder block. No panel and no numbers: the line Andrea built the company on is the
+// heading, set big and two-tone like the other section headings, signed with his name. His
+// cut-out stands on a glowing horizon line (the edge light of the studio platform) over the
+// hero's dot grid. On phones the portrait sits between the line and the signature.
 export function FounderSection() {
   return (
     <section id="founder" className="mx-auto max-w-6xl px-6 py-24 sm:px-10 lg:px-12">
-      <p className="font-label text-[10px] tracking-[0.14em] text-muted uppercase">The founder</p>
-      <h2 className="mt-4 max-w-3xl text-3xl tracking-tight text-balance sm:text-4xl">
-        Built by an operator. <span className="text-muted">Not a spectator.</span>
-      </h2>
+      <div className="grid items-center gap-x-16 gap-y-10 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
+        <div className="lg:col-start-1 lg:row-start-1 lg:self-end">
+          <p className="font-label text-[10px] tracking-[0.14em] text-muted uppercase">The founder</p>
+          <h2 className="mt-5 text-4xl leading-[1.05] tracking-tight sm:text-5xl lg:text-[56px]">
+            <span className="block text-balance text-muted">Anyone can make content.</span>
+            <span className="block text-balance">We decide who sees it.</span>
+          </h2>
+        </div>
 
-      <div className="relative isolate mt-12 overflow-hidden rounded-3xl border border-line bg-bg-raised/50">
-        {/* dot grid and glow, gathered behind the portrait */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(var(--line)_1px,transparent_1px)] [mask-image:radial-gradient(ellipse_60%_80%_at_78%_55%,#000_30%,transparent_100%)] [background-size:24px_24px]"
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute right-[-10%] bottom-[-30%] -z-10 aspect-square w-[70%] rounded-full bg-[radial-gradient(closest-side,rgb(var(--glow)/0.16),rgb(var(--glow)/0.05)_50%,transparent)]"
-        />
-        <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/50 to-transparent" />
+        <div className="relative isolate mx-auto w-full max-w-sm lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:max-w-none">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -inset-x-10 -top-10 bottom-0 -z-10 bg-[radial-gradient(var(--line)_1px,transparent_1px)] [mask-image:radial-gradient(ellipse_65%_70%_at_50%_60%,#000_25%,transparent_100%)] [background-size:24px_24px]"
+          />
+          <FounderPortrait className="w-full" />
+          {/* the horizon he stands on: a line of light with a soft pool under it */}
+          <div aria-hidden className="pointer-events-none absolute inset-x-[-12%] bottom-0 h-px bg-gradient-to-r from-transparent via-accent/80 to-transparent" />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute bottom-0 left-1/2 h-20 w-[90%] -translate-x-1/2 translate-y-1/2 rounded-[100%] bg-[radial-gradient(closest-side,rgb(var(--glow)/0.28),transparent)]"
+          />
+        </div>
 
-        <div className="grid lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
-          <div className="relative z-10 p-7 sm:p-10 lg:p-12 lg:pr-4">
-            <p className="font-label text-[10px] tracking-[0.14em] text-accent uppercase">Founder, {facts.name}</p>
-            <h3 className="mt-3 text-3xl tracking-tight sm:text-4xl">{facts.founder}</h3>
-            <p className="mt-5 max-w-lg leading-relaxed text-muted">
-              Andrea built a media network past 500,000 followers before turning what he learned into NovaEyes. Today the
-              network has {facts.clippersLabel} clippers and has delivered hundreds of millions of views for brands, artists
-              and creators.
-            </p>
-
-            <figure className="mt-10">
-              <span aria-hidden className="block h-px w-10 bg-accent shadow-[0_0_10px_rgb(var(--glow))]" />
-              <blockquote className="mt-5 max-w-lg font-display text-[22px] leading-snug font-semibold tracking-tight sm:text-[28px]">
-                <span className="block">Anyone can make content.</span>
-                <span className="block">We decide who sees it.</span>
-              </blockquote>
-            </figure>
-
-            <dl className="mt-10 grid grid-cols-3 gap-px overflow-hidden rounded-2xl border border-line bg-line">
-              {stats.map((s, i) => (
-                <div key={s.label} className="flex flex-col-reverse justify-end bg-bg px-3 py-5 sm:px-5">
-                  <dt className="mt-1.5 font-label text-[8px] leading-relaxed tracking-[0.1em] text-muted uppercase sm:text-[9px] sm:tracking-[0.12em]">{s.label}</dt>
-                  <dd className="font-display text-xl font-bold tracking-tight sm:text-2xl">
-                    <CountUp value={s.value} delay={i * 0.12} />
-                  </dd>
-                </div>
-              ))}
-            </dl>
-
-            <Link href="/about" className="mt-8 inline-block font-display text-sm font-semibold text-accent transition-colors hover:text-fg">
-              More about NovaEyes →
-            </Link>
+        <div className="lg:col-start-1 lg:row-start-2 lg:self-start">
+          <div className="flex items-center gap-4">
+            <span aria-hidden className="h-px w-10 shrink-0 bg-accent shadow-[0_0_10px_rgb(var(--glow))]" />
+            <div>
+              <h3 className="text-lg leading-tight">{facts.founder}</h3>
+              <p className="mt-1 font-label text-[10px] tracking-[0.14em] text-muted uppercase">Founder, {facts.name}</p>
+            </div>
           </div>
-
-          <div className="relative flex items-end justify-center px-8 pt-2 lg:px-0 lg:pt-20">
-            {/* where and since when, in the status-line style of the engine diagrams */}
-            <p className="absolute top-8 right-8 hidden items-center gap-2 font-label text-[9px] tracking-[0.14em] text-muted uppercase lg:flex">
-              <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-accent shadow-[0_0_8px_rgb(var(--glow))]" />
-              {facts.location}, since {facts.foundingYear}
-            </p>
-            <FounderPortrait className="w-full max-w-sm lg:-ml-[14%] lg:w-[124%] lg:max-w-none" />
-          </div>
+          <p className="mt-6 max-w-md leading-relaxed text-muted">
+            Andrea built a media network past 500,000 followers before turning what he learned into NovaEyes. Today the network
+            has {facts.clippersLabel} clippers and has delivered hundreds of millions of views for brands, artists and creators.
+          </p>
+          <Link href="/about" className="mt-6 inline-block font-display text-sm font-semibold text-accent transition-colors hover:text-fg">
+            More about NovaEyes →
+          </Link>
         </div>
       </div>
     </section>
