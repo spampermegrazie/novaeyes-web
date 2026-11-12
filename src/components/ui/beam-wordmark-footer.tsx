@@ -290,7 +290,7 @@ const CSS =
   ".bwf-link:hover,.bwf-link:focus-visible{color:var(--bwf-ink)}" +
   // The wordmark. Each letter paints the section-sized background, shifted
   // back by its own offset, so beam and glow line up with the backdrop.
-  ".bwf-word{position:relative;z-index:1;overflow:hidden;margin-top:clamp(28px,7cqw,96px)}" +
+  ".bwf-word{position:relative;z-index:1;overflow:hidden;margin-top:var(--bwf-wgap,clamp(28px,7cqw,96px))}" +
   ".bwf-word-box{padding:0 var(--bwf-gut,clamp(20px,6cqw,88px));max-width:var(--bwf-max,1120px);margin:0 auto;box-sizing:border-box}" +
   ".bwf-word-in{display:inline-flex;white-space:nowrap;font-family:var(--bwf-wsans);font-weight:var(--bwf-ww);line-height:1;letter-spacing:var(--bwf-wtrack);user-select:none;-webkit-user-select:none}" +
   ".bwf-lw{display:inline-block;translate:0 0;transition:translate 1.25s cubic-bezier(.16,.84,.2,1) var(--bwf-d,0ms)}" +

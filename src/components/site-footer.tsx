@@ -58,9 +58,10 @@ export function SiteFooter() {
       wordTracking="-0.03em"
       wordWeight={800}
       labelFont="var(--font-label-face), ui-sans-serif, system-ui, sans-serif"
-      cut={0.16}
+      // negative: the bottom of the letters sinks below the end of the page
+      cut={-0.2}
       // the same content width and side padding as every section (max-w-6xl, px-6 sm:px-10 lg:px-12)
-      className="[--bwf-gut:1.5rem] [--bwf-max:72rem] sm:[--bwf-gut:2.5rem] lg:[--bwf-gut:3rem]"
+      className="[--bwf-gut:1.5rem] [--bwf-max:72rem] [--bwf-wgap:clamp(56px,11cqw,160px)] sm:[--bwf-gut:2.5rem] lg:[--bwf-gut:3rem]"
     />
   );
 }
