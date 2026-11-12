@@ -6,7 +6,7 @@
 // that fills in as you go. The estimate is not in the page until the email is in;
 // after that the numbers follow any change live.
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, animate, motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "motion/react";
 import { siInstagram, siTiktok, siX, siYoutubeshorts } from "simple-icons";
 import { estimatorConfig } from "@/content/estimator-config";
@@ -402,12 +402,20 @@ function AmountPicker({ mode, value, onChange, reduced }: { mode: Mode; value: n
     } else target.set(value);
   }, [value, reduced, target, spring]);
 
-  // Glide the thumb onto the exact spot of a value.
+  // Glide the thumb onto the exact spot of a value (typed amounts and arrow keys). The glide is
+  // stopped the moment the slider is touched again, or it would drag the thumb back mid-slide.
+  const glide = useRef<ReturnType<typeof animate> | null>(null);
+  const stopGlide = () => {
+    glide.current?.stop();
+    glide.current = null;
+  };
   const snapThumb = (v: number) => {
     const to = positionOf(scale, v);
+    stopGlide();
     if (reduced) setPos(to);
-    else animate(pos, to, { duration: 0.25, ease: [0.16, 1, 0.3, 1], onUpdate: setPos });
+    else glide.current = animate(pos, to, { duration: 0.25, ease: [0.16, 1, 0.3, 1], onUpdate: setPos });
   };
+  useEffect(() => stopGlide, []);
 
   const commitTyped = () => {
     if (!typed.trim()) return;
@@ -447,8 +455,9 @@ function AmountPicker({ mode, value, onChange, reduced }: { mode: Mode; value: n
         step={1}
         value={Math.round(pos * 1000)}
         aria-valuetext={mode === "budget" ? formatUsd(value) : `${formatCompact(value)} views`}
-        onPointerUp={() => snapThumb(value)}
+        onPointerDown={stopGlide}
         onChange={(e) => {
+          stopGlide();
           const p = Number(e.target.value) / 1000;
           setPos(p);
           setNote(null);
