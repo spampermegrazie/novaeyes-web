@@ -3,10 +3,12 @@
 // a review gate, floating screens, and a pile of NovaEyes coins. Everything that should
 // feel alive is animated; everything else is merged into a few draw calls.
 // The canvas is transparent, so the diorama sits directly on the page.
+// It runs in a Web Worker on an OffscreenCanvas where the browser allows it (studio.worker.ts),
+// and on the main thread otherwise, so nothing in here may touch the DOM except through
+// makeCanvas.
 import * as THREE from "three";
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
-import { SVGLoader } from "three/addons/loaders/SVGLoader.js";
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
@@ -15,12 +17,18 @@ import { SavePass } from "three/addons/postprocessing/SavePass.js";
 import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 import { siInstagram, siTiktok, siX, siYoutubeshorts } from "simple-icons";
-import { MARK_PATH, MARK_VIEWBOX } from "@/components/brand";
+import { MARK_PATH, MARK_VIEWBOX } from "@/components/brand-paths";
+import { markOutline } from "./mark-outline";
 
 export const STUDIO_KEYS = ["brief", "source", "clippers", "posting", "review", "views", "payout", "control"] as const;
 export type StudioPoint = { x: number; y: number; on: boolean };
 export type StudioOptions = {
-  onFrame: (points: StudioPoint[]) => void;
+  width: number;
+  height: number;
+  dpr: number;
+  /** Where the station numbers sit, in CSS pixels. Called only when they move. */
+  onPoints: (points: StudioPoint[]) => void;
+  /** The scene is built, compiled and has drawn its first frame. */
   onReady: () => void;
   reduceMotion: boolean;
   lowPower: boolean;
@@ -28,7 +36,7 @@ export type StudioOptions = {
 export type StudioHandle = {
   focus: (index: number | null, layout: "desktop" | "mobile") => void;
   setRunning: (on: boolean) => void;
-  resize: () => void;
+  resize: (width: number, height: number, dpr: number) => void;
   dispose: () => void;
 };
 
@@ -38,14 +46,34 @@ const VIEW_H = 17.4;
 const SIDE = -1;
 
 type Mat = THREE.MeshStandardMaterialParameters;
+// Main thread canvases and worker OffscreenCanvases share every 2D call used here.
 type Ctx = CanvasRenderingContext2D;
+type AnyCanvas = HTMLCanvasElement | OffscreenCanvas;
 
-export function createStudio(canvas: HTMLCanvasElement, opts: StudioOptions): StudioHandle {
+// Canvas textures are CPU-backed (willReadFrequently): uploading a GPU-backed 2D canvas into
+// WebGL costs a readback stall, every time a live screen redraws.
+function makeCanvas(w: number, h: number): AnyCanvas {
+  if (typeof document !== "undefined") {
+    const c = document.createElement("canvas");
+    c.width = w;
+    c.height = h;
+    return c;
+  }
+  return new OffscreenCanvas(w, h);
+}
+const ctx2d = (c: AnyCanvas) => c.getContext("2d", { willReadFrequently: true }) as unknown as Ctx;
+
+// requestAnimationFrame exists in dedicated workers in current browsers; fall back to a timer.
+const hasRaf = typeof requestAnimationFrame === "function";
+const nextFrame = (cb: (now: number) => void): number => (hasRaf ? requestAnimationFrame(cb) : (setTimeout(() => cb(performance.now()), 16) as unknown as number));
+const cancelFrame = (id: number) => (hasRaf ? cancelAnimationFrame(id) : clearTimeout(id));
+
+export function createStudio(canvas: AnyCanvas, opts: StudioOptions): StudioHandle {
   const { reduceMotion, lowPower } = opts;
 
   /* ---------------------------------------------------------------- renderer */
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: true, premultipliedAlpha: true, powerPreference: "high-performance" });
-  let dpr = Math.min(window.devicePixelRatio || 1, lowPower ? 1.6 : 2);
+  let dpr = opts.dpr;
   renderer.setPixelRatio(dpr);
   renderer.setClearColor(0x000000, 0);
   renderer.shadowMap.enabled = true;
@@ -61,11 +89,8 @@ export function createStudio(canvas: HTMLCanvasElement, opts: StudioOptions): St
   scene.environment = envRT.texture;
   scene.environmentIntensity = 0.35;
 
-  const size = () => {
-    const r = canvas.getBoundingClientRect();
-    return { w: Math.max(1, r.width), h: Math.max(1, r.height) };
-  };
-  let { w: W, h: H } = size();
+  let W = Math.max(1, opts.width);
+  let H = Math.max(1, opts.height);
   renderer.setSize(W, H, false);
 
   /* ---------------------------------------------------------------- camera rig */
@@ -144,17 +169,15 @@ export function createStudio(canvas: HTMLCanvasElement, opts: StudioOptions): St
 
   /* ---------------------------------------------------------------- canvas textures */
   function canvasTex(w: number, h: number, draw?: (g: Ctx, w: number, h: number) => void) {
-    const c = document.createElement("canvas");
-    c.width = w;
-    c.height = h;
-    const g = c.getContext("2d") as Ctx;
+    const c = makeCanvas(w, h);
+    const g = ctx2d(c);
     if (draw) draw(g, w, h);
-    const t = new THREE.CanvasTexture(c);
+    const t = new THREE.CanvasTexture(c as HTMLCanvasElement);
     t.colorSpace = THREE.SRGBColorSpace;
     t.anisotropy = maxAniso;
     return t;
   }
-  const ctxOf = (t: THREE.Texture) => (t.image as HTMLCanvasElement).getContext("2d") as Ctx;
+  const ctxOf = (t: THREE.Texture) => ctx2d(t.image as AnyCanvas);
   const rr = (g: Ctx, x: number, y: number, w: number, h: number, r: number) => {
     g.beginPath();
     w = Math.max(0, w);
@@ -181,16 +204,14 @@ export function createStudio(canvas: HTMLCanvasElement, opts: StudioOptions): St
   };
   const frac = (x: number) => x - Math.floor(x);
 
-  const clipCanvasCache = new Map<number, HTMLCanvasElement>();
+  const clipCanvasCache = new Map<number, AnyCanvas>();
   function clipCanvas(seed: number) {
     const hit = clipCanvasCache.get(seed);
     if (hit) return hit;
     const r = rand(seed * 97 + 13);
     const hue = [215, 225, 205, 235, 195][seed % 5];
-    const c = document.createElement("canvas");
-    c.width = 256;
-    c.height = 448;
-    const g = c.getContext("2d") as Ctx;
+    const c = makeCanvas(256, 448);
+    const g = ctx2d(c);
     const w = 256, h = 448;
     const grd = g.createLinearGradient(0, 0, w, h);
     grd.addColorStop(0, `hsl(${hue} 45% ${18 + r() * 10}%)`);
@@ -271,13 +292,16 @@ export function createStudio(canvas: HTMLCanvasElement, opts: StudioOptions): St
     return m;
   }
 
-  // Live canvases: redrawn on their own clock, a few times a second.
-  type LiveCanvas = { tex: THREE.CanvasTexture; every: number; next: number; draw: (g: Ctx, t: number) => void };
+  // Live canvases: redrawn on their own clock, a few times a second. Each redraw is a texture
+  // upload, so the clocks are offset and at most one canvas redraws per frame.
+  type LiveCanvas = { tex: THREE.CanvasTexture; g: Ctx; every: number; next: number; draw: (g: Ctx, t: number) => void };
   const liveCanvases: LiveCanvas[] = [];
   const liveCanvas = (w: number, h: number, fps: number, draw: (g: Ctx, t: number) => void) => {
     const tex = canvasTex(w, h);
-    draw(ctxOf(tex), 0);
-    liveCanvases.push({ tex, every: 1 / (lowPower ? fps * 0.6 : fps), next: 0, draw });
+    const g = ctxOf(tex);
+    draw(g, 0);
+    const every = 1 / (lowPower ? fps * 0.6 : fps);
+    liveCanvases.push({ tex, g, every, next: every * (0.25 + 0.19 * liveCanvases.length), draw });
     return tex;
   };
 
@@ -514,11 +538,9 @@ export function createStudio(canvas: HTMLCanvasElement, opts: StudioOptions): St
       cuts.push([x, len]);
       x += len + 30 + r() * 60;
     }
-    const base = document.createElement("canvas");
-    base.width = 768;
-    base.height = 512;
+    const base = makeCanvas(768, 512);
     {
-      const g = base.getContext("2d") as Ctx;
+      const g = ctx2d(base);
       g.fillStyle = "#0e1017";
       g.fillRect(0, 0, 768, 512);
       const grd = g.createLinearGradient(fx, fy, fx + fw, fy + fh);
@@ -544,7 +566,7 @@ export function createStudio(canvas: HTMLCanvasElement, opts: StudioOptions): St
         g.fill();
       }
     }
-    const tex = liveCanvas(768, 512, 12, (g, t) => {
+    const tex = liveCanvas(768, 512, 10, (g, t) => {
       g.drawImage(base, 0, 0);
       const p = frac(t / 9);
       const px = fx + p * fw;
@@ -678,7 +700,7 @@ export function createStudio(canvas: HTMLCanvasElement, opts: StudioOptions): St
     const S = 0.75; // drawn at 1840x640 coordinates, stored at 75%
     const r = rand(91);
     const kpiW = [0, 1, 2].map(() => 190 + r() * 90);
-    const tex = liveCanvas(1380, 480, 12, (g, t) => {
+    const tex = liveCanvas(1380, 480, 10, (g, t) => {
       g.setTransform(S, 0, 0, S, 0, 0);
       const w = 1840;
       g.fillStyle = "#0a0c13";
@@ -814,11 +836,9 @@ export function createStudio(canvas: HTMLCanvasElement, opts: StudioOptions): St
   {
     const r = rand(23);
     const lineW = [0, 1, 2, 3].map(() => 200 + r() * 180);
-    const base = document.createElement("canvas");
-    base.width = 900;
-    base.height = 640;
+    const base = makeCanvas(900, 640);
     {
-      const g = base.getContext("2d") as Ctx;
+      const g = ctx2d(base);
       g.fillStyle = "#0a0c13";
       g.fillRect(0, 0, 900, 640);
       g.fillStyle = "#11141f";
@@ -849,7 +869,7 @@ export function createStudio(canvas: HTMLCanvasElement, opts: StudioOptions): St
       }
     }
     const CYCLE = 10;
-    const tex = liveCanvas(900, 640, 15, (g, t) => {
+    const tex = liveCanvas(900, 640, 12, (g, t) => {
       g.drawImage(base, 0, 0);
       const c = t % CYCLE;
       const out = 1 - smooth(9.2, 10, c);
@@ -916,11 +936,9 @@ export function createStudio(canvas: HTMLCanvasElement, opts: StudioOptions): St
   const phoneTexs: THREE.CanvasTexture[] = [];
   const phoneTops: THREE.Object3D[] = [];
   {
-    const feed = document.createElement("canvas");
-    feed.width = 256;
-    feed.height = 448 * 4;
+    const feed = makeCanvas(256, 448 * 4);
     {
-      const g = feed.getContext("2d") as Ctx;
+      const g = ctx2d(feed);
       for (let k = 0; k < 4; k++) {
         const y0 = k * 448;
         g.drawImage(clipCanvas(64 + k), 0, y0, 256, 448);
@@ -940,7 +958,7 @@ export function createStudio(canvas: HTMLCanvasElement, opts: StudioOptions): St
         g.fill();
       }
     }
-    const feedTex = new THREE.CanvasTexture(feed);
+    const feedTex = new THREE.CanvasTexture(feed as HTMLCanvasElement);
     feedTex.colorSpace = THREE.SRGBColorSpace;
     feedTex.anisotropy = maxAniso;
     feedTex.wrapT = THREE.RepeatWrapping;
@@ -1021,10 +1039,7 @@ export function createStudio(canvas: HTMLCanvasElement, opts: StudioOptions): St
   const hearts = Array.from({ length: 8 }, (_, i) => ({ phase: i / 8, from: new THREE.Vector3(), phone: i % 4 }));
 
   /* ---------------------------------------------------------------- shared mark geometry */
-  const markShapes = (() => {
-    const data = new SVGLoader().parse(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="${MARK_VIEWBOX}"><path d="${MARK_PATH}"/></svg>`);
-    return data.paths.flatMap((pp) => SVGLoader.createShapes(pp));
-  })();
+  const markShapes = [new THREE.Shape(markOutline().map(([x, y]) => new THREE.Vector2(x, y)))];
   const markVW = Number(MARK_VIEWBOX.split(" ")[2]);
   function markGeo(width: number, depth = 90) {
     const geo = new THREE.ExtrudeGeometry(markShapes, { depth, bevelEnabled: true, bevelThickness: 14, bevelSize: 8, bevelSegments: 2, curveSegments: 8 });
@@ -1338,8 +1353,16 @@ export function createStudio(canvas: HTMLCanvasElement, opts: StudioOptions): St
   /* ---------------------------------------------------------------- merge meshes into as few draw calls as possible */
   const bake = (meshes: THREE.Mesh[], space: THREE.Matrix4 | null) => {
     const inv = space ? space.clone().invert() : null;
+    // Everything stays indexed (unindexed parts get a trivial index), so shared vertices are
+    // shaded once instead of once per triangle.
     const geos = meshes.map((m) => {
-      const geo = m.geometry.index ? m.geometry.toNonIndexed() : m.geometry.clone();
+      const geo = m.geometry.clone();
+      if (!geo.index) {
+        const n = geo.attributes.position.count;
+        const idx = new Uint32Array(n);
+        for (let i = 0; i < n; i++) idx[i] = i;
+        geo.setIndex(new THREE.BufferAttribute(idx, 1));
+      }
       geo.applyMatrix4(inv ? inv.clone().multiply(m.matrixWorld) : m.matrixWorld);
       for (const name of Object.keys(geo.attributes)) if (name !== "position" && name !== "normal" && name !== "uv") geo.deleteAttribute(name);
       if (!geo.attributes.uv) geo.setAttribute("uv", new THREE.Float32BufferAttribute(new Float32Array(geo.attributes.position.count * 2), 2));
@@ -1409,14 +1432,15 @@ export function createStudio(canvas: HTMLCanvasElement, opts: StudioOptions): St
   renderer.shadowMap.needsUpdate = true;
 
   /* ---------------------------------------------------------------- post-processing, keeping the background transparent */
-  const rt = new THREE.WebGLRenderTarget(W * dpr, H * dpr, { type: THREE.HalfFloatType, samples: renderer.capabilities.isWebGL2 ? 4 : 0 });
+  // 4x MSAA at low pixel ratios, 2x once the pixel ratio already smooths edges.
+  const rt = new THREE.WebGLRenderTarget(W * dpr, H * dpr, { type: THREE.HalfFloatType, samples: renderer.capabilities.isWebGL2 ? (dpr > 1.3 ? 2 : 4) : 0 });
   const composer = new EffectComposer(renderer, rt);
   composer.setPixelRatio(dpr);
   composer.setSize(W, H);
   const renderPass = new RenderPass(scene, camera);
   renderPass.clearAlpha = 0;
   composer.addPass(renderPass);
-  const save = new SavePass(new THREE.WebGLRenderTarget(W * dpr, H * dpr, { type: THREE.HalfFloatType }));
+  const save = new SavePass(new THREE.WebGLRenderTarget(W * dpr, H * dpr)); // only its alpha is read: 8 bits are plenty
   composer.addPass(save);
   const bloom = new UnrealBloomPass(new THREE.Vector2(W, H), 0.42, 0.55, 0.9);
   composer.addPass(bloom);
@@ -1472,14 +1496,19 @@ export function createStudio(canvas: HTMLCanvasElement, opts: StudioOptions): St
     cam.tv = av;
     cam.tz = Math.log(Z);
   }
-  function stepCamera(dt: number) {
+  // Critically damped spring, solved exactly, so the glide takes the same time at any frame rate
+  // (a slow device drops frames instead of slowing the camera down).
+  function stepCamera(frameDt: number) {
     const w = reduceMotion ? 12 : 3.6;
+    const dt = Math.min(frameDt, 0.25);
+    const e = Math.exp(-w * dt);
     for (const k of ["u", "v", "z"] as const) {
       const vk = `v${k}` as "vu" | "vv" | "vz";
       const tk = `t${k}` as "tu" | "tv" | "tz";
-      const a = w * w * (cam[tk] - cam[k]) - 2 * w * cam[vk];
-      cam[vk] += a * dt;
-      cam[k] += cam[vk] * dt;
+      const d = cam[k] - cam[tk];
+      const c = cam[vk] + w * d;
+      cam[k] = cam[tk] + (d + c * dt) * e;
+      cam[vk] = (cam[vk] - w * c * dt) * e;
     }
     camera.position.copy(basePos).addScaledVector(right, cam.u).addScaledVector(up, cam.v);
     camera.zoom = Math.exp(cam.z);
@@ -1684,68 +1713,109 @@ export function createStudio(canvas: HTMLCanvasElement, opts: StudioOptions): St
     });
     heartMesh.instanceMatrix.needsUpdate = true;
     if (heartMesh.instanceColor) heartMesh.instanceColor.needsUpdate = true;
-    // canvases
-    for (const lc of liveCanvases) {
-      if (t < lc.next) continue;
-      lc.next = t + lc.every;
-      lc.draw(ctxOf(lc.tex), t);
-      lc.tex.needsUpdate = true;
+    // canvases: the most overdue one redraws, the rest wait a frame
+    let due: LiveCanvas | null = null;
+    for (const lc of liveCanvases) if (t >= lc.next && (!due || lc.next < due.next)) due = lc;
+    if (due) {
+      due.next += due.every;
+      if (due.next < t) due.next = t + due.every; // after a pause, pick up the rhythm again
+      due.draw(due.g, t);
+      due.tex.needsUpdate = true;
     }
   }
 
   /* ---------------------------------------------------------------- loop */
+  // Station numbers: projected every frame, handed out only when one actually moved.
   const pts: StudioPoint[] = ANCHORS.map(() => ({ x: 0, y: 0, on: true }));
+  let ptsDirty = true;
   const report = () => {
+    let moved = ptsDirty;
     for (let i = 0; i < ANCHORS.length; i++) {
       tmp.copy(ANCHORS[i]).project(camera);
-      pts[i].x = ((tmp.x + 1) / 2) * W;
-      pts[i].y = ((1 - tmp.y) / 2) * H;
-      pts[i].on = tmp.x > -1.02 && tmp.x < 1.02 && tmp.y > -1.02 && tmp.y < 1.02;
+      const x = ((tmp.x + 1) / 2) * W;
+      const y = ((1 - tmp.y) / 2) * H;
+      const on = tmp.x > -1.02 && tmp.x < 1.02 && tmp.y > -1.02 && tmp.y < 1.02;
+      const p = pts[i];
+      if (Math.abs(p.x - x) > 0.2 || Math.abs(p.y - y) > 0.2 || p.on !== on) {
+        p.x = x;
+        p.y = y;
+        p.on = on;
+        moved = true;
+      }
     }
-    opts.onFrame(pts);
+    ptsDirty = false;
+    if (moved) opts.onPoints(pts.map((p) => ({ ...p })));
   };
   let raf = 0;
   let running = false;
+  let disposed = false;
+  let ready = false;
   let last = 0;
   let clock = reduceMotion ? 3.3 : 0;
-  let ready = false;
-  let slow = 0;
   let still = false;
-  const frame = (now: number) => {
-    raf = requestAnimationFrame(frame);
-    const dt = Math.min(0.05, last ? (now - last) / 1000 : 0.016);
-    last = now;
-    if (!reduceMotion) clock += dt;
-    const moving = stepCamera(dt);
+  // Frame pacing: on 120Hz+ screens draw every other refresh, which is still 60fps.
+  let skip = 1;
+  let tick = 0;
+  const probe: number[] = [];
+  // Adaptive quality: if the frame rate stays low, draw fewer pixels.
+  const minDpr = 1;
+  let dprCap = Infinity;
+  let slowFrames = 0;
+  let sampled = 0;
+  let warmup = 0;
+  const draw = (dt: number, realDt: number) => {
+    const moving = stepCamera(realDt);
     if (reduceMotion && still && !moving) return;
     animate(clock, dt);
     composer.render();
     report();
     still = reduceMotion && !moving;
-    if (!ready) {
-      ready = true;
-      opts.onReady();
+  };
+  const frame = (now: number) => {
+    raf = nextFrame(frame);
+    if (probe.length < 24 && last) {
+      probe.push(now - last);
+      if (probe.length === 24) {
+        const sorted = probe.slice(4).sort((a, b) => a - b);
+        skip = sorted[10] < 10.5 ? 2 : 1; // median refresh interval
+      }
     }
-    // if frames are slow, render fewer pixels
-    if (dt > 0.03) slow++;
-    else slow = Math.max(0, slow - 1);
-    if (slow > 90 && dpr > 1) {
-      slow = 0;
-      dpr = Math.max(1, dpr - 0.25);
-      resize();
+    if (++tick % skip !== 0) return;
+    const realDt = last ? (now - last) / 1000 : 0.016;
+    const dt = Math.min(0.05, realDt);
+    last = now;
+    if (!reduceMotion) clock += dt;
+    draw(dt, realDt);
+    // a slow first second is shader and texture warm-up, not the steady state
+    if (warmup < 45) {
+      warmup++;
+      return;
+    }
+    sampled++;
+    if (dt > 0.026) slowFrames++;
+    if (sampled >= 60) {
+      if (slowFrames > 36 && dpr > minDpr) {
+        dpr = dprCap = Math.max(minDpr, Math.round((dpr - 0.25) * 4) / 4);
+        applySize();
+        warmup = 30;
+      }
+      sampled = 0;
+      slowFrames = 0;
     }
   };
   function setRunning(on: boolean) {
-    if (on === running) return;
+    if (disposed || on === running) return;
     running = on;
+    if (!ready) return; // starts once the warm-up below is done
     if (on) {
       last = 0;
+      tick = 0;
+      warmup = 0;
       still = false;
-      raf = requestAnimationFrame(frame);
-    } else cancelAnimationFrame(raf);
+      raf = nextFrame(frame);
+    } else cancelFrame(raf);
   }
-  function resize() {
-    ({ w: W, h: H } = size());
+  function applySize() {
     renderer.setPixelRatio(dpr);
     renderer.setSize(W, H, false);
     composer.setPixelRatio(dpr);
@@ -1753,9 +1823,23 @@ export function createStudio(canvas: HTMLCanvasElement, opts: StudioOptions): St
     save.setSize(W * dpr, H * dpr);
     setFrustum();
     still = false;
+    ptsDirty = true;
+  }
+  function resize(width: number, height: number, ratio: number) {
+    W = Math.max(1, width);
+    H = Math.max(1, height);
+    dpr = Math.min(ratio, dprCap); // never back above a ratio the adaptive step dropped to
+    applySize();
+    if (ready && !running) {
+      // the canvas was cleared by the resize: redraw once so it is not blank when it comes back
+      composer.render();
+      report();
+    }
   }
   function dispose() {
-    setRunning(false);
+    disposed = true;
+    running = false;
+    cancelFrame(raf);
     scene.traverse((o) => {
       const m = o as THREE.Mesh;
       if (!m.isMesh) return;
@@ -1770,12 +1854,56 @@ export function createStudio(canvas: HTMLCanvasElement, opts: StudioOptions): St
     pmrem.dispose();
     composer.dispose();
     renderer.dispose();
+    renderer.forceContextLoss();
   }
+
+  /* ---------------------------------------------------------------- warm-up */
+  // Compile every shader before the first frame (in parallel where the browser supports it),
+  // with the composer's target bound so the variants match what gets drawn. Hidden parts are
+  // shown for the compile so they do not stall the loop the first time they appear. Then draw
+  // one frame, which uploads every texture and bakes the shadow map, and only then go live.
+  (async () => {
+    const hidden: THREE.Object3D[] = [];
+    scene.traverse((o) => {
+      if (!o.visible) {
+        hidden.push(o);
+        o.visible = true;
+      }
+    });
+    renderer.setRenderTarget(rt);
+    try {
+      // parallel compile where the GPU driver offers it, a plain compile otherwise
+      if (renderer.extensions.has("KHR_parallel_shader_compile")) await renderer.compileAsync(scene, camera);
+      else renderer.compile(scene, camera);
+    } catch {
+      // compile on first draw instead
+    }
+    renderer.setRenderTarget(null);
+    for (const o of hidden) o.visible = false;
+    if (disposed) return;
+    stepCamera(0);
+    animate(clock, 0);
+    composer.render();
+    report();
+    ready = true;
+    opts.onReady();
+    if (running) {
+      running = false;
+      setRunning(true);
+    }
+  })();
 
   return {
     focus: (i, layout) => {
       focus(i, layout);
       still = false;
+      if (ready && !running) {
+        // jump straight there while paused, so it is in place when it comes back on screen
+        cam.u = cam.tu;
+        cam.v = cam.tv;
+        cam.z = cam.tz;
+        cam.vu = cam.vv = cam.vz = 0;
+      }
     },
     setRunning,
     resize,
