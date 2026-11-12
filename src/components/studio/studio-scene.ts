@@ -459,10 +459,12 @@ export function createStudio(canvas: HTMLCanvasElement, opts: StudioOptions): St
   const seats: [number, number, number, number][] = [];
   for (const x of [-3.6, -1.2, 1.2, 3.6]) seats.push([x, 0, 0, -1], [x, 0, 0, 1]);
   for (const a of [(3 * Math.PI) / 4, (5 * Math.PI) / 4]) seats.push([-SX, 0, Math.cos(a), Math.sin(a)]);
+  const seatLaptops: THREE.Object3D[] = [];
   seats.forEach(([px, pz, nx, nz], i) => {
     const rot = Math.atan2(nx, nz);
     figure(px + nx * 3.3, pz + nz * 3.3, rot);
     const l = laptop(i + 1);
+    seatLaptops.push(l);
     l.position.set(px + nx * 2.33, 0.98, pz + nz * 2.33);
     l.rotation.y = rot;
     l.traverse((o) => (o.castShadow = true));
@@ -1044,11 +1046,18 @@ export function createStudio(canvas: HTMLCanvasElement, opts: StudioOptions): St
     add(rbox(0.36, 2.5, 0.5, 0.06, frameM), -1.15, 1.25, 0, g);
     add(rbox(0.36, 2.5, 0.5, 0.06, frameM), 1.15, 1.25, 0, g);
     add(rbox(2.7, 0.4, 0.56, 0.08, frameM), 0, 2.6, 0, g);
+    const arch = new THREE.TubeGeometry(
+      new THREE.CatmullRomCurve3(Array.from({ length: 41 }, (_, i) => new THREE.Vector3(Math.cos((i / 40) * Math.PI) * 0.62, Math.sin((i / 40) * Math.PI) * 1.0, 0))),
+      64,
+      0.03,
+      8,
+      false,
+    );
     for (const z of [-0.27, 0.27]) {
       const m = glowOwn(3);
       gateRings.push(m);
-      const ring = live(new THREE.Mesh(new THREE.TorusGeometry(0.62, 0.03, 10, 48, Math.PI), m));
-      ring.position.set(0, 1.04, z);
+      const ring = live(new THREE.Mesh(arch, m));
+      ring.position.set(0, 1.0, z);
       g.add(ring);
     }
     const scan = live(new THREE.Mesh(new THREE.PlaneGeometry(1.94, 1.36), scanM));
@@ -1071,21 +1080,32 @@ export function createStudio(canvas: HTMLCanvasElement, opts: StudioOptions): St
   /* ---------------------------------------------------------------- reviewer with a tablet */
   let reviewerHead: THREE.Group;
   let reviewerBody: THREE.Group;
-  let checks = -1;
+  const reviewerTablet = new THREE.Object3D();
+  let tabletState = "";
   const verifyTex = canvasTex(512, 360);
-  const drawVerify = (n: number) => {
+  const drawVerify = (n: number, fail = false, seed = 7) => {
     const g = ctxOf(verifyTex);
     g.fillStyle = "#0d1018";
     g.fillRect(0, 0, 512, 360);
-    g.drawImage(clipCanvas(7 + Math.floor(n / 7)), 22, 22, 120, 210);
+    g.drawImage(clipCanvas(seed), 22, 22, 120, 210);
     for (let i = 0; i < 5; i++) {
       const y = 30 + i * 44;
       const on = i < n;
-      g.fillStyle = on ? "#3b82f6" : "rgba(255,255,255,0.12)";
+      const bad = fail && i === 3 && on;
+      g.fillStyle = bad ? "#ef4444" : on ? "#3b82f6" : "rgba(255,255,255,0.12)";
       g.beginPath();
       g.arc(178, y + 12, 12, 0, Math.PI * 2);
       g.fill();
-      if (on) {
+      if (bad) {
+        g.strokeStyle = "#fff";
+        g.lineWidth = 3.5;
+        g.beginPath();
+        g.moveTo(173, y + 7);
+        g.lineTo(183, y + 17);
+        g.moveTo(183, y + 7);
+        g.lineTo(173, y + 17);
+        g.stroke();
+      } else if (on) {
         g.strokeStyle = "#fff";
         g.lineWidth = 3.5;
         g.beginPath();
@@ -1098,11 +1118,12 @@ export function createStudio(canvas: HTMLCanvasElement, opts: StudioOptions): St
       rr(g, 200, y + 6, 120 + ((i * 53) % 150), 12, 6);
       g.fill();
     }
-    g.fillStyle = n >= 5 ? "#3b82f6" : "rgba(59,130,246,0.25)";
+    const done = fail ? n >= 4 : n >= 5;
+    g.fillStyle = done ? (fail ? "#ef4444" : "#3b82f6") : "rgba(59,130,246,0.25)";
     rr(g, 22, 262, 468, 70, 14);
     g.fill();
     g.fillStyle = "rgba(255,255,255,0.9)";
-    rr(g, 46, 288, n >= 5 ? 160 : 60, 18, 9);
+    rr(g, 46, 288, done ? 160 : 60, 18, 9);
     g.fill();
     verifyTex.needsUpdate = true;
   };
@@ -1137,6 +1158,7 @@ export function createStudio(canvas: HTMLCanvasElement, opts: StudioOptions): St
     tab.add(ts);
     tab.position.set(0, 0.36, -0.42);
     tab.rotation.x = 0.75;
+    tab.add(reviewerTablet);
     reviewerBody.add(tab);
     reviewerBody.traverse((o) => (o.castShadow = false));
     g.add(reviewerBody);
@@ -1257,6 +1279,8 @@ export function createStudio(canvas: HTMLCanvasElement, opts: StudioOptions): St
   });
   let flyerN = 0;
   let gateFlash = 0;
+  let failFlash = 0;
+  const reach: number[] = [];
 
   /* ---------------------------------------------------------------- clips on the belt, and view packets */
   const GATE_U = (() => {
@@ -1278,11 +1302,32 @@ export function createStudio(canvas: HTMLCanvasElement, opts: StudioOptions): St
   scene.add(cardBodies);
   const faceGeo = new THREE.PlaneGeometry(0.4, 0.72);
   faceGeo.translate(0, 0, 0.03);
-  const clipCards = Array.from({ length: 12 }, (_, i) => {
-    const face = live(new THREE.Mesh(faceGeo, screenMat(clipTex(i + 100), 0.6)));
+  const clipTexs = Array.from({ length: 18 }, (_, i) => clipTex(i + 100));
+  type Card = { face: THREE.Mesh; fm: THREE.MeshStandardMaterial; offset: number; lastU: number; tex: number; out: number; back: number; seat: number; from: THREE.Vector3 };
+  const clipCards: Card[] = Array.from({ length: 12 }, (_, i) => {
+    const fm = screenMat(clipTexs[i], 0.6);
+    const face = live(new THREE.Mesh(faceGeo, fm));
     scene.add(face);
-    return { face, offset: i / 12, lastU: -1 };
+    return { face, fm, offset: i / 12, lastU: -1, tex: i, out: -99, back: -99, seat: 0, from: new THREE.Vector3() };
   });
+  // about one clip in four does not pass review
+  const rejected = (ci: number, lap: number) => frac(Math.sin(ci * 12.9898 + lap * 78.233) * 43758.5453) < 0.26;
+  const RED = new THREE.Color(0xef4444);
+  const BLUE_C = new THREE.Color(BLUE);
+  // where each clipper's laptop meets the belt
+  const nearestU = (p: THREE.Vector3) => {
+    let best = 0, bd = Infinity;
+    for (let i = 0; i < 600; i++) {
+      const q = rail.getPointAt(i / 600);
+      const d = (q.x - p.x) ** 2 + (q.z - p.z) ** 2;
+      if (d < bd) {
+        bd = d;
+        best = i / 600;
+      }
+    }
+    return best;
+  };
+  const seatU = seatLaptops.map((l) => nearestU(l.getWorldPosition(new THREE.Vector3())));
   const viewDir = new THREE.Vector3(camera.position.x, 0, camera.position.z).normalize();
   const packetGeo = new THREE.SphereGeometry(0.055, 10, 8);
   const packetM = glow(5);
@@ -1450,36 +1495,120 @@ export function createStudio(canvas: HTMLCanvasElement, opts: StudioOptions): St
   const C4 = new THREE.Color();
   function animate(t: number, dt: number) {
     // clips and packets
+    let nextCard: Card | null = null;
+    let nextGap = Infinity;
     clipCards.forEach((c, ci) => {
       const u = frac(c.offset + t * SPEED);
+      const lap = Math.floor(c.offset + t * SPEED);
       const p = rail.getPointAt(u);
       const tan = rail.getTangentAt(u);
       let yaw = Math.atan2(tan.x, tan.z) + Math.PI / 2;
       if (Math.sin(yaw) * viewDir.x + Math.cos(yaw) * viewDir.z < 0) yaw += Math.PI; // face the viewer
       c.face.position.set(p.x, p.y + 0.44, p.z);
       c.face.rotation.set(0, yaw, 0);
-      cardBodies.setMatrixAt(ci, c.face.matrix.compose(c.face.position, c.face.quaternion, S4.setScalar(1)));
-      if (c.lastU >= 0 && c.lastU < GATE_U && u >= GATE_U) {
-        // this clip just cleared the gate: flash, then pay out a coin
-        gateFlash = 1;
-        const f = flyers[flyerN++ % flyers.length];
-        f.start = t + 0.15;
-        f.from.set(GATE_X - 0.7, 1.85, (Math.random() - 0.5) * 0.3);
-        const pool = stackTops.filter((s) => s.x > -1.5);
-        f.to.copy(pool[Math.floor(Math.random() * pool.length)]).add(tmp.set(0, coinT / 2, 0));
+      let scale = 1;
+      const onBelt = t < c.out || t >= c.back;
+      if (!onBelt) {
+        const leave = (t - c.out) / 0.9;
+        const enter = 1 - (c.back - t) / 0.8;
+        if (leave < 1) {
+          // rejected: tinted red, the reviewer pulls it off the belt into his tablet
+          reviewerTablet.getWorldPosition(tmp);
+          const k = smooth(0, 1, leave);
+          c.face.position.lerpVectors(c.from, tmp, k);
+          c.face.position.y += Math.sin(k * Math.PI) * 0.45;
+          const turn = Math.atan2(Math.sin(camYaw - yaw), Math.cos(camYaw - yaw));
+          c.face.rotation.set(0, yaw + turn * k, k * 0.25);
+          scale = 1 - 0.7 * k - 0.3 * smooth(0.75, 1, leave);
+          c.fm.emissive.copy(RED);
+        } else if (enter >= 0) {
+          // a clipper hands a new version from their laptop back onto the belt
+          if (c.fm.emissive.equals(RED)) {
+            c.tex = (c.tex + 12) % clipTexs.length;
+            c.fm.map = c.fm.emissiveMap = clipTexs[c.tex];
+            c.fm.emissive.setRGB(1, 1, 1);
+          }
+          seatLaptops[c.seat].getWorldPosition(tmp);
+          tmp.y += 0.35;
+          const k = smooth(0, 1, enter);
+          c.face.position.lerpVectors(tmp, c.face.position, k);
+          c.face.position.y += Math.sin(k * Math.PI) * 0.5;
+          scale = 0.35 + 0.65 * k;
+          reach[c.seat] = Math.max(reach[c.seat] ?? 0, Math.sin(Math.min(1, enter * 1.4) * Math.PI));
+        } else scale = 0;
+      } else if (c.fm.emissive.equals(RED)) c.fm.emissive.setRGB(1, 1, 1);
+      c.face.scale.setScalar(Math.max(0.0001, scale));
+      c.face.visible = scale > 0.001;
+      cardBodies.setMatrixAt(ci, c.face.matrix.compose(c.face.position, c.face.quaternion, S4.setScalar(Math.max(0.0001, scale))));
+      if (onBelt) {
+        const gap = frac(GATE_U - u);
+        if (gap < nextGap) {
+          nextGap = gap;
+          nextCard = c;
+        }
+      }
+      if (onBelt && c.lastU >= 0 && c.lastU < GATE_U && u >= GATE_U) {
+        if (rejected(ci, lap)) {
+          // fails review: red flash, no payout, off the belt
+          failFlash = 1;
+          c.out = t;
+          c.from.copy(c.face.position);
+          // back on the belt a few seconds later, from whichever clipper it reaches first after that
+          const wait = 1.6 + Math.random() * 9;
+          let best = Infinity;
+          seatU.forEach((su, j) => {
+            const k = Math.ceil((t + wait) * SPEED + c.offset - su);
+            const when = (su + k - c.offset) / SPEED;
+            if (when < best) {
+              best = when;
+              c.seat = j;
+            }
+          });
+          c.back = best;
+        } else {
+          // passes: flash, then pay out a coin
+          gateFlash = 1;
+          const f = flyers[flyerN++ % flyers.length];
+          f.start = t + 0.15;
+          f.from.set(GATE_X - 0.7, 1.85, (Math.random() - 0.5) * 0.3);
+          const pool = stackTops.filter((s) => s.x > -1.5);
+          f.to.copy(pool[Math.floor(Math.random() * pool.length)]).add(tmp.set(0, coinT / 2, 0));
+        }
       }
       c.lastU = u;
     });
     cardBodies.instanceMatrix.needsUpdate = true;
+    // the reviewer's tablet runs through the checks for the clip that is coming up
+    {
+      const nc = nextCard as Card | null;
+      if (nc) {
+        const ci = clipCards.indexOf(nc);
+        const fail = rejected(ci, Math.floor(nc.offset + t * SPEED));
+        const n = Math.max(0, Math.min(5, Math.floor((1 - nextGap * 12) * 6)));
+        const state = `${ci}|${n}|${fail}`;
+        if (state !== tabletState) {
+          tabletState = state;
+          drawVerify(n, fail, 100 + nc.tex);
+        }
+      }
+    }
     packets.forEach((off, i) => {
       const q = rail.getPointAt(frac(off + t * SPEED));
       packetMesh.setMatrixAt(i, M4.makeTranslation(q.x, q.y + 0.06, q.z));
     });
     packetMesh.instanceMatrix.needsUpdate = true;
-    // gate
+    // gate: blue when a clip passes, red when it fails
     gateFlash = Math.max(0, gateFlash - dt * 1.6);
-    scanM.opacity = 0.08 + 0.3 * gateFlash;
-    for (const m of gateRings) m.emissiveIntensity = 2.4 + 3 * gateFlash;
+    failFlash = Math.max(0, failFlash - dt * 1.2);
+    const flash = Math.max(gateFlash, failFlash);
+    const redness = failFlash > 0 ? failFlash / (failFlash + gateFlash + 1e-6) : 0;
+    scanM.opacity = 0.08 + 0.3 * flash;
+    scanM.color.copy(BLUE_C).lerp(RED, redness);
+    for (const m of gateRings) {
+      m.emissiveIntensity = 2.4 + 3 * flash;
+      m.emissive.copy(BLUE_C).lerp(RED, redness);
+      m.color.copy(m.emissive);
+    }
     markMesh.position.y = 3.5 + 0.06 * Math.sin(t * 1.1);
     gateHalo.opacity = 0.85 + 0.15 * Math.sin(t * 1.1) + 0.4 * gateFlash;
     // coins in flight
@@ -1505,15 +1634,17 @@ export function createStudio(canvas: HTMLCanvasElement, opts: StudioOptions): St
         f.ringM.opacity = 0.8 * (1 - s);
       }
     }
-    // clippers at work: typing in bursts, glancing around
-    for (const w of workers) {
-      const burst = smooth(0.1, 0.6, 0.5 + 0.5 * Math.sin(t * 0.55 + w.phase));
-      w.hands.rotation.x = burst * 0.06 * (0.5 + 0.5 * Math.sin(t * 17 + w.phase));
+    // clippers at work: typing in bursts, glancing around, reaching when they put a clip back
+    workers.forEach((w, i) => {
+      const r = reach[i] ?? 0;
+      const burst = smooth(0.1, 0.6, 0.5 + 0.5 * Math.sin(t * 0.55 + w.phase)) * (1 - r);
+      w.hands.rotation.x = burst * 0.06 * (0.5 + 0.5 * Math.sin(t * 17 + w.phase)) + r * 0.55;
       w.hands.rotation.z = burst * 0.035 * Math.sin(t * 11 + w.phase);
-      const glance = smooth(0.75, 0.95, Math.sin(t * 0.21 + w.phase * 2.3));
+      const glance = smooth(0.75, 0.95, Math.sin(t * 0.21 + w.phase * 2.3)) * (1 - r);
       w.head.rotation.y = glance * 0.45 * Math.sin(w.phase * 5) + 0.04 * Math.sin(t * 0.7 + w.phase);
-      w.head.rotation.x = 0.04 * Math.sin(t * 1.3 + w.phase) + burst * 0.05;
-    }
+      w.head.rotation.x = 0.04 * Math.sin(t * 1.3 + w.phase) + burst * 0.05 - r * 0.12;
+      reach[i] = 0;
+    });
     // the reviewer reads the tablet, looks up at the gate, checks off the clip
     {
       const c = t % 5;
@@ -1521,11 +1652,6 @@ export function createStudio(canvas: HTMLCanvasElement, opts: StudioOptions): St
       reviewerHead.rotation.x = 0.38 * (1 - lookUp) - 0.06 * lookUp;
       reviewerHead.rotation.y = lookUp * (0.25 * Math.sin((c - 2.4) * 2.2));
       reviewerBody.rotation.y = 0.04 * Math.sin(t * 0.6);
-      const n = Math.min(5, Math.floor((c / 2.4) * 5));
-      if (n !== checks) {
-        checks = n;
-        drawVerify(n);
-      }
     }
     // playheads on the laptops
     playheads.forEach((p, i) => {
