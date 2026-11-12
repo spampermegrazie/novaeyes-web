@@ -533,8 +533,10 @@ function CountUpRange({ text }: { text: string }) {
   );
 }
 
-// Budget in, NovaEyes in the middle, views out. The bigger the amount, the more and
-// faster the packets. Negative begin times start every packet mid-path.
+// NovaEyes in the middle, the budget on the left, views on the right. The packets flow from
+// what you picked to what you get: from a budget they run right, toward views; from a view
+// target they run left, toward the budget. The bigger the amount, the more and faster the
+// packets. Negative begin times start every packet mid-path.
 function MiniEngine({ mode, value, result }: { mode: Mode; value: number | null; result: string | null }) {
   const scale = mode === "budget" ? BUDGET_SCALE : VIEWS_SCALE;
   const level = value === null ? 0 : Math.round(positionOf(scale, value) * 7);
@@ -542,18 +544,26 @@ function MiniEngine({ mode, value, result }: { mode: Mode; value: number | null;
   const speed = 2.4 - level * 0.18;
   const left = "M150,60 C190,60 200,60 236,60";
   const right = "M324,60 C360,60 370,60 410,60";
+  // the same two wires, drawn in the direction the packets travel
+  const [into, outOf] =
+    mode === "budget" ? [left, right] : ["M410,60 C370,60 360,60 324,60", "M236,60 C200,60 190,60 150,60"];
   const known = value === null ? "• • •" : fmt(mode, value);
   return (
-    <svg viewBox="0 0 560 120" className="h-auto w-full overflow-visible" role="img" aria-label="Your budget runs through NovaEyes and comes out as views">
+    <svg
+      viewBox="0 0 560 120"
+      className="h-auto w-full overflow-visible"
+      role="img"
+      aria-label={mode === "budget" ? "Your budget runs through NovaEyes and comes out as views" : "Your view target runs through NovaEyes and comes out as a budget"}
+    >
       <path d={left} className="ne-flow ne-flow-on" />
       <path d={right} className="ne-flow ne-flow-on" />
       {value !== null &&
         Array.from({ length: count }).flatMap((_, i) => [
-          <circle key={`a-${level}-${i}`} r="2.4" className="ne-pkt">
-            <animateMotion dur={`${speed}s`} begin={`-${(i * speed) / count}s`} repeatCount="indefinite" path={left} />
+          <circle key={`a-${mode}-${level}-${i}`} r="2.4" className="ne-pkt">
+            <animateMotion dur={`${speed}s`} begin={`-${(i * speed) / count}s`} repeatCount="indefinite" path={into} />
           </circle>,
-          <circle key={`b-${level}-${i}`} r="2.4" className="ne-pkt">
-            <animateMotion dur={`${speed}s`} begin={`-${(i * speed) / count + speed / 2}s`} repeatCount="indefinite" path={right} />
+          <circle key={`b-${mode}-${level}-${i}`} r="2.4" className="ne-pkt">
+            <animateMotion dur={`${speed}s`} begin={`-${(i * speed) / count + speed / 2}s`} repeatCount="indefinite" path={outOf} />
           </circle>,
         ])}
       <g transform="translate(10,40)">
