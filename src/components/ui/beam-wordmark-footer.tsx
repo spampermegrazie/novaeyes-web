@@ -236,6 +236,8 @@ const noYear = () => null
 
 // One scoped stylesheet. Every rule sits under .bwf; element resets go through
 // :where(.bwf) so they never out-rank the component's own classes or yours.
+// The page can line the footer up with its own container by setting --bwf-max (content
+// max width) and --bwf-gut (side padding) on the footer, e.g. through className.
 // .bwf clips with overflow:clip, not hidden: a hidden box is a scroll container, and the
 // view() timelines inside it would then track the footer box instead of the page scroll.
 const CSS =
@@ -256,7 +258,7 @@ const CSS =
   ".bwf-glow{position:absolute;inset:0;opacity:var(--bwf-g);background:radial-gradient(circle 26cqw at var(--bwf-px) var(--bwf-py),rgba(var(--bwf-acc),.16),transparent 70%)}" +
   ".bwf-grain{position:absolute;inset:0;opacity:.14;mix-blend-mode:overlay;background-image:url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\")}" +
   // Layout.
-  ".bwf-inner{position:relative;z-index:2;box-sizing:border-box;max-width:1120px;margin:0 auto;padding:clamp(120px,15cqw,200px) clamp(20px,6cqw,88px) 0;display:grid;grid-template-columns:minmax(0,1.62fr) repeat(var(--bwf-cols),minmax(0,.86fr));column-gap:clamp(24px,4cqw,48px);row-gap:44px}" +
+  ".bwf-inner{position:relative;z-index:2;box-sizing:border-box;max-width:var(--bwf-max,1120px);margin:0 auto;padding:clamp(120px,15cqw,200px) var(--bwf-gut,clamp(20px,6cqw,88px)) 0;display:grid;grid-template-columns:minmax(0,1.62fr) repeat(var(--bwf-cols),minmax(0,.86fr));column-gap:clamp(24px,4cqw,48px);row-gap:44px}" +
   ".bwf-label{font-family:var(--bwf-lsans);font-size:12px;line-height:1;letter-spacing:.01em;color:rgb(var(--bwf-acc));padding-bottom:13px;position:relative;display:block}" +
   ".bwf[data-caps] .bwf-label{font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding-bottom:14px}" +
   ".bwf-label::after{content:'';position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,rgba(var(--bwf-acc),.55),rgba(var(--bwf-acc),.28));transform-origin:0 50%;transform:scaleX(var(--bwf-line,1));transition:transform 1.1s cubic-bezier(.2,.7,.1,1) var(--bwf-d,0ms)}" +
@@ -289,7 +291,7 @@ const CSS =
   // The wordmark. Each letter paints the section-sized background, shifted
   // back by its own offset, so beam and glow line up with the backdrop.
   ".bwf-word{position:relative;z-index:1;overflow:hidden;margin-top:clamp(28px,7cqw,96px)}" +
-  ".bwf-word-box{padding:0 clamp(20px,6cqw,88px);max-width:1120px;margin:0 auto;box-sizing:border-box}" +
+  ".bwf-word-box{padding:0 var(--bwf-gut,clamp(20px,6cqw,88px));max-width:var(--bwf-max,1120px);margin:0 auto;box-sizing:border-box}" +
   ".bwf-word-in{display:inline-flex;white-space:nowrap;font-family:var(--bwf-wsans);font-weight:var(--bwf-ww);line-height:1;letter-spacing:var(--bwf-wtrack);user-select:none;-webkit-user-select:none}" +
   ".bwf-lw{display:inline-block;translate:0 0;transition:translate 1.25s cubic-bezier(.16,.84,.2,1) var(--bwf-d,0ms)}" +
   ".bwf[data-in='false'] .bwf-lw{translate:0 85%}" +

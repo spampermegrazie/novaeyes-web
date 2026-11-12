@@ -13,7 +13,7 @@ import { JsonLd, organizationJsonLd } from "@/components/json-ld";
 // free for personal use only, so until a commercial license is bought, Michroma
 // (same wide, technical feel, open license) stands in. To switch: put the licensed
 // file in src/fonts and load it with next/font/local as --font-label-face.
-const manrope = Manrope({ subsets: ["latin"], weight: ["500", "600", "700"], variable: "--font-manrope", display: "swap" });
+const manrope = Manrope({ subsets: ["latin"], weight: ["500", "600", "700", "800"], variable: "--font-manrope", display: "swap" });
 const inter = Inter({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-inter", display: "swap" });
 const label = Michroma({ subsets: ["latin"], weight: "400", variable: "--font-label-face", display: "swap" });
 
