@@ -446,14 +446,14 @@ export function StudioTour() {
               transition={{ duration: 0.25 }}
               className="absolute inset-x-3 bottom-3 z-20 flex items-center justify-between"
             >
-              <div className="flex items-center gap-1 rounded-full border border-white/10 bg-bg-raised/85 p-1 backdrop-blur-md">
-                <button type="button" onClick={() => step(-1)} aria-label="Previous station" className="flex h-8 w-8 items-center justify-center rounded-full text-fg">
+              <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-bg-raised/85 p-1 backdrop-blur-md">
+                <button type="button" onClick={() => step(-1)} aria-label="Previous station" className="flex h-8 w-8 items-center justify-center rounded-xl text-fg">
                   ←
                 </button>
                 <span className="px-1 font-label text-[10px] tracking-[0.14em] text-muted">
                   {pad(active + 1)} / {pad(N)}
                 </span>
-                <button type="button" onClick={() => step(1)} aria-label="Next station" className="flex h-8 w-8 items-center justify-center rounded-full text-fg">
+                <button type="button" onClick={() => step(1)} aria-label="Next station" className="flex h-8 w-8 items-center justify-center rounded-xl text-fg">
                   →
                 </button>
               </div>
@@ -461,7 +461,7 @@ export function StudioTour() {
                 type="button"
                 onClick={close}
                 aria-label="Zoom out"
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-bg-raised/85 text-fg backdrop-blur-md"
+                className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-bg-raised/85 text-fg backdrop-blur-md"
               >
                 <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
                   <path d="M3.5 3.5l9 9M12.5 3.5l-9 9" />
@@ -485,7 +485,7 @@ export function StudioTour() {
             setTouring(true);
             setActive((a) => a ?? 0);
           }}
-          className="shrink-0 cursor-pointer rounded-full border border-line px-4 py-2 font-display text-sm font-semibold hover:border-muted/50"
+          className="shrink-0 cursor-pointer rounded-xl border border-line px-4 py-2 font-display text-sm font-semibold hover:border-muted/50"
         >
           {touring ? "Pause tour" : "Take the tour"}
         </button>

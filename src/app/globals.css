@@ -165,7 +165,7 @@ h2, h3, h4 { font-weight: 600; }
     font-weight: 600;
     text-align: center;
     border: 1px solid transparent;
-    border-radius: 360px;
+    border-radius: 12px;
     color: var(--shiny-cta-fg);
     background:
       linear-gradient(var(--shiny-cta-bg), var(--shiny-cta-bg)) padding-box,

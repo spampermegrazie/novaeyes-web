@@ -226,7 +226,7 @@ export function ReachEstimator() {
                         <button
                           type="submit"
                           disabled={submitting}
-                          className="rounded-full bg-accent px-6 py-3 font-display text-sm font-semibold text-accent-ink shadow-[0_0_32px_rgb(var(--glow)/0.35)] hover:opacity-90 disabled:opacity-50"
+                          className="rounded-xl bg-accent px-6 py-3 font-display text-sm font-semibold text-accent-ink shadow-[0_0_32px_rgb(var(--glow)/0.35)] hover:opacity-90 disabled:opacity-50"
                         >
                           {submitting ? "Calculating" : "Show my estimate"}
                         </button>
@@ -271,7 +271,7 @@ export function ReachEstimator() {
                           <button
                             type="button"
                             onClick={() => setShowBooking(true)}
-                            className="rounded-full bg-accent px-6 py-3 font-display text-sm font-semibold text-accent-ink shadow-[0_0_32px_rgb(var(--glow)/0.35)] hover:opacity-90"
+                            className="rounded-xl bg-accent px-6 py-3 font-display text-sm font-semibold text-accent-ink shadow-[0_0_32px_rgb(var(--glow)/0.35)] hover:opacity-90"
                           >
                             Book a 15-minute reach audit
                           </button>
@@ -378,7 +378,7 @@ function Nav({ onBack, onNext }: { onBack: () => void; onNext?: () => void }) {
         <button
           type="button"
           onClick={onNext}
-          className="rounded-full bg-accent px-6 py-3 font-display text-sm font-semibold text-accent-ink shadow-[0_0_32px_rgb(var(--glow)/0.35)] hover:opacity-90"
+          className="rounded-xl bg-accent px-6 py-3 font-display text-sm font-semibold text-accent-ink shadow-[0_0_32px_rgb(var(--glow)/0.35)] hover:opacity-90"
         >
           Continue
         </button>

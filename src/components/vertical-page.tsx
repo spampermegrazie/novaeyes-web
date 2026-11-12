@@ -37,7 +37,7 @@ export function VerticalPage({ vertical }: { vertical: Vertical }) {
           ))}
           <div className="mt-10 flex flex-col gap-3 sm:flex-row">
             <ShinyButton href="/book">Book a 15-minute reach audit</ShinyButton>
-            <Link href="/reach-estimator" className="font-display font-semibold rounded-full border border-line px-6 py-3 text-center text-sm hover:border-muted/50">
+            <Link href="/reach-estimator" className="font-display font-semibold rounded-xl border border-line px-6 py-3 text-center text-sm hover:border-muted/50">
               Estimate your reach
             </Link>
           </div>
@@ -119,13 +119,13 @@ export function VerticalPage({ vertical }: { vertical: Vertical }) {
             <ul className="mt-4 flex flex-wrap gap-3">
               {others.map((v) => (
                 <li key={v.path}>
-                  <Link href={v.path} className="inline-block rounded-full border border-line px-4 py-2 text-sm hover:border-muted/50">
+                  <Link href={v.path} className="inline-block rounded-xl border border-line px-4 py-2 text-sm hover:border-muted/50">
                     {v.name}
                   </Link>
                 </li>
               ))}
               <li>
-                <Link href="/pricing" className="inline-block rounded-full border border-line px-4 py-2 text-sm hover:border-muted/50">
+                <Link href="/pricing" className="inline-block rounded-xl border border-line px-4 py-2 text-sm hover:border-muted/50">
                   Pricing
                 </Link>
               </li>

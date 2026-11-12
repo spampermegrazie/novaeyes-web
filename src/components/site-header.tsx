@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { nav } from "@/content/facts";
 import { Logo } from "./brand";
+import { ShinyButton } from "./ui/shiny-button";
 
 export function SiteHeader() {
   return (
@@ -21,12 +22,9 @@ export function SiteHeader() {
           <a href="/app" className="hidden font-display text-sm font-medium text-muted hover:text-fg sm:inline">
             Client login
           </a>
-          <Link
-            href="/book"
-            className="font-display font-semibold rounded-full bg-accent px-4 py-2 text-sm text-accent-ink transition-opacity hover:opacity-90"
-          >
+          <ShinyButton href="/book" className="px-4 py-2 text-sm">
             Book a call
-          </Link>
+          </ShinyButton>
         </div>
       </div>
     </header>

@@ -61,7 +61,7 @@ export default function About() {
                       href={p.href}
                       target="_blank"
                       rel="noopener noreferrer me"
-                      className="inline-block rounded-full border border-line px-4 py-2 text-sm hover:border-muted/50"
+                      className="inline-block rounded-xl border border-line px-4 py-2 text-sm hover:border-muted/50"
                     >
                       Andrea on {p.label}
                     </a>

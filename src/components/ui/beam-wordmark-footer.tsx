@@ -16,9 +16,9 @@ import Link from "next/link"
  * the columns and through the letters.
  *
  * Interaction: the beam drifts on its own and leans toward the pointer; the
- * pointer carries a soft glow that lights the letters it passes; letters lift
- * on hover and hop when clicked; columns, hairlines and letters rise in the
- * first time the footer is seen.
+ * pointer carries a soft glow that lights the letters it passes; letters
+ * brighten on hover; columns, hairlines and letters rise in as the footer
+ * scrolls into view.
  *
  * No dependencies and nothing fetched: icons are inline SVG, the wordmark is
  * live text in whatever sans the page has.
@@ -266,32 +266,26 @@ const CSS =
   ".bwf-fade{transition:opacity .9s ease var(--bwf-d,0ms),translate .9s cubic-bezier(.2,.7,.1,1) var(--bwf-d,0ms)}" +
   ".bwf[data-in='false'] .bwf-fade{opacity:0;translate:0 14px}" +
   // Socials: glassy squares with a lit top edge.
-  ".bwf-socials{display:flex;gap:16px;margin-top:13px}" +
-  ".bwf-soc{position:relative;width:31px;height:31px;display:grid;place-items:center;border-radius:5px;color:rgba(var(--bwf-ink-rgb),.62);background:linear-gradient(180deg,rgba(var(--bwf-ink-rgb),.09),rgba(var(--bwf-ink-rgb),.025));box-shadow:inset 0 0 0 1px rgba(var(--bwf-ink-rgb),.16),inset 0 1px 0 rgba(var(--bwf-ink-rgb),.14),0 6px 14px -8px rgba(0,0,0,.8);transition:color .25s,box-shadow .35s,translate .35s cubic-bezier(.2,.8,.2,1),background .35s}" +
-  ".bwf-soc svg{width:17px;height:17px}" +
-  ".bwf-soc:hover,.bwf-soc:focus-visible{color:var(--bwf-ink);translate:0 -2px;background:linear-gradient(180deg,rgba(var(--bwf-acc),.32),rgba(var(--bwf-acc),.08));box-shadow:inset 0 0 0 1px rgba(var(--bwf-acc),.75),inset 0 1px 0 rgba(var(--bwf-ink-rgb),.3),0 10px 26px -8px rgba(var(--bwf-acc),.75)}" +
-  ".bwf-soc:focus-visible{outline:none}" +
-  ".bwf-tip{position:absolute;z-index:5;left:50%;top:calc(100% + 9px);translate:-50% -4px;white-space:nowrap;font-size:11px;line-height:1;padding:6px 8px;border-radius:4px;background:rgba(var(--bwf-acc),.95);color:#fff;opacity:0;pointer-events:none;transition:opacity .2s,translate .25s}" +
-  ".bwf-tip::after{content:'';position:absolute;left:50%;bottom:100%;margin-left:-4px;border:4px solid transparent;border-bottom-color:rgba(var(--bwf-acc),.95)}" +
-  ".bwf-soc:hover .bwf-tip,.bwf-soc:focus-visible .bwf-tip{opacity:1;translate:-50% 0}" +
+  // Socials use the site's shiny button (.shiny-cta in globals.css); these rules only size them.
+  // The label tip is a sibling, since the button clips its own overflow.
+  ".bwf-socials{display:flex;gap:12px;margin-top:16px}" +
+  ".bwf-socials li{position:relative}" +
+  ".bwf-soc{width:38px;height:38px;padding:0;border-radius:10px;box-shadow:inset 0 0 0 1px #1f2030;color:rgba(var(--bwf-ink-rgb),.8)}" +
+  ".bwf-soc svg{width:16px;height:16px}" +
+  ".bwf-soc:hover{color:var(--bwf-ink)}" +
+  ".bwf-tip{position:absolute;z-index:5;left:50%;top:calc(100% + 9px);translate:-50% -4px;white-space:nowrap;font-size:11px;line-height:1;padding:6px 8px;border-radius:6px;background:var(--bwf-bg);box-shadow:inset 0 0 0 1px rgba(var(--bwf-ink-rgb),.12);color:var(--bwf-ink);opacity:0;pointer-events:none;transition:opacity .2s,translate .25s}" +
+  ".bwf-socials li:hover .bwf-tip,.bwf-soc:focus-visible+.bwf-tip{opacity:1;translate:-50% 0}" +
   // Credits.
   ".bwf-credits{margin-top:21px;font-size:14px;line-height:1.5;color:var(--bwf-muted)}" +
   ".bwf-credits p+p{margin-top:2px}" +
   ".bwf-credits b{font-weight:400;color:var(--bwf-ink)}" +
   ".bwf-blurb{margin-bottom:12px;max-width:380px}" +
-  ".bwf-credits a{color:var(--bwf-ink);background:linear-gradient(rgb(var(--bwf-acc)),rgb(var(--bwf-acc))) 0 100%/0 1px no-repeat;transition:background-size .35s cubic-bezier(.2,.8,.2,1),color .25s}" +
-  ".bwf-credits a:hover,.bwf-credits a:focus-visible{background-size:100% 1px;color:#fff;outline:none}" +
+  ".bwf-credits a{color:var(--bwf-ink);transition:color .2s}" +
+  ".bwf-credits a:hover,.bwf-credits a:focus-visible{color:rgb(var(--bwf-acc))}" +
   // Link columns.
-  ".bwf-links{margin-top:13px;display:flex;flex-direction:column;gap:0}" +
-  ".bwf-link{position:relative;display:inline-flex;align-items:center;gap:8px;padding:6px 0;font-size:14.5px;line-height:21px;color:rgba(var(--bwf-ink-rgb),.78);transition:color .25s}" +
-  ".bwf-link-t{display:inline-block;transition:translate .35s cubic-bezier(.2,.8,.2,1)}" +
-  ".bwf-link::before{content:'';position:absolute;left:0;top:50%;width:6px;height:1px;margin-top:0;background:rgb(var(--bwf-acc));transform:scaleX(0);transform-origin:0 50%;transition:transform .35s cubic-bezier(.2,.8,.2,1)}" +
-  ".bwf-link svg{width:12px;height:12px;opacity:0;translate:-6px 0;color:rgb(var(--bwf-acc));transition:opacity .25s,translate .35s cubic-bezier(.2,.8,.2,1)}" +
-  ".bwf-link:hover,.bwf-link:focus-visible{color:#fff;outline:none}" +
-  ".bwf-link:hover::before,.bwf-link:focus-visible::before{transform:scaleX(1)}" +
-  ".bwf-link:hover .bwf-link-t,.bwf-link:focus-visible .bwf-link-t{translate:12px 0}" +
-  ".bwf-link:hover svg,.bwf-link:focus-visible svg{opacity:1;translate:10px 0}" +
-  ".bwf-link:focus-visible .bwf-link-t{text-decoration:underline;text-underline-offset:4px;text-decoration-color:rgba(var(--bwf-acc),.8)}" +
+  ".bwf-links{margin-top:14px;display:flex;flex-direction:column;gap:2px}" +
+  ".bwf-link{display:inline-block;padding:5px 0;font-size:14px;line-height:20px;color:var(--bwf-muted);transition:color .2s}" +
+  ".bwf-link:hover,.bwf-link:focus-visible{color:var(--bwf-ink)}" +
   // The wordmark. Each letter paints the section-sized background, shifted
   // back by its own offset, so beam and glow line up with the backdrop.
   ".bwf-word{position:relative;z-index:1;overflow:hidden;margin-top:clamp(28px,7cqw,96px)}" +
@@ -299,14 +293,12 @@ const CSS =
   ".bwf-word-in{display:inline-flex;white-space:nowrap;font-family:var(--bwf-wsans);font-weight:var(--bwf-ww);line-height:1;letter-spacing:var(--bwf-wtrack);user-select:none;-webkit-user-select:none}" +
   ".bwf-lw{display:inline-block;translate:0 0;transition:translate 1.25s cubic-bezier(.16,.84,.2,1) var(--bwf-d,0ms)}" +
   ".bwf[data-in='false'] .bwf-lw{translate:0 85%}" +
-  ".bwf-l{display:inline-block;cursor:pointer;color:transparent;-webkit-background-clip:text;background-clip:text;background-repeat:no-repeat;background-size:var(--bwf-rw) var(--bwf-rh);background-position:calc(var(--bwf-x) * -1) calc(var(--bwf-y) * -1);" +
+  ".bwf-l{display:inline-block;color:transparent;-webkit-background-clip:text;background-clip:text;background-repeat:no-repeat;background-size:var(--bwf-rw) var(--bwf-rh);background-position:calc(var(--bwf-x) * -1) calc(var(--bwf-y) * -1);" +
   "background-image:radial-gradient(circle 22cqw at var(--bwf-px) var(--bwf-py),rgba(var(--bwf-lit),calc(var(--bwf-g) * .85)),transparent 70%)," +
   "linear-gradient(var(--bwf-ang),transparent calc(var(--bwf-b) - 9%),rgba(var(--bwf-lit),.55) calc(var(--bwf-b) - 1.5%),rgba(var(--bwf-lit),.7) var(--bwf-b),rgba(var(--bwf-lit),.2) calc(var(--bwf-b) + 3.5%),transparent calc(var(--bwf-b) + 8%))," +
   "linear-gradient(180deg,var(--bwf-wt) var(--bwf-top),var(--bwf-wf) var(--bwf-bot));" +
-  "transition:transform .5s cubic-bezier(.2,.9,.25,1.2),filter .4s;transform-origin:50% 100%}" +
-  ".bwf-l:hover{transform:translateY(-.045em);filter:brightness(1.35) saturate(1.1)}" +
-  ".bwf-l.is-hop{animation:bwf-hop .75s cubic-bezier(.2,.8,.2,1)}" +
-  "@keyframes bwf-hop{0%{transform:translateY(0) scale(1,1)}18%{transform:translateY(.02em) scale(1.06,.9)}45%{transform:translateY(-.14em) scale(.97,1.05)}70%{transform:translateY(.01em) scale(1.02,.97)}100%{transform:translateY(-.045em) scale(1,1)}}" +
+  "transition:filter .4s}" +
+  ".bwf-l:hover{filter:brightness(1.25) saturate(1.1)}" +
   // The foot sinks into the dark, the way the reference does.
   ".bwf-foot{position:absolute;left:0;right:0;bottom:0;height:34%;z-index:2;pointer-events:none;background:linear-gradient(180deg,transparent,rgba(var(--bwf-bg-rgb),.55) 55%,var(--bwf-bg))}" +
   // Scroll-driven reveal. The backdrop brightens as the footer comes in, every item rises
@@ -328,13 +320,7 @@ const CSS =
   "@keyframes bwf-line{from{transform:scaleX(0)}to{transform:scaleX(1)}}" +
   "@keyframes bwf-letter{from{translate:0 92%}to{translate:0 0}}" +
   "@container (max-width: 760px){.bwf-inner{grid-template-columns:minmax(0,1fr) minmax(0,1fr);row-gap:40px}.bwf-col:nth-child(1){grid-column:1 / -1;max-width:none}}" +
-  "@media (prefers-reduced-motion: reduce){.bwf .bwf-lw,.bwf .bwf-fade,.bwf .bwf-label::after,.bwf .bwf-l,.bwf .bwf-soc,.bwf .bwf-link-t,.bwf .bwf-link svg,.bwf .bwf-label,.bwf .bwf-sky{transition:none!important;animation:none!important}.bwf[data-in='false'] .bwf-lw,.bwf[data-in='false'] .bwf-fade{translate:none;opacity:1}.bwf[data-in='false'] .bwf-label::after{--bwf-line:1}}"
-
-const Arrow = () => (
-  <svg viewBox="0 0 12 12" aria-hidden="true">
-    <path d="M2.5 9.5l7-7M4 2.5h5.5V8" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-)
+  "@media (prefers-reduced-motion: reduce){.bwf .bwf-lw,.bwf .bwf-fade,.bwf .bwf-label::after,.bwf .bwf-l,.bwf .bwf-soc,.bwf .bwf-link,.bwf .bwf-label,.bwf .bwf-sky{transition:none!important;animation:none!important}.bwf[data-in='false'] .bwf-lw,.bwf[data-in='false'] .bwf-fade{translate:none;opacity:1}.bwf[data-in='false'] .bwf-label::after{--bwf-line:1}}"
 
 export default function BeamWordmarkFooter({
   brand = "Zephyr",
@@ -542,14 +528,6 @@ export default function BeamWordmarkFooter({
     p.inside = e.type !== "pointerleave"
   }
 
-  const hop = (e: React.MouseEvent<HTMLSpanElement>) => {
-    if (reduced) return
-    const el = e.currentTarget
-    el.classList.remove("is-hop")
-    void el.offsetWidth
-    el.classList.add("is-hop")
-  }
-
   const follow = (e: React.MouseEvent<HTMLAnchorElement>, label: string, href?: string) => {
     // "#" and missing hrefs never touch the host page's URL hash.
     if (!href || href === "#") e.preventDefault()
@@ -621,19 +599,21 @@ export default function BeamWordmarkFooter({
               {socials.map((s, i) => (
                 <li key={s.label + i} className="bwf-fade" style={delay()}>
                   <a
-                    className="bwf-soc"
+                    className="shiny-cta bwf-soc"
                     href={s.href || "#"}
                     aria-label={s.label}
                     onClick={(e) => follow(e, s.label, s.href)}
                     {...(s.href && /^https?:/.test(s.href) ? { target: "_blank", rel: "noreferrer" } : {})}
                   >
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                      {isIconName(s.icon) ? ICONS[s.icon] : s.icon}
-                    </svg>
-                    <span className="bwf-tip" aria-hidden="true">
-                      {s.label}
+                    <span>
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        {isIconName(s.icon) ? ICONS[s.icon] : s.icon}
+                      </svg>
                     </span>
                   </a>
+                  <span className="bwf-tip" aria-hidden="true">
+                    {s.label}
+                  </span>
                 </li>
               ))}
             </ul>
@@ -680,13 +660,11 @@ export default function BeamWordmarkFooter({
                 <li key={l.label + li} className="bwf-fade" style={delay()}>
                   {l.href && isInternal(l.href) ? (
                     <Link className="bwf-link" href={l.href} onClick={() => onLinkClick?.(l.label, l.href)}>
-                      <span className="bwf-link-t">{l.label}</span>
-                      <Arrow />
+                      {l.label}
                     </Link>
                   ) : (
                     <a className="bwf-link" href={l.href || "#"} onClick={(e) => follow(e, l.label, l.href)}>
-                      <span className="bwf-link-t">{l.label}</span>
-                      <Arrow />
+                      {l.label}
                     </a>
                   )}
                 </li>
@@ -714,7 +692,7 @@ export default function BeamWordmarkFooter({
         <div ref={innerRef} className="bwf-word-in" aria-hidden="true">
           {letters.map((ch, i) => (
             <span key={i} className="bwf-lw" style={{ "--bwf-d": 260 + i * 75 + "ms", "--bwf-i": i } as React.CSSProperties}>
-              <span className="bwf-l" onClick={hop} onAnimationEnd={(e) => e.currentTarget.classList.remove("is-hop")}>
+              <span className="bwf-l">
                 {ch === " " ? " " : ch}
               </span>
             </span>

@@ -65,7 +65,7 @@ export function ResultsShowcase({ campaigns }: { campaigns: Campaign[] }) {
             aria-selected={i === active}
             aria-controls={`result-${c.slug}`}
             onClick={() => select(i)}
-            className={`relative flex shrink-0 snap-start items-center gap-2 overflow-hidden rounded-full border py-1.5 pr-4 pl-1.5 font-display text-sm font-semibold transition-colors ${
+            className={`relative flex shrink-0 snap-start items-center gap-2 overflow-hidden rounded-xl border py-1.5 pr-4 pl-1.5 font-display text-sm font-semibold transition-colors ${
               i === active ? "border-accent/60 text-fg" : "border-line text-muted"
             }`}
           >

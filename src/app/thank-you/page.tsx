@@ -17,7 +17,7 @@ export default function ThankYou() {
         A calendar invite is on its way. Bring the content you want to push, and we will come with a view estimate and a
         campaign outline.
       </p>
-      <Link href="/case-studies" className="font-display font-semibold mt-10 inline-block rounded-full border border-line px-6 py-3 text-sm hover:border-muted/50">
+      <Link href="/case-studies" className="font-display font-semibold mt-10 inline-block rounded-xl border border-line px-6 py-3 text-sm hover:border-muted/50">
         See what we have delivered
       </Link>
     </section>

@@ -20,7 +20,7 @@ export default function Faq() {
         <h1 className="text-5xl font-bold tracking-tight">FAQ</h1>
         <nav aria-label="FAQ sections" className="mt-8 flex flex-wrap gap-2">
           {faqGroups.map((g) => (
-            <a key={g.title} href={`#${slug(g.title)}`} className="rounded-full border border-line px-4 py-1.5 text-sm text-muted hover:text-fg">
+            <a key={g.title} href={`#${slug(g.title)}`} className="rounded-xl border border-line px-4 py-1.5 text-sm text-muted hover:text-fg">
               {g.title}
             </a>
           ))}
