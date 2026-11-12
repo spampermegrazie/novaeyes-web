@@ -294,23 +294,15 @@ export function ReachEstimator() {
         </div>
       </div>
 
-      {/* Right: the whole campaign as one flow, filling in as you go. It spans the height of the
-          steps, and once the left side grows past the screen (the booking calendar) it stays in
-          view instead. */}
+      {/* Right: your number turning into the estimate. It spans the height of the steps, and once
+          the left side grows past the screen (the booking calendar) it stays in view instead. */}
       <aside aria-label="Your campaign" className="relative isolate hidden lg:block">
-        <div className="sticky top-28 flex min-h-[min(100%,calc(100vh-9rem))] flex-col justify-center">
+        <div className="sticky top-28 flex min-h-[min(100%,calc(100vh-9rem))] flex-col">
           <div
             aria-hidden
-            className="pointer-events-none absolute top-[32%] left-1/2 -z-10 aspect-square w-[110%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgb(59_130_246/0.14),rgb(59_130_246/0.04)_45%,transparent)]"
+            className="pointer-events-none absolute top-1/2 left-1/2 -z-10 aspect-square w-[110%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgb(59_130_246/0.12),rgb(59_130_246/0.03)_45%,transparent)]"
           />
-          <EstimatorFlow
-            mode={mode}
-            value={value}
-            nicheLabel={niche?.label ?? null}
-            result={unlocked ? headline : null}
-            locked={!unlocked && !!niche}
-            reduced={reduced}
-          />
+          <EstimatorFlow mode={mode} value={value} nicheLabel={niche?.label ?? null} estimate={result} unlocked={unlocked} reduced={reduced} />
         </div>
       </aside>
     </div>

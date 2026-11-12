@@ -258,6 +258,27 @@ h2, h3, h4 { font-weight: 600; }
   .shiny-cta span::before { animation: none !important; }
 }
 
+/* Reach estimator side panel (src/components/estimator-flow.tsx): pulses between the two
+   numbers and the scan on the ruler while the estimate is still locked. Not rendered with
+   reduced motion. */
+.est-down { animation: est-down 1.5s linear infinite; }
+.est-up { animation: est-up 1.5s linear infinite; }
+.est-scan { animation: est-scan 1.6s ease-in-out infinite alternate; }
+@keyframes est-down {
+  0% { top: 0%; opacity: 0; }
+  15%, 85% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+@keyframes est-up {
+  0% { top: 100%; opacity: 0; }
+  15%, 85% { opacity: 1; }
+  100% { top: 0%; opacity: 0; }
+}
+@keyframes est-scan {
+  from { left: -25%; }
+  to { left: 100%; }
+}
+
 /* Reach estimator slider: thin line, blue fill up to the thumb, glowing thumb. */
 .ne-range { appearance: none; -webkit-appearance: none; height: 28px; background: transparent; cursor: pointer; }
 .ne-range:focus-visible { outline: none; }
