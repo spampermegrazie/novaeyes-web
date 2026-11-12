@@ -14,7 +14,7 @@ import { estimate, formatCompact, formatRange, formatUsd } from "@/lib/estimator
 import { BUDGET_SCALE, VIEWS_SCALE, parseAmount, positionOf, stepFrom, valueAt } from "@/lib/scale";
 import { getAttribution } from "@/lib/attribution";
 import { BookCall } from "./book-call";
-import { EstimatorFlow } from "./estimator-flow";
+import { EstimatorPhone } from "./estimator-phone";
 import { CountUp } from "./ui/count-up";
 
 type Mode = "budget" | "views";
@@ -294,15 +294,15 @@ export function ReachEstimator() {
         </div>
       </div>
 
-      {/* Right: your number turning into the estimate. It spans the height of the steps, and once
-          the left side grows past the screen (the booking calendar) it stays in view instead. */}
+      {/* Right: a phone playing a clip, with the estimate where a post shows its views. It spans
+          the height of the steps, and stays in view beside the booking calendar. */}
       <aside aria-label="Your campaign" className="relative isolate hidden lg:block">
         <div className="sticky top-28 flex min-h-[min(100%,calc(100vh-9rem))] flex-col">
           <div
             aria-hidden
             className="pointer-events-none absolute top-1/2 left-1/2 -z-10 aspect-square w-[110%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgb(59_130_246/0.12),rgb(59_130_246/0.03)_45%,transparent)]"
           />
-          <EstimatorFlow mode={mode} value={value} nicheLabel={niche?.label ?? null} estimate={result} unlocked={unlocked} reduced={reduced} />
+          <EstimatorPhone mode={mode} value={value} nicheId={nicheId} estimate={result} unlocked={unlocked} company={company} reduced={reduced} />
         </div>
       </aside>
     </div>
