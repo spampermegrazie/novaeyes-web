@@ -1,7 +1,7 @@
 import { facts, verticalLinks } from "@/content/facts";
 import BeamWordmarkFooter, { type FooterColumn, type FooterSocial } from "@/components/ui/beam-wordmark-footer";
 
-// Site footer: link columns over a giant novaeyes wordmark that a slow beam of light runs through.
+// Site footer: link columns over a giant NOVAEYES wordmark that a slow beam of light runs through.
 const columns: FooterColumn[] = [
   { title: "Clipping for", links: verticalLinks.map((v) => ({ label: v.label, href: v.href })) },
   {
@@ -37,7 +37,7 @@ export function SiteFooter() {
   return (
     <BeamWordmarkFooter
       brand={facts.name}
-      wordmark="novaeyes"
+      wordmark="NOVAEYES"
       company={facts.name}
       blurb={facts.oneLiner}
       credits={[
@@ -52,9 +52,12 @@ export function SiteFooter() {
       accent="#3b82f6"
       wordTop="#1e40af"
       wordFoot="#070a18"
-      fontSans='var(--font-inter), ui-sans-serif, system-ui, sans-serif'
-      wordFont='var(--font-manrope), ui-sans-serif, system-ui, sans-serif'
-      wordWeight={600}
+      fontSans="var(--font-inter), ui-sans-serif, system-ui, sans-serif"
+      wordFont="var(--font-label-face), ui-sans-serif, system-ui, sans-serif"
+      wordTracking="0.06em"
+      wordWeight={400}
+      labelFont="var(--font-label-face), ui-sans-serif, system-ui, sans-serif"
+      cut={0.16}
     />
   );
 }

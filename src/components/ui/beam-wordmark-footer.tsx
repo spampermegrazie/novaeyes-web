@@ -25,8 +25,13 @@ import Link from "next/link"
  *
  * NovaEyes changes from the 21st.dev original: internal links ("/...") use
  * next/link, the grid takes as many link columns as you pass, the wordmark can
- * use its own font (wordFont), an optional blurb sits above the credits, and
- * the idle beam repaints at ~20fps (it drifts too slowly for more to show).
+ * use its own font and tracking (wordFont, wordTracking), column labels can
+ * take the site's eyebrow style (labelFont), an optional blurb sits above the
+ * credits, and the idle beam repaints at ~20fps (it drifts too slowly for more
+ * to show). The backdrop fades in from the page colour instead of starting at
+ * a hairline, and where the browser supports scroll-driven animations the
+ * columns rise as they scroll into view and the wordmark rises over the last
+ * stretch of the page (elsewhere the original one-shot reveal runs).
  */
 
 // #region beam
@@ -119,6 +124,10 @@ export type BeamWordmarkFooterProps = {
   fontSans?: string
   /** Font for the giant wordmark. Defaults to `fontSans`. */
   wordFont?: string
+  /** Letter spacing of the giant wordmark. */
+  wordTracking?: string
+  /** Font for the column labels, set small, uppercase and tracked when given. */
+  labelFont?: string
   wordWeight?: number
   /** A short paragraph above the credits. */
   blurb?: string
@@ -227,27 +236,29 @@ const noYear = () => null
 
 // One scoped stylesheet. Every rule sits under .bwf; element resets go through
 // :where(.bwf) so they never out-rank the component's own classes or yours.
+// .bwf clips with overflow:clip, not hidden: a hidden box is a scroll container, and the
+// view() timelines inside it would then track the footer box instead of the page scroll.
 const CSS =
-  ".bwf{position:relative;isolation:isolate;overflow:hidden;container-type:inline-size;background:var(--bwf-bg);color:var(--bwf-ink);font-family:var(--bwf-sans);-webkit-font-smoothing:antialiased;touch-action:pan-y}" +
+  ".bwf{position:relative;isolation:isolate;overflow:hidden;overflow:clip;container-type:inline-size;background:var(--bwf-bg);color:var(--bwf-ink);font-family:var(--bwf-sans);-webkit-font-smoothing:antialiased;touch-action:pan-y}" +
   ":where(.bwf) a{color:inherit;text-decoration:none}" +
   ":where(.bwf) button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer}" +
   ":where(.bwf) ul{list-style:none;margin:0;padding:0}" +
   ":where(.bwf) p{margin:0}" +
   ".bwf svg{max-width:none;display:block}" +
   ".bwf .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}" +
-  // The top rule: a hairline of accent, brighter where the beam crosses it.
-  ".bwf-rule{position:absolute;left:0;right:0;top:0;height:1px;z-index:3;background:linear-gradient(90deg,rgba(var(--bwf-acc),.15),rgba(var(--bwf-acc),.55) var(--bwf-b),rgba(var(--bwf-acc),.15))}" +
   // Backdrop: navy wash, faint vertical bands, the beam, a soft second beam,
   // the pointer glow, and grain. One frame (the section box) for all of them.
-  ".bwf-sky{position:absolute;inset:0;z-index:0;pointer-events:none}" +
+  // The backdrop eases in from the page colour over the footer's first few hundred pixels.
+  ".bwf-sky{--bwf-bl:clamp(280px,36cqw,520px);--bwf-mask:linear-gradient(180deg,transparent 0px,rgba(0,0,0,.03) calc(var(--bwf-bl) * .16),rgba(0,0,0,.12) calc(var(--bwf-bl) * .32),rgba(0,0,0,.3) calc(var(--bwf-bl) * .5),rgba(0,0,0,.56) calc(var(--bwf-bl) * .68),rgba(0,0,0,.82) calc(var(--bwf-bl) * .85),#000 var(--bwf-bl));position:absolute;inset:0;z-index:0;pointer-events:none;-webkit-mask-image:var(--bwf-mask);mask-image:var(--bwf-mask)}" +
   ".bwf-wash{position:absolute;inset:0;background:radial-gradient(120% 90% at 8% 0%,rgba(var(--bwf-acc),.2),transparent 55%),radial-gradient(90% 70% at 92% 8%,rgba(var(--bwf-acc),.14),transparent 60%),linear-gradient(180deg,rgba(var(--bwf-acc),.06),transparent 70%)}" +
   ".bwf-bands{position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(var(--bwf-acc),.05) 0 1.6cqw,transparent 1.6cqw 4.2cqw);-webkit-mask-image:linear-gradient(100deg,#000 0%,transparent 55%);mask-image:linear-gradient(100deg,#000 0%,transparent 55%);opacity:.9}" +
   ".bwf-beam{position:absolute;inset:0;filter:blur(calc(1px + 1.6cqw));background:linear-gradient(var(--bwf-ang),transparent calc(var(--bwf-b) - 11%),rgba(var(--bwf-acc),.10) calc(var(--bwf-b) - 5%),rgba(var(--bwf-acc),.34) var(--bwf-b),rgba(var(--bwf-acc),.08) calc(var(--bwf-b) + 4%),transparent calc(var(--bwf-b) + 9%)),linear-gradient(var(--bwf-ang),transparent calc(var(--bwf-b) - 34%),rgba(var(--bwf-acc),.10) calc(var(--bwf-b) - 27%),transparent calc(var(--bwf-b) - 20%))}" +
   ".bwf-glow{position:absolute;inset:0;opacity:var(--bwf-g);background:radial-gradient(circle 26cqw at var(--bwf-px) var(--bwf-py),rgba(var(--bwf-acc),.16),transparent 70%)}" +
   ".bwf-grain{position:absolute;inset:0;opacity:.14;mix-blend-mode:overlay;background-image:url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\")}" +
   // Layout.
-  ".bwf-inner{position:relative;z-index:2;box-sizing:border-box;max-width:1120px;margin:0 auto;padding:clamp(48px,8.5cqw,104px) clamp(20px,6cqw,88px) 0;display:grid;grid-template-columns:minmax(0,1.62fr) repeat(var(--bwf-cols),minmax(0,.86fr));column-gap:clamp(24px,4cqw,48px);row-gap:44px}" +
-  ".bwf-label{font-size:12px;line-height:1;letter-spacing:.01em;color:rgb(var(--bwf-acc));padding-bottom:13px;position:relative;display:block}" +
+  ".bwf-inner{position:relative;z-index:2;box-sizing:border-box;max-width:1120px;margin:0 auto;padding:clamp(120px,15cqw,200px) clamp(20px,6cqw,88px) 0;display:grid;grid-template-columns:minmax(0,1.62fr) repeat(var(--bwf-cols),minmax(0,.86fr));column-gap:clamp(24px,4cqw,48px);row-gap:44px}" +
+  ".bwf-label{font-family:var(--bwf-lsans);font-size:12px;line-height:1;letter-spacing:.01em;color:rgb(var(--bwf-acc));padding-bottom:13px;position:relative;display:block}" +
+  ".bwf[data-caps] .bwf-label{font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding-bottom:14px}" +
   ".bwf-label::after{content:'';position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,rgba(var(--bwf-acc),.55),rgba(var(--bwf-acc),.28));transform-origin:0 50%;transform:scaleX(var(--bwf-line,1));transition:transform 1.1s cubic-bezier(.2,.7,.1,1) var(--bwf-d,0ms)}" +
   ".bwf[data-in='false'] .bwf-label::after{--bwf-line:0}" +
   ".bwf-col{min-width:0}" +
@@ -285,7 +296,7 @@ const CSS =
   // back by its own offset, so beam and glow line up with the backdrop.
   ".bwf-word{position:relative;z-index:1;overflow:hidden;margin-top:clamp(28px,7cqw,96px)}" +
   ".bwf-word-box{padding:0 clamp(20px,6cqw,88px);max-width:1120px;margin:0 auto;box-sizing:border-box}" +
-  ".bwf-word-in{display:inline-flex;white-space:nowrap;font-family:var(--bwf-wsans);font-weight:var(--bwf-ww);line-height:1;letter-spacing:-.045em;user-select:none;-webkit-user-select:none}" +
+  ".bwf-word-in{display:inline-flex;white-space:nowrap;font-family:var(--bwf-wsans);font-weight:var(--bwf-ww);line-height:1;letter-spacing:var(--bwf-wtrack);user-select:none;-webkit-user-select:none}" +
   ".bwf-lw{display:inline-block;translate:0 0;transition:translate 1.25s cubic-bezier(.16,.84,.2,1) var(--bwf-d,0ms)}" +
   ".bwf[data-in='false'] .bwf-lw{translate:0 85%}" +
   ".bwf-l{display:inline-block;cursor:pointer;color:transparent;-webkit-background-clip:text;background-clip:text;background-repeat:no-repeat;background-size:var(--bwf-rw) var(--bwf-rh);background-position:calc(var(--bwf-x) * -1) calc(var(--bwf-y) * -1);" +
@@ -298,8 +309,26 @@ const CSS =
   "@keyframes bwf-hop{0%{transform:translateY(0) scale(1,1)}18%{transform:translateY(.02em) scale(1.06,.9)}45%{transform:translateY(-.14em) scale(.97,1.05)}70%{transform:translateY(.01em) scale(1.02,.97)}100%{transform:translateY(-.045em) scale(1,1)}}" +
   // The foot sinks into the dark, the way the reference does.
   ".bwf-foot{position:absolute;left:0;right:0;bottom:0;height:34%;z-index:2;pointer-events:none;background:linear-gradient(180deg,transparent,rgba(var(--bwf-bg-rgb),.55) 55%,var(--bwf-bg))}" +
+  // Scroll-driven reveal. The backdrop brightens as the footer comes in, every item rises
+  // over its first ~220px on screen (a little later per column), and the wordmark's letters
+  // rise in turn over the last stretch of the page. Animations override the one-shot
+  // reveal above; with no scroll timeline (a page too short to scroll) nothing is hidden.
+  // They switch on (data-sr) only once the ranges are measured: Chrome keeps a range it first
+  // resolved from a var() fallback even after the variable is set.
+  "@supports (animation-timeline: view()){" +
+  ".bwf{view-timeline-name:--bwf}" +
+  ".bwf[data-sr] .bwf-sky{animation:bwf-sky linear both;animation-timeline:--bwf;animation-range:entry 0% entry 70%}" +
+  ".bwf[data-sr] .bwf-fade,.bwf[data-sr] .bwf-label{transition:none;opacity:1;translate:none;animation:bwf-rise linear both;animation-timeline:view();animation-range:cover var(--bwf-r0,calc(var(--bwf-o,0px) + 10px)) cover var(--bwf-r1,calc(var(--bwf-o,0px) + 230px))}" +
+  ".bwf[data-sr] .bwf-label{view-timeline-name:--bwf-lab}" +
+  ".bwf[data-sr] .bwf-label::after{transition:none;transform:none;animation:bwf-line linear both;animation-timeline:--bwf-lab;animation-range:cover calc(var(--bwf-r0,var(--bwf-o,0px)) + 30px) cover var(--bwf-r2,calc(var(--bwf-o,0px) + 300px))}" +
+  ".bwf[data-sr] .bwf-lw{transition:none;translate:none;animation:bwf-letter linear both;animation-timeline:scroll(root);animation-range:calc(100% - var(--bwf-wr) + var(--bwf-i) * var(--bwf-ws)) calc(100% - (var(--bwf-n) - 1 - var(--bwf-i)) * var(--bwf-ws))}" +
+  "}" +
+  "@keyframes bwf-sky{from{opacity:.35}to{opacity:1}}" +
+  "@keyframes bwf-rise{from{opacity:0;translate:0 22px}to{opacity:1;translate:0 0}}" +
+  "@keyframes bwf-line{from{transform:scaleX(0)}to{transform:scaleX(1)}}" +
+  "@keyframes bwf-letter{from{translate:0 92%}to{translate:0 0}}" +
   "@container (max-width: 760px){.bwf-inner{grid-template-columns:minmax(0,1fr) minmax(0,1fr);row-gap:40px}.bwf-col:nth-child(1){grid-column:1 / -1;max-width:none}}" +
-  "@media (prefers-reduced-motion: reduce){.bwf .bwf-lw,.bwf .bwf-fade,.bwf .bwf-label::after,.bwf .bwf-l,.bwf .bwf-soc,.bwf .bwf-link-t,.bwf .bwf-link svg{transition:none!important;animation:none!important}.bwf[data-in='false'] .bwf-lw,.bwf[data-in='false'] .bwf-fade{translate:none;opacity:1}.bwf[data-in='false'] .bwf-label::after{--bwf-line:1}}"
+  "@media (prefers-reduced-motion: reduce){.bwf .bwf-lw,.bwf .bwf-fade,.bwf .bwf-label::after,.bwf .bwf-l,.bwf .bwf-soc,.bwf .bwf-link-t,.bwf .bwf-link svg,.bwf .bwf-label,.bwf .bwf-sky{transition:none!important;animation:none!important}.bwf[data-in='false'] .bwf-lw,.bwf[data-in='false'] .bwf-fade{translate:none;opacity:1}.bwf[data-in='false'] .bwf-label::after{--bwf-line:1}}"
 
 const Arrow = () => (
   <svg viewBox="0 0 12 12" aria-hidden="true">
@@ -325,6 +354,8 @@ export default function BeamWordmarkFooter({
   wordFoot = "#060b22",
   fontSans = SANS,
   wordFont,
+  wordTracking = "-.045em",
+  labelFont,
   wordWeight = 500,
   blurb,
   animate = true,
@@ -393,6 +424,21 @@ export default function BeamWordmarkFooter({
       })
       root.style.setProperty("--bwf-top", top + "px")
       root.style.setProperty("--bwf-bot", top + (parseFloat(inner.style.fontSize) || 0) * 0.92 + "px")
+      // Scroll reveal: an item rises over ~220px of scroll from the moment it enters, but never
+      // needs more scroll than is left below it, since the footer ends the page.
+      const fh = root.offsetHeight
+      root.querySelectorAll<HTMLElement>(".bwf-fade, .bwf-label").forEach((item) => {
+        let y = 0
+        for (let p: HTMLElement | null = item; p && p !== root; p = p.offsetParent as HTMLElement | null) y += p.offsetTop
+        const o = parseFloat(getComputedStyle(item).getPropertyValue("--bwf-o")) || 0
+        const avail = Math.max(24, fh - y - 4)
+        const end = Math.min(o + 230, avail)
+        const start = Math.max(0, Math.min(o + 10, end - 90))
+        item.style.setProperty("--bwf-r0", start + "px")
+        item.style.setProperty("--bwf-r1", end + "px")
+        item.style.setProperty("--bwf-r2", Math.min(end + 70, avail) + "px")
+      })
+      root.setAttribute("data-sr", "")
     }
     const schedule = () => {
       cancelAnimationFrame(frame)
@@ -408,7 +454,7 @@ export default function BeamWordmarkFooter({
       cancelAnimationFrame(frame)
       ro.disconnect()
     }
-  }, [word, fontSans, wordFont, wordWeight])
+  }, [word, fontSans, wordFont, wordTracking, wordWeight])
 
   // Reveal once, the first time the footer is on screen; the beam runs only
   // while it is.
@@ -522,6 +568,8 @@ export default function BeamWordmarkFooter({
     "--bwf-wf": wordFoot,
     "--bwf-sans": fontSans,
     "--bwf-wsans": wordFont ?? fontSans,
+    "--bwf-wtrack": wordTracking,
+    "--bwf-lsans": labelFont ?? "inherit",
     "--bwf-cols": String(Math.max(1, columns.length)),
     "--bwf-ww": String(wordWeight),
     "--bwf-ang": "118deg",
@@ -534,6 +582,8 @@ export default function BeamWordmarkFooter({
   } as React.CSSProperties
 
   const label = company ?? brand + " LLC"
+  // Scroll the wordmark's letters rise over: a bit more than the wordmark's height, never too short to see.
+  const riseWindow = Math.max(140, Math.round((size ? wordHeight(size, base, cut) : 0) * 1.3))
   // Reveal stagger: each element that calls delay() waits 70ms longer than the one before.
   const seq = { d: 0 }
   const delay = () => {
@@ -547,12 +597,12 @@ export default function BeamWordmarkFooter({
       className={"bwf " + className}
       style={vars}
       data-in={seen || reduced ? "true" : "false"}
+      data-caps={labelFont ? "" : undefined}
       onPointerMove={onPointer}
       onPointerEnter={onPointer}
       onPointerLeave={onPointer}
     >
       <style>{CSS}</style>
-      <div className="bwf-rule" aria-hidden="true" />
       <div className="bwf-sky" aria-hidden="true">
         <div className="bwf-wash" />
         <div className="bwf-bands" />
@@ -621,7 +671,7 @@ export default function BeamWordmarkFooter({
         </div>
 
         {columns.map((col, ci) => (
-          <nav key={col.title + ci} className="bwf-col" aria-label={col.title}>
+          <nav key={col.title + ci} className="bwf-col" aria-label={col.title} style={{ "--bwf-o": (ci + 1) * 28 + "px" } as React.CSSProperties}>
             <p className="bwf-label" style={delay()}>
               {col.title}
             </p>
@@ -649,13 +699,21 @@ export default function BeamWordmarkFooter({
       <div
         ref={wordRef}
         className="bwf-word"
-        style={{ height: size ? wordHeight(size, base, cut) : "calc(" + (0.8 + cut) * 26 + "cqw)" }}
+        style={
+          {
+            height: size ? wordHeight(size, base, cut) : "calc(" + (0.8 + cut) * 26 + "cqw)",
+            // the letters rise one after another over the last stretch of page scroll
+            "--bwf-wr": riseWindow + "px",
+            "--bwf-ws": Math.round(riseWindow / (letters.length + 4)) + "px",
+            "--bwf-n": letters.length,
+          } as React.CSSProperties
+        }
       >
         <p className="sr-only">{word}</p>
         <div className="bwf-word-box">
         <div ref={innerRef} className="bwf-word-in" aria-hidden="true">
           {letters.map((ch, i) => (
-            <span key={i} className="bwf-lw" style={{ "--bwf-d": 260 + i * 75 + "ms" } as React.CSSProperties}>
+            <span key={i} className="bwf-lw" style={{ "--bwf-d": 260 + i * 75 + "ms", "--bwf-i": i } as React.CSSProperties}>
               <span className="bwf-l" onClick={hop} onAnimationEnd={(e) => e.currentTarget.classList.remove("is-hop")}>
                 {ch === " " ? " " : ch}
               </span>
