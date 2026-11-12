@@ -54,8 +54,8 @@ export function StudioTour() {
             poster="/studio/studio-poster.webp"
             aria-hidden
           >
-            <source src="/studio/studio-loop.webm" type="video/webm" />
             <source src="/studio/studio-loop.mp4" type="video/mp4" />
+            <source src="/studio/studio-loop.webm" type="video/webm" />
           </video>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
