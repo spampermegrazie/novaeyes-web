@@ -294,19 +294,25 @@ export function ReachEstimator() {
         </div>
       </div>
 
-      {/* Right: the engine and what you picked so far */}
+      {/* Right: the engine and what you picked so far. It spans the full height of the steps
+          (engine level with the step counter, summary level with the buttons), and once the
+          left side grows past the screen (the booking calendar) it stays in view instead. */}
       <aside aria-label="Your campaign" className="relative isolate hidden lg:block">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute top-[22%] left-1/2 -z-10 aspect-square w-[115%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgb(59_130_246/0.16),rgb(59_130_246/0.05)_45%,transparent)]"
-        />
-        <MiniEngine mode={m} value={mode ? value : null} result={unlocked ? headline : null} />
-        <dl className="mt-12 divide-y divide-line border-y border-line">
-          <SummaryRow label="Starting from" value={mode ? (mode === "budget" ? "A budget" : "A view target") : null} />
-          <SummaryRow label={m === "budget" ? "Budget" : "Target views"} value={mode ? (m === "budget" ? formatUsd(value) : `${formatCompact(value)} views`) : null} />
-          <SummaryRow label="Niche" value={niche?.label ?? null} />
-          <SummaryRow label={m === "budget" ? "Estimated views" : "Estimated budget"} value={unlocked ? headline : null} locked={!unlocked && !!niche} />
-        </dl>
+        <div className="sticky top-28 flex min-h-[min(100%,calc(100vh-9rem))] flex-col justify-between gap-12">
+          <div className="relative">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute top-1/2 left-1/2 -z-10 aspect-square w-[115%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgb(59_130_246/0.16),rgb(59_130_246/0.05)_45%,transparent)]"
+            />
+            <MiniEngine mode={m} value={mode ? value : null} result={unlocked ? headline : null} />
+          </div>
+          <dl className="divide-y divide-line border-y border-line">
+            <SummaryRow label="Starting from" value={mode ? (mode === "budget" ? "A budget" : "A view target") : null} />
+            <SummaryRow label={m === "budget" ? "Budget" : "Target views"} value={mode ? (m === "budget" ? formatUsd(value) : `${formatCompact(value)} views`) : null} />
+            <SummaryRow label="Niche" value={niche?.label ?? null} />
+            <SummaryRow label={m === "budget" ? "Estimated views" : "Estimated budget"} value={unlocked ? headline : null} locked={!unlocked && !!niche} />
+          </dl>
+        </div>
       </aside>
     </div>
   );
