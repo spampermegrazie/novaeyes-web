@@ -395,7 +395,7 @@ function Pipeline({
         {/* packets: blue is your content going out, white is verified views coming back */}
         {packets.map((p, i) => (
           <circle key={`${stage}-${i}`} r={p.back ? 2.4 : 2.6} className={p.back ? "ne-pkt-back" : "ne-pkt"}>
-            <animateMotion dur={`${p.dur}s`} begin={`${p.begin}s`} repeatCount="indefinite" path={p.d} />
+            <animateMotion dur={`${p.dur}s`} begin={`-${p.begin}s`} repeatCount="indefinite" path={p.d} />
           </circle>
         ))}
 
