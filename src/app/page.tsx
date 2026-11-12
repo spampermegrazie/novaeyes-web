@@ -10,7 +10,7 @@ import { JsonLd, faqJsonLd } from "@/components/json-ld";
 import { ClipCurtainHero } from "@/components/ui/clip-curtain-hero";
 import { ResultsShowcase } from "@/components/ui/results-showcase";
 import { StudioTour } from "@/components/studio-tour";
-import { FounderSection } from "@/components/founder-section";
+import { FounderPortrait } from "@/components/founder-portrait";
 import { CountUp } from "@/components/ui/count-up";
 import { EngineSteps, type EngineStep } from "@/components/ui/engine-steps";
 import { ShinyButton } from "@/components/ui/shiny-button";
@@ -170,7 +170,26 @@ export default function Home() {
         </p>
       </section>
 
-      <FounderSection />
+      <section id="founder">
+        <div className="mx-auto grid max-w-6xl items-center gap-10 px-6 py-24 sm:px-10 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:gap-16 lg:px-12">
+          <div className="order-2 lg:order-1">
+            <p className="font-label text-[10px] tracking-[0.14em] text-muted uppercase">Built by operators, not spectators</p>
+            <h2 className="mt-4 text-3xl tracking-tight sm:text-5xl">{facts.founder}</h2>
+            <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted">
+              Andrea built a media network past 500,000 followers before turning what he learned into NovaEyes. Today the
+              network has {facts.clippersLabel} clippers and has delivered hundreds of millions of views for brands, artists
+              and creators.
+            </p>
+            <blockquote className="mt-10 border-l-2 border-accent pl-6 font-display text-2xl font-semibold sm:text-3xl">
+              Anyone can make content. We decide who sees it.
+            </blockquote>
+            <Link href="/about" className="mt-8 inline-block font-display text-sm font-semibold text-accent hover:text-fg">
+              More about NovaEyes →
+            </Link>
+          </div>
+          <FounderPortrait className="order-1 mx-auto w-full max-w-md lg:order-2 lg:max-w-none" />
+        </div>
+      </section>
 
       {/* Stage 4: control panel */}
       <section id="faq" className="mx-auto max-w-6xl px-6 py-24 sm:px-10 lg:px-12 *:max-w-3xl">
