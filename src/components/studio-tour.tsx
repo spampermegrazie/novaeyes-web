@@ -368,10 +368,12 @@ export function StudioTour() {
                   ? "scale-110 border-accent bg-accent text-white shadow-[0_0_24px_rgb(59_130_246/0.8)]"
                   : hover === i
                     ? "scale-110 border-accent bg-bg/90 text-white"
-                    : "border-white/70 bg-bg/85 text-white"
+                    : "border-accent/80 bg-bg/90 text-white shadow-[0_0_14px_rgb(59_130_246/0.55)]"
               }`}
             >
-              {active !== i && <span className="absolute inset-0 animate-ping rounded-full border border-accent/60 motion-reduce:hidden" />}
+              {active !== i && (
+                <span aria-hidden className="st-pulse absolute inset-0 rounded-full border-2 border-accent motion-reduce:hidden" style={{ animationDelay: `${i * 0.25}s` }} />
+              )}
               {i + 1}
             </span>
           </button>
@@ -386,13 +388,13 @@ export function StudioTour() {
                   key={`${stop.key}-${pinned}`}
                   role={pinned ? "dialog" : "tooltip"}
                   aria-label={stop.title}
-                  initial={{ opacity: 0, scale: 0.96, filter: "blur(6px)" }}
-                  animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-                  exit={{ opacity: 0, scale: 0.98, filter: "blur(4px)" }}
+                  initial={{ opacity: 0, scale: 0.96, y: 6 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.98, y: 4 }}
                   transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
                   className={pinned ? "pointer-events-auto" : ""}
                 >
-                  <div className="rounded-2xl border border-white/10 bg-bg-raised/90 p-5 shadow-[0_24px_64px_rgb(0_0_0/0.55),0_0_0_1px_rgb(59_130_246/0.12)] backdrop-blur-xl">
+                  <div className="rounded-2xl border border-white/10 bg-bg-raised/95 p-5 shadow-[0_24px_64px_rgb(0_0_0/0.55),0_0_0_1px_rgb(59_130_246/0.12)] backdrop-blur-xl">
                     <div className="flex items-center justify-between">
                       <span className="font-label text-[10px] tracking-[0.14em] text-accent">
                         {pad(shown + 1)} / {pad(N)}

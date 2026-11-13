@@ -246,6 +246,13 @@ h2, h3, h4 { font-weight: 600; }
 @keyframes vp-float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -7px; } }
 @media (prefers-reduced-motion: reduce) { .vp-float { animation: none; } }
 
+/* Studio tour (src/components/studio-tour.tsx): the pulse around each station number. */
+.st-pulse { animation: st-pulse 2s cubic-bezier(0.2, 0.6, 0.3, 1) infinite; box-shadow: 0 0 12px rgb(var(--glow) / 0.8); }
+@keyframes st-pulse {
+  0% { transform: scale(1); opacity: 0.95; }
+  75%, 100% { transform: scale(2.3); opacity: 0; }
+}
+
 /* Homepage numbers panel (src/components/stats-band.tsx). */
 .sb-sweep { animation: sb-sweep 7s cubic-bezier(0.45, 0, 0.25, 1) infinite; }
 @keyframes sb-sweep {
