@@ -9,6 +9,8 @@ import { RailArrows } from "./ui/rail-arrows";
 
 const BLURBS: Record<string, string> = {
   "/sports-clipping": "Any sport, from match footage to behind the scenes, cut into clips.",
+  "/gaming-clipping": "Gameplay, trailers and updates that push wishlists and downloads.",
+  "/app-and-startup-clipping": "Demo clips, founder clips and TikTok slideshows that drive sign-ups.",
   "/combat-sports-clipping": "Fight footage cut into thousands of highlight clips.",
   "/music-clipping": "Your song in thousands of clips, so people go and stream it.",
   "/podcast-clipping": "Episodes turned into clips that bring new listeners to the show.",
@@ -30,6 +32,94 @@ function Sport() {
       <div className="absolute inset-x-0 bottom-6 flex justify-center" aria-hidden>
         <span className="wc-pill rounded-full bg-accent px-2 py-0.5 text-[7px] font-semibold whitespace-nowrap text-white shadow-[0_0_12px_rgb(var(--glow)/0.7)]" style={{ animationDelay: "-3.28s" }}>
           Goal
+        </span>
+      </div>
+    </>
+  );
+}
+
+function Game() {
+  return (
+    <>
+      {/* HUD */}
+      <div className="absolute inset-x-2.5 top-3 flex items-center justify-between" aria-hidden>
+        <span className="flex gap-[3px]">
+          {[0, 1, 2].map((i) => (
+            <svg key={i} viewBox="0 0 10 9" className="h-2 w-2.5">
+              <path d="M5 8.6 1 4.7A2.4 2.4 0 0 1 5 1.6a2.4 2.4 0 0 1 4 3.1Z" fill={i < 2 ? "#ef4b6c" : "rgb(255 255 255 / 0.2)"} />
+            </svg>
+          ))}
+        </span>
+        <span className="font-[family-name:var(--font-geist-mono)] text-[6px] text-white/60">LVL 7</span>
+      </div>
+      {/* controller */}
+      <svg viewBox="0 0 64 40" className="absolute top-[40%] left-1/2 h-10 w-16 -translate-x-1/2 -translate-y-1/2" aria-hidden>
+        <path d="M14 6h36c7 0 12 6 13 14l1 9c.4 5-5 8-9 4l-6-6H15l-6 6c-4 4-9.4 1-9-4l1-9C2 12 7 6 14 6Z" fill="#232738" stroke="rgb(255 255 255 / 0.18)" />
+        <rect x="13" y="16" width="10" height="3" rx="1" fill="rgb(255 255 255 / 0.5)" />
+        <rect x="16.5" y="12.5" width="3" height="10" rx="1" fill="rgb(255 255 255 / 0.5)" />
+        {[
+          [46, 13],
+          [51, 17.5],
+          [46, 22],
+          [41, 17.5],
+        ].map(([cx, cy], i) => (
+          <circle key={i} cx={cx} cy={cy} r="2.4" className="wc-btn" style={{ animationDelay: `${i * 0.35}s` }} />
+        ))}
+      </svg>
+      {/* score popping */}
+      <span className="wc-pop-up absolute top-[24%] right-3 font-[family-name:var(--font-geist-mono)] text-[7px] font-semibold text-accent" aria-hidden>
+        +250
+      </span>
+      <div className="absolute inset-x-0 bottom-6 flex justify-center" aria-hidden>
+        <span className="wc-pill flex items-center gap-1 rounded-full bg-white px-2 py-0.5 text-[7px] font-semibold whitespace-nowrap text-[#12131a]">
+          <svg viewBox="0 0 16 16" className="h-2 w-2">
+            <path fill="currentColor" d="m8 1.5 1.9 4 4.4.5-3.3 3 .9 4.3L8 11.1l-3.9 2.2.9-4.3-3.3-3 4.4-.5Z" />
+          </svg>
+          Wishlist
+        </span>
+      </div>
+    </>
+  );
+}
+
+const SLIDES = [
+  { top: "POV", lines: [26, 18] },
+  { top: "Before", lines: [22, 30] },
+  { top: "After", lines: [28, 14] },
+];
+
+function AppSlides() {
+  return (
+    <>
+      {/* slideshow pager */}
+      <div className="absolute inset-x-0 top-2.5 flex justify-center gap-1" aria-hidden>
+        {[0, 1, 2].map((i) => (
+          <span key={i} className="wc-dot h-[3px] w-4 rounded-full" style={{ animationDelay: `${i * 1.5}s` }} />
+        ))}
+      </div>
+      {/* slides sliding left */}
+      <div className="absolute inset-x-0 top-6 bottom-12 overflow-hidden" aria-hidden>
+        <div className="wc-slides flex h-full w-[300%]">
+          {SLIDES.map((sl, i) => (
+            <div key={i} className="flex h-full w-1/3 flex-col items-center justify-center gap-1.5 px-3">
+              <span className="rounded bg-white/90 px-1.5 py-0.5 text-[7px] font-bold text-[#12131a]">{sl.top}</span>
+              {sl.lines.map((w, li) => (
+                <span key={li} className="h-1.5 rounded-full bg-white/30" style={{ width: w * 1.6 }} />
+              ))}
+              {i === 2 && (
+                <span className="mt-1 flex h-7 w-7 items-center justify-center rounded-lg bg-accent shadow-[0_0_12px_rgb(var(--glow)/0.7)]">
+                  <svg viewBox="0 0 16 16" className="h-3.5 w-3.5 text-white">
+                    <path fill="currentColor" d="M8 2 13 5v6l-5 3-5-3V5Z" />
+                  </svg>
+                </span>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="absolute inset-x-0 bottom-6 flex justify-center" aria-hidden>
+        <span className="rounded-full bg-accent px-2 py-0.5 text-[7px] font-semibold whitespace-nowrap text-white shadow-[0_0_12px_rgb(var(--glow)/0.7)]">
+          Get the app
         </span>
       </div>
     </>
@@ -159,6 +249,8 @@ function Product() {
 
 const SCENES: Record<string, () => React.ReactNode> = {
   "/sports-clipping": Sport,
+  "/gaming-clipping": Game,
+  "/app-and-startup-clipping": AppSlides,
   "/combat-sports-clipping": Fight,
   "/music-clipping": Music,
   "/podcast-clipping": Podcast,

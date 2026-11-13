@@ -180,6 +180,31 @@ h2, h3, h4 { font-weight: 600; }
   42%, 60% { stroke: var(--accent); filter: drop-shadow(0 0 4px rgb(var(--glow))); }
   75%, 100% { stroke: rgb(255 255 255 / 0.4); filter: none; }
 }
+.wc-btn { fill: rgb(255 255 255 / 0.35); animation: wc-btn 1.4s ease-in-out infinite; }
+@keyframes wc-btn {
+  0%, 100% { fill: rgb(255 255 255 / 0.35); }
+  20% { fill: var(--accent); }
+  40% { fill: rgb(255 255 255 / 0.35); }
+}
+.wc-pop-up { animation: wc-pop-up 2.8s ease-out infinite; }
+@keyframes wc-pop-up {
+  0%, 30% { opacity: 0; translate: 0 4px; }
+  40% { opacity: 1; translate: 0 0; }
+  70% { opacity: 1; translate: 0 -6px; }
+  85%, 100% { opacity: 0; translate: 0 -8px; }
+}
+.wc-slides { animation: wc-slides 4.5s cubic-bezier(0.65, 0, 0.35, 1) infinite; }
+@keyframes wc-slides {
+  0%, 26% { transform: translateX(0); }
+  33%, 59% { transform: translateX(-33.333%); }
+  66%, 92% { transform: translateX(-66.666%); }
+  100% { transform: translateX(0); }
+}
+.wc-dot { background: rgb(255 255 255 / 0.25); animation: wc-dot 4.5s linear infinite; }
+@keyframes wc-dot {
+  0%, 31% { background: rgb(255 255 255 / 0.95); }
+  33%, 100% { background: rgb(255 255 255 / 0.25); }
+}
 .wc-impact { transform-box: fill-box; transform-origin: center; animation: wc-impact 2.4s cubic-bezier(0.2, 0.7, 0.3, 1) infinite; }
 @keyframes wc-impact {
   0% { transform: scale(0.3); opacity: 0; }
@@ -213,7 +238,7 @@ h2, h3, h4 { font-weight: 600; }
 .wc-glow { animation: wc-glow 2.4s ease-in-out infinite; }
 @keyframes wc-glow { 0%, 100% { box-shadow: 0 0 0 rgb(var(--glow) / 0); } 50% { box-shadow: 0 0 14px rgb(var(--glow) / 0.8); } }
 @media (prefers-reduced-motion: reduce) {
-  .wc-progress, .wc-impact, .wc-cut, .wc-eq, .wc-spin, .wc-word, .wc-pill, .wc-bob, .wc-glow, .wc-shot, .wc-net { animation: none; }
+  .wc-progress, .wc-impact, .wc-cut, .wc-eq, .wc-spin, .wc-word, .wc-pill, .wc-bob, .wc-glow, .wc-shot, .wc-net, .wc-btn, .wc-pop-up, .wc-slides, .wc-dot { animation: none; }
 }
 
 /* Service pages (src/components/vertical-page.tsx): chips floating by the hero clip. */

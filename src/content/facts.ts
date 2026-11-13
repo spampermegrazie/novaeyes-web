@@ -47,8 +47,10 @@ export const nav = [
 export const verticalLinks = [
   { href: "/sports-clipping", label: "Sports" },
   { href: "/combat-sports-clipping", label: "Combat sports" },
+  { href: "/gaming-clipping", label: "Gaming" },
   { href: "/music-clipping", label: "Music" },
   { href: "/podcast-clipping", label: "Podcasts" },
+  { href: "/app-and-startup-clipping", label: "Apps and startups" },
   { href: "/logo-clipping", label: "Logo clipping" },
   { href: "/product-clipping", label: "Product clipping" },
 ] as const;

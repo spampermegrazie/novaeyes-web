@@ -16,6 +16,10 @@ export type Vertical = {
   sendUs: string[]; // what the client provides
   forWho: string[];
   faqs: { q: string; a: string }[];
+  // Optional: the content formats we post for this vertical (shown as tiles).
+  formats?: { title: string; body: string }[];
+  // Optional: related blog posts, linked from the FAQ column.
+  guides?: { href: string; label: string }[];
 };
 
 export const verticals: Vertical[] = [
@@ -88,6 +92,10 @@ export const verticals: Vertical[] = [
         a: "Campaigns start at $3,000 and you pay per verified view. Your cost per 1,000 views depends on your footage, the sport and your goals.",
       },
     ],
+    guides: [
+      { href: "/blog/sports-content-distribution", label: "Sports content goes viral on its own. The problem is nobody is distributing it." },
+      { href: "/blog/world-cup-2026-brands-without-sponsorship", label: "You don't need a $65 million sponsorship to be in the World Cup conversation." },
+    ],
   },
   {
     path: "/combat-sports-clipping",
@@ -151,6 +159,87 @@ export const verticals: Vertical[] = [
         q: "How was the $700,000 revenue figure for BRAVE CF worked out?",
         a: "It is an estimate based on revenue across tracked channels during the campaign period. It is not a directly tracked conversion number.",
       },
+    ],
+  },
+  {
+    path: "/gaming-clipping",
+    name: "Gaming",
+    campaignSlugs: [],
+    title: "Gaming Clipping for Studios, Publishers and Esports",
+    description:
+      "We turn gameplay, trailers and updates into thousands of short clips across TikTok, Reels, Shorts and X, to push wishlists, downloads and players. Pay per verified view.",
+    h1: "Gaming clipping",
+    lead: [
+      "Gaming clipping means turning your gameplay, trailers, updates and esports footage into short clips that thousands of creators post on their own pages. Each clip points people to one place, like your store page, a wishlist or a pre-registration link. You pay only for the views that are verified.",
+      "It works for indie and AA studios, publishers, mobile games and esports teams, at launch and for every update after it.",
+    ],
+    sections: [
+      {
+        heading: "Which game footage works best as short clips?",
+        body: [
+          "Moments that make people want to play: a clutch play, a funny bug, a boss fight, a satisfying build or a big reveal. Gameplay usually beats polished cinematics, because it shows what playing the game actually feels like.",
+          "One trailer can become dozens of clips, and every update, season or event adds new ones.",
+        ],
+      },
+      {
+        heading: "How do clips help a game launch?",
+        body: [
+          "A trailer gets a few days of attention. Clips keep the game in the feed for weeks: before launch to build wishlists or pre-registrations, at launch to drive downloads, and after launch with every patch and season so players come back.",
+        ],
+      },
+      {
+        heading: "What about esports?",
+        body: [
+          "Plays, reactions and rivalries from matches and tournaments make strong clips. We only use footage you own or have the rights to share, and we follow the timing rules your tournament or league sets.",
+        ],
+      },
+    ],
+    steps: [
+      "We go through your footage and pick the moments with the strongest hooks: plays, reveals, reactions and the funny stuff.",
+      "We brief our clippers. They cut each moment for every platform and post it on their own pages, with your store or wishlist link where the platform allows.",
+      "Every week we check what is working and move the budget toward the clips and formats that perform.",
+    ],
+    sendUs: [
+      "Gameplay capture and trailers",
+      "Update, season and roadmap footage",
+      "Stream VODs and creator content you have the rights to",
+      "Your store page, wishlist or pre-registration link",
+    ],
+    forWho: [
+      "Indie and AA studios",
+      "Publishers launching a new title",
+      "Mobile games",
+      "Esports teams, leagues and tournaments",
+      "Gaming creators and streamers",
+    ],
+    formats: [
+      { title: "Gameplay highlights", body: "The plays, fails and moments that show what the game feels like." },
+      { title: "Trailer cuts", body: "One trailer cut into many short clips, each opening on a different hook." },
+      { title: "Update and season drops", body: "New content, patches and events, clipped while players are talking about them." },
+      { title: "Creator and streamer moments", body: "Reactions and highlights from streams and creator videos you have the rights to." },
+      { title: "Esports plays", body: "Big plays and rivalries from matches you own or can share." },
+    ],
+    faqs: [
+      {
+        q: "Do you work with indie games or only big studios?",
+        a: "Both. What matters is footage worth watching, not the size of the studio. A strong indie game with good gameplay can do very well.",
+      },
+      {
+        q: "Can clips push wishlists, pre-registrations or downloads?",
+        a: "That is what most game campaigns aim for. Each clip points to one store page or link, so you can see what the views turn into. We do not guarantee installs: you pay for verified views.",
+      },
+      {
+        q: "Can you clip esports matches?",
+        a: "Yes, if you own the footage or have the rights to share it. We follow the timing and rights rules of your tournament or league.",
+      },
+      {
+        q: "How much does a gaming campaign cost?",
+        a: "Campaigns start at $3,000 and you pay per verified view. Your cost per 1,000 views depends on your footage, your audience and your goals.",
+      },
+    ],
+    guides: [
+      { href: "/blog/game-launch-trailers-distribution", label: "You spent $2 million on a launch trailer. It got 48 hours of attention." },
+      { href: "/blog/gaming-esports-content-distribution", label: "Gaming brands are sponsoring streamers and praying. There is a smarter way to buy reach." },
     ],
   },
   {
@@ -274,6 +363,83 @@ export const verticals: Vertical[] = [
         a: "Campaigns start at $3,000 and you pay per verified view. Family Ties ran at $0.41 per thousand views.",
       },
     ],
+    guides: [
+      { href: "/blog/why-podcasts-are-the-most-undervalued-distribution-asset-in-marketing-right-now", label: "Why podcasts are the most undervalued distribution asset in marketing right now" },
+    ],
+  },
+  {
+    path: "/app-and-startup-clipping",
+    name: "Apps and startups",
+    campaignSlugs: [],
+    title: "App and Startup Clipping: Clips and TikTok Slideshows",
+    description:
+      "Demo clips, founder clips and TikTok slideshows posted by thousands of creators, to drive downloads and sign-ups for apps, SaaS and AI tools. Pay per verified view.",
+    h1: "App and startup clipping",
+    lead: [
+      "App and startup clipping means getting your product in front of millions of people through short clips and TikTok slideshows that thousands of creators post on their own pages. Demos, founder clips, use cases and slideshows all point people to one place: your app store page, a sign-up link or a code. You pay only for the views that are verified.",
+      "It is built for apps, SaaS and AI tools that need reach at launch and after it, without betting the budget on one ad or one influencer.",
+    ],
+    sections: [
+      {
+        heading: "What are TikTok slideshows, and why do apps use them?",
+        body: [
+          "A TikTok slideshow is a post made of photos or screenshots that people swipe through, usually with a line of text on each slide and a sound underneath. For apps they are a fast way to show a before and after, a list of tips that ends with your app, or a short story where your app is the answer.",
+          "Slideshows take minutes to make, so the network can post many versions, test different hooks and keep the ones that work.",
+        ],
+      },
+      {
+        heading: "How do views turn into downloads and sign-ups?",
+        body: [
+          "Every clip and slideshow points to one place: your app store page, a sign-up link or a landing page with a code. Clippers put it where each platform allows, and we track which formats and hooks bring people through, so the budget moves to what converts.",
+        ],
+      },
+    ],
+    steps: [
+      "You show us the product, who it is for and the moment it clicks. We turn that into a brief with the formats to test, including slideshows.",
+      "Our clippers make clips and slideshows from your screen recordings, product shots and founder content, and post them on their own pages.",
+      "Every week we check which formats and hooks bring people through and move the budget toward them.",
+    ],
+    sendUs: [
+      "Access to the app, or a demo build",
+      "Screen recordings, screenshots and brand assets",
+      "Founder interviews, podcasts or launch videos, if you have them",
+      "The link or code you want people to use",
+    ],
+    forWho: [
+      "Consumer and mobile apps",
+      "AI tools",
+      "SaaS and productivity tools",
+      "Startups launching a product or a big update",
+      "Founders building in public",
+    ],
+    formats: [
+      {
+        title: "TikTok slideshows",
+        body: "Swipeable photo and screenshot posts with a line of text on each slide: a before and after, a list that ends with your app, or a short story. Cheap to make in volume and easy to test.",
+      },
+      { title: "Demo clips", body: "Screen recordings cut to the moment the app does something people want." },
+      { title: "Founder clips", body: "Short cuts from interviews, podcasts and launch videos where the founder explains the why." },
+      { title: "Use-case clips", body: "Creators showing a real problem and the app solving it, in their own style." },
+      { title: "Launch moments", body: "Launch days, big updates and milestones, clipped while the news is fresh." },
+    ],
+    faqs: [
+      {
+        q: "Do you make TikTok slideshows?",
+        a: "Yes. Slideshows are one of the formats in app and startup campaigns, next to demo clips, founder clips and use-case clips. They are paid per verified view, the same way as video clips.",
+      },
+      {
+        q: "Do I need existing video content?",
+        a: "No. Screen recordings, screenshots and a clear brief are enough to start. Founder interviews and launch videos help if you have them.",
+      },
+      {
+        q: "Can you guarantee downloads or sign-ups?",
+        a: "No. You pay for verified views. We point every clip and slideshow at one link or code, so you can see exactly what the views turn into.",
+      },
+      {
+        q: "How much does an app campaign cost?",
+        a: "Campaigns start at $3,000 and you pay per verified view. Your cost per 1,000 views depends on the formats, your niche and your goals.",
+      },
+    ],
   },
   {
     path: "/logo-clipping",
@@ -331,6 +497,9 @@ export const verticals: Vertical[] = [
         q: "How do I measure results?",
         a: "Views are tracked per clip in your campaign dashboard. Promo code use and visits from your link show you what those views turned into.",
       },
+    ],
+    guides: [
+      { href: "/blog/billboards-vs-performance-clipping", label: "You are paying billboard prices for views nobody can prove happened" },
     ],
   },
   {
@@ -396,6 +565,9 @@ export const verticals: Vertical[] = [
         q: "How much does product clipping cost?",
         a: "Campaigns start at $3,000 and you pay per verified view. Across our past campaigns, CPMs ranged from $0.13 to $0.41 per thousand views.",
       },
+    ],
+    guides: [
+      { href: "/blog/supplement-brands-influencer-marketing-alternative", label: "Supplement brands are the biggest losers in the influencer economy. Here is the alternative." },
     ],
   },
 ];

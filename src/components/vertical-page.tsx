@@ -232,6 +232,42 @@ export function VerticalPage({ vertical }: { vertical: Vertical }) {
           </ul>
         </section>
 
+        {/* what we post: the content formats for this vertical */}
+        {vertical.formats && vertical.formats.length > 0 && (
+          <section id="formats" className="mx-auto max-w-6xl px-6 pb-24 sm:px-10 lg:px-12">
+            <Eyebrow>Formats</Eyebrow>
+            <h2 className="mt-4 max-w-3xl text-3xl tracking-tight text-balance sm:text-4xl">
+              What we post. <span className="text-muted">Formats that work for {vertical.name.toLowerCase()}.</span>
+            </h2>
+            <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {vertical.formats.map((f, i) =>
+                i === 0 ? (
+                  <li
+                    key={f.title}
+                    className="relative flex items-center gap-8 overflow-hidden rounded-2xl border border-accent/45 bg-accent/[0.05] p-6 shadow-[0_0_40px_rgb(var(--glow)/0.08)] sm:col-span-2 sm:p-8"
+                  >
+                    <div className="min-w-0 flex-1">
+                      <p className="font-label text-[10px] tracking-[0.14em] text-accent">01</p>
+                      <h3 className="mt-3 text-2xl tracking-tight">{f.title}</h3>
+                      <p className="mt-2 max-w-md leading-relaxed text-muted">{f.body}</p>
+                    </div>
+                    <div className="relative hidden shrink-0 sm:block" aria-hidden>
+                      <div className="pointer-events-none absolute -inset-10 bg-[radial-gradient(closest-side,rgb(var(--glow)/0.22),transparent)]" />
+                      <ClipPhone path={vertical.path} delay={-1.1} />
+                    </div>
+                  </li>
+                ) : (
+                  <li key={f.title} className="rounded-2xl border border-line bg-bg-raised/40 p-6">
+                    <p className="font-label text-[10px] tracking-[0.14em] text-accent">{String(i + 1).padStart(2, "0")}</p>
+                    <h3 className="mt-3 text-lg tracking-tight">{f.title}</h3>
+                    <p className="mt-2 leading-relaxed text-muted">{f.body}</p>
+                  </li>
+                ),
+              )}
+            </ul>
+          </section>
+        )}
+
         {/* how a campaign runs */}
         <section className="mx-auto max-w-6xl px-6 pb-24 sm:px-10 lg:px-12">
           <Eyebrow>How it runs</Eyebrow>
@@ -289,6 +325,26 @@ export function VerticalPage({ vertical }: { vertical: Vertical }) {
               <Link href="/faq" className="mt-6 inline-block font-display text-sm font-semibold text-accent transition-colors hover:text-fg">
                 All questions →
               </Link>
+              {vertical.guides && vertical.guides.length > 0 && (
+                <div className="mt-10">
+                  <Eyebrow>Read next</Eyebrow>
+                  <ul className="mt-3 space-y-2">
+                    {vertical.guides.map((g) => (
+                      <li key={g.href}>
+                        <Link
+                          href={g.href}
+                          className="group block rounded-xl border border-line bg-bg-raised/40 p-4 text-sm leading-snug transition-colors hover:border-accent/50"
+                        >
+                          {g.label}
+                          <span className="ml-1 text-muted transition-colors group-hover:text-accent" aria-hidden>
+                            →
+                          </span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
             <dl className="space-y-3">
               {faqs.map((f, i) => (
