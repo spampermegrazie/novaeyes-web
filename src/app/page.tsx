@@ -14,7 +14,7 @@ import { FounderPortrait } from "@/components/founder-portrait";
 import { CountUp } from "@/components/ui/count-up";
 import { EngineSteps, type EngineStep } from "@/components/ui/engine-steps";
 import { ShinyButton } from "@/components/ui/shiny-button";
-import { ClippingExplainer } from "@/components/clipping-explainer";
+import { WhatIsNovaEyes } from "@/components/what-is-novaeyes";
 import { FitCheck } from "@/components/fit-check";
 
 // Every word on this page is in the server HTML. The hero animates its text in,
@@ -90,7 +90,7 @@ export default function Home() {
         </dl>
       </section>
 
-      <ClippingExplainer />
+      <WhatIsNovaEyes />
 
       {/* Stage 2: the engine. Title, steps and diagram pin together as one unit. */}
       <section id="how-it-works">
