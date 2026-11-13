@@ -168,6 +168,18 @@ h2, h3, h4 { font-weight: 600; }
 /* Who we clip for (src/components/who-we-clip-for.tsx): a small clip per vertical. */
 .wc-progress { transform-origin: left; animation: wc-progress 7s linear infinite; }
 @keyframes wc-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.wc-shot { transform-box: fill-box; animation: wc-shot 4s cubic-bezier(0.3, 0.6, 0.3, 1) infinite; }
+@keyframes wc-shot {
+  0% { transform: translate(0, 0); opacity: 1; }
+  40%, 50% { transform: translate(4px, -76px); opacity: 1; }
+  62%, 100% { transform: translate(4px, -76px); opacity: 0; }
+}
+.wc-net { stroke: rgb(255 255 255 / 0.4); animation: wc-net 4s ease-out infinite; }
+@keyframes wc-net {
+  0%, 38% { stroke: rgb(255 255 255 / 0.4); filter: none; }
+  42%, 60% { stroke: var(--accent); filter: drop-shadow(0 0 4px rgb(var(--glow))); }
+  75%, 100% { stroke: rgb(255 255 255 / 0.4); filter: none; }
+}
 .wc-impact { transform-box: fill-box; transform-origin: center; animation: wc-impact 2.4s cubic-bezier(0.2, 0.7, 0.3, 1) infinite; }
 @keyframes wc-impact {
   0% { transform: scale(0.3); opacity: 0; }
@@ -201,7 +213,7 @@ h2, h3, h4 { font-weight: 600; }
 .wc-glow { animation: wc-glow 2.4s ease-in-out infinite; }
 @keyframes wc-glow { 0%, 100% { box-shadow: 0 0 0 rgb(var(--glow) / 0); } 50% { box-shadow: 0 0 14px rgb(var(--glow) / 0.8); } }
 @media (prefers-reduced-motion: reduce) {
-  .wc-progress, .wc-impact, .wc-cut, .wc-eq, .wc-spin, .wc-word, .wc-pill, .wc-bob, .wc-glow { animation: none; }
+  .wc-progress, .wc-impact, .wc-cut, .wc-eq, .wc-spin, .wc-word, .wc-pill, .wc-bob, .wc-glow, .wc-shot, .wc-net { animation: none; }
 }
 
 /* Service pages (src/components/vertical-page.tsx): chips floating by the hero clip. */

@@ -17,6 +17,7 @@
 
 - [Music clipping](https://nova-eyes.com/music-clipping): songs pushed through thousands of clips to drive streams
 - [Podcast clipping](https://nova-eyes.com/podcast-clipping): episodes cut into clips that bring new listeners
+- [Sports clipping](https://nova-eyes.com/sports-clipping): match footage, highlights and behind the scenes from any sport, cut into short clips
 - [Combat sports clipping](https://nova-eyes.com/combat-sports-clipping): fight footage turned into highlight clips
 - [Logo clipping](https://nova-eyes.com/logo-clipping): a brand's logo, promo code and link on clips that already perform
 - [Product clipping](https://nova-eyes.com/product-clipping): creators showing a product in new short clips

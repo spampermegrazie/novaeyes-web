@@ -45,6 +45,7 @@ export const nav = [
 ] as const;
 
 export const verticalLinks = [
+  { href: "/sports-clipping", label: "Sports" },
   { href: "/combat-sports-clipping", label: "Combat sports" },
   { href: "/music-clipping", label: "Music" },
   { href: "/podcast-clipping", label: "Podcasts" },

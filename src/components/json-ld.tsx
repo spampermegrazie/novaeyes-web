@@ -44,6 +44,7 @@ export const organizationJsonLd = {
         "Short-form video distribution",
         "Music promotion",
         "Podcast growth",
+        "Sports marketing",
         "Combat sports marketing",
         "Logo clipping",
       ],

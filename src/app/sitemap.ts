@@ -5,7 +5,7 @@ import { verticals } from "@/content/verticals";
 import { getPosts } from "@/lib/blog";
 
 // Update a page's date here when its content changes, so lastmod stays honest.
-const UPDATED = "2026-11-11";
+const UPDATED = "2026-11-13";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const url = (path: string) => `${facts.url}${path}`;

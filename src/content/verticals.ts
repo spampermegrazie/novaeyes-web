@@ -20,6 +20,76 @@ export type Vertical = {
 
 export const verticals: Vertical[] = [
   {
+    path: "/sports-clipping",
+    name: "Sports",
+    campaignSlugs: ["brave-cf", "oktagon-mma"],
+    title: "Sports Clipping for Clubs, Leagues, Events and Athletes",
+    description:
+      "We turn sports footage into thousands of short clips across TikTok, Reels, Shorts and X, for any sport. You pay only for verified views.",
+    h1: "Sports clipping",
+    lead: [
+      "Sports clipping means turning your match footage, highlights and behind-the-scenes video into short clips that thousands of creators post on their own pages. It works for any sport: football, basketball, tennis, motorsport, combat sports and more. You pay only for the views that are verified.",
+      "Our published sports results so far come from combat sports. BRAVE CF reached 52.1 million views at $0.21 per thousand views, and Oktagon MMA reached 20.8 million views in 19 days.",
+    ],
+    sections: [
+      {
+        heading: "Which sports work as short clips?",
+        body: [
+          "Any sport with moments people want to see again: goals, dunks, aces, overtakes, saves and finishes. The big plays are only part of it. Reactions, press conferences, warm-ups, locker room footage and fan moments often travel just as far.",
+          "Each sport has its own audience on each platform, so the same moment gets cut differently for TikTok, Reels, Shorts and X.",
+        ],
+      },
+      {
+        heading: "What about broadcast rights?",
+        body: [
+          "We only clip footage you own or have the rights to share. If a broadcaster or league holds the match footage, we work with what you control, such as your own cameras, training, interviews and behind the scenes, and we follow any timing rules you have, like waiting a set number of days after a match.",
+        ],
+      },
+      {
+        heading: "When should a sports campaign run?",
+        body: [
+          "Around the moments fans already care about: the build-up to a big match or event, the start of a season, tournaments, signings and finals. Clips posted in those windows ride interest that is already there, which is when they do the most for tickets, streams and merch.",
+        ],
+      },
+    ],
+    steps: [
+      "We go through your footage and pick the moments with the strongest hooks: the big plays, the reactions and the stories around them.",
+      "We brief our clippers. They cut each moment for every platform and post it on their own pages.",
+      "Every week we check what is working and move the budget toward the clips and formats that perform.",
+    ],
+    sendUs: [
+      "Match and event footage you own",
+      "Highlights and recap videos",
+      "Interviews, press conferences and media days",
+      "Training, behind-the-scenes and fan footage",
+    ],
+    forWho: [
+      "Clubs and teams",
+      "Leagues, federations and tournaments",
+      "Sports events, from marathons to motorsport",
+      "Athletes building their own brand",
+      "Sports media channels and podcasts",
+    ],
+    faqs: [
+      {
+        q: "Which sports do you clip?",
+        a: "Any sport where you own or can share the footage, including football, basketball, tennis, motorsport, combat sports and esports. What matters is the footage, not the sport.",
+      },
+      {
+        q: "Do you have results outside combat sports?",
+        a: "Our published sports case studies are in combat sports so far: BRAVE CF and Oktagon MMA. Other sports run through the same network, the same review and the same pay per verified view.",
+      },
+      {
+        q: "Can you clip footage our broadcaster or league owns?",
+        a: "Only with permission. We use footage you own or have the rights to share, and we follow the timing rules your broadcaster or league sets.",
+      },
+      {
+        q: "How much does a sports campaign cost?",
+        a: "Campaigns start at $3,000 and you pay per verified view. Your cost per 1,000 views depends on your footage, the sport and your goals.",
+      },
+    ],
+  },
+  {
     path: "/combat-sports-clipping",
     name: "Combat sports",
     campaignSlugs: ["brave-cf", "oktagon-mma"],
