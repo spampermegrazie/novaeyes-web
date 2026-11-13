@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { facts } from "@/content/facts";
 import { Cta } from "@/components/cta";
+import { StudioTour } from "@/components/studio-tour";
 import { JsonLd, faqJsonLd, breadcrumbJsonLd } from "@/components/json-ld";
 
 // Ported from the live page (Lovable repo, src/pages/AttentionMonopolySystem.tsx) and rewritten in plain words.
@@ -113,6 +114,15 @@ export default function AttentionMonopolySystem() {
             attention every week, not one lucky viral post.
           </p>
         </header>
+
+        {/* The studio: the whole operation in one picture, with a stop at every station. */}
+        <section id="the-team" className="mx-auto max-w-6xl scroll-mt-24 px-6 py-10 sm:px-10 lg:px-12">
+          <p className="font-label text-[10px] tracking-[0.14em] text-muted uppercase">The team</p>
+          <h2 className="mt-4 mb-10 max-w-3xl text-3xl tracking-tight text-balance sm:text-4xl">
+            See your new distribution team at work. <span className="text-muted">Eight stations, one loop.</span>
+          </h2>
+          <StudioTour />
+        </section>
 
         <div className="mx-auto max-w-3xl px-4 sm:px-6">
           <section className="py-10">

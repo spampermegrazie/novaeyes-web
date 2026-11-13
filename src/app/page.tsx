@@ -9,7 +9,6 @@ import { Cta } from "@/components/cta";
 import { JsonLd, faqJsonLd } from "@/components/json-ld";
 import { ClipCurtainHero } from "@/components/ui/clip-curtain-hero";
 import { ResultsShowcase } from "@/components/ui/results-showcase";
-import { StudioTour } from "@/components/studio-tour";
 import { FounderPortrait } from "@/components/founder-portrait";
 import { StatsBand } from "@/components/stats-band";
 import { EngineSteps, type EngineStep } from "@/components/ui/engine-steps";
@@ -35,14 +34,6 @@ const steps: [EngineStep, EngineStep, EngineStep] = [
   },
 ];
 
-const verticalBlurbs: Record<string, string> = {
-  "/combat-sports-clipping": "Fight footage cut into thousands of highlight clips.",
-  "/music-clipping": "Your song in thousands of clips, so people go and stream it.",
-  "/podcast-clipping": "Episodes turned into clips that bring new listeners to the show.",
-  "/logo-clipping": "Your logo and promo code on clips that already perform.",
-  "/product-clipping": "Creators showing your product in new short clips.",
-};
-
 export const metadata: Metadata = {
   title: { absolute: "NovaEyes: Clipping Agency Paid Per Verified View" },
   description: `NovaEyes is a clipping agency with ${facts.clippersLabel} clippers posting your content on TikTok, Reels, Shorts and X. You pay only for verified views. From ${facts.minimumBudgetLabel}.`,
@@ -57,10 +48,16 @@ export default function Home() {
 
       {/* Stage 1: ignition. The clips part like a curtain as you scroll. */}
       <ClipCurtainHero clips={heroClips}>
-        <p className="font-label text-[10px] tracking-[0.14em] text-muted uppercase sm:text-xs sm:tracking-[0.18em]">{facts.tagline}</p>
-        <h1 className="mx-auto mt-6 text-5xl leading-[1.02] font-bold tracking-tight text-balance sm:text-6xl lg:text-[64px]">
-          Short-form reach, <br className="hidden md:block" />
-          paid per verified view.
+        {/* The label sits inside the H1 so the main heading names the category for search. */}
+        <h1>
+          <span className="block font-label text-[10px] leading-normal font-normal tracking-[0.14em] text-muted uppercase sm:text-xs sm:tracking-[0.18em]">
+            {facts.tagline}
+          </span>
+          <span className="sr-only">: </span>
+          <span className="mx-auto mt-6 block text-5xl leading-[1.02] font-bold tracking-tight text-balance sm:text-6xl lg:text-[64px]">
+            Short-form reach, <br className="hidden md:block" />
+            paid per verified view.
+          </span>
         </h1>
         <p className="mx-auto mt-6 max-w-md text-base leading-relaxed text-muted sm:text-lg">
           {facts.clippersLabel} clippers post your content across TikTok, Reels, Shorts and X. You pay only for the views
@@ -95,6 +92,12 @@ export default function Home() {
               </div>
             }
           />
+          <Link
+            href="/attention-monopoly-system#the-team"
+            className="mt-10 inline-block font-display text-sm font-semibold text-accent transition-colors hover:text-fg lg:mt-6"
+          >
+            See the whole operation, station by station →
+          </Link>
         </div>
       </section>
 
@@ -116,25 +119,20 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Stage 4: the studio. The whole operation in one picture, with a stop at every station. */}
-      <section id="the-team">
-        <div className="mx-auto max-w-6xl px-6 pb-24 sm:px-10 lg:px-12">
-          <p className="font-label text-[10px] tracking-[0.14em] text-muted uppercase">The team</p>
-          <h2 className="mt-4 mb-10 max-w-3xl text-3xl tracking-tight text-balance sm:text-4xl">
-            See your new distribution team at work. <span className="text-muted">Eight stations, one loop.</span>
-          </h2>
-          <StudioTour />
-        </div>
-      </section>
-
       <section id="who-we-clip-for" className="mx-auto max-w-6xl px-6 pb-24 sm:px-10 lg:px-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Who we clip for</h2>
-        <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <p className="font-label text-[10px] tracking-[0.14em] text-muted uppercase">Who we clip for</p>
+        <h2 className="mt-4 max-w-3xl text-3xl tracking-tight text-balance sm:text-4xl">
+          Five kinds of content. <span className="text-muted">Pick yours.</span>
+        </h2>
+        <ul className="mt-8 flex flex-wrap gap-2.5">
           {verticals.map((v) => (
             <li key={v.path}>
-              <Link href={v.path} className="block h-full rounded-2xl border border-line p-6 transition-colors hover:border-muted/40">
-                <p className="font-display font-semibold">{v.h1}</p>
-                <p className="mt-2 text-sm leading-relaxed text-muted">{verticalBlurbs[v.path]}</p>
+              <Link
+                href={v.path}
+                className="group inline-flex items-center gap-2.5 rounded-xl border border-line bg-bg-raised/40 px-4 py-3 font-display text-sm font-semibold transition-colors hover:border-accent/50 hover:bg-accent/[0.06]"
+              >
+                {v.h1}
+                <span className="text-muted transition-[color,translate] group-hover:translate-x-0.5 group-hover:text-accent">→</span>
               </Link>
             </li>
           ))}
@@ -164,20 +162,30 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Stage 4: control panel */}
-      <section id="faq" className="mx-auto max-w-6xl px-6 py-24 sm:px-10 lg:px-12 *:max-w-3xl">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Questions buyers ask</h2>
-        <dl className="mt-10 divide-y divide-line border-y border-line">
-          {homeFaqs.map((f) => (
-            <div key={f.q} className="py-6">
-              <dt className="font-display font-semibold">{f.q}</dt>
-              <dd className="mt-2 leading-relaxed text-muted">{f.a}</dd>
-            </div>
-          ))}
-        </dl>
-        <Link href="/faq" className="mt-6 inline-block text-sm text-accent">
-          All questions
-        </Link>
+      {/* Stage 4: control panel. Three short answers, the rest live on /faq. */}
+      <section id="faq" className="mx-auto max-w-6xl px-6 py-24 sm:px-10 lg:px-12">
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,4fr)_minmax(0,7fr)] lg:gap-16">
+          <div>
+            <p className="font-label text-[10px] tracking-[0.14em] text-muted uppercase">FAQ</p>
+            <h2 className="mt-4 text-3xl tracking-tight text-balance sm:text-4xl">
+              Questions buyers ask. <span className="text-muted">Short answers.</span>
+            </h2>
+            <Link href="/faq" className="mt-6 inline-block font-display text-sm font-semibold text-accent transition-colors hover:text-fg">
+              All questions →
+            </Link>
+          </div>
+          <dl className="space-y-3">
+            {homeFaqs.map((f, i) => (
+              <div key={f.q} className="rounded-2xl border border-line bg-bg-raised/40 p-5 sm:p-6">
+                <dt className="flex gap-4 font-display font-semibold">
+                  <span className="font-label text-[10px] leading-6 tracking-[0.14em] text-accent">{String(i + 1).padStart(2, "0")}</span>
+                  {f.q}
+                </dt>
+                <dd className="mt-2 leading-relaxed text-muted sm:pl-9">{f.a}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
       </section>
 
       {/* Stage 5: launch */}

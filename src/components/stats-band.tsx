@@ -152,6 +152,7 @@ export function StatsBand() {
           })}
         </dl>
       </div>
+      <p className="mt-3 text-right font-label text-[9px] tracking-[0.14em] text-muted/70 uppercase">Network totals, {facts.statsAsOf}</p>
     </section>
   );
 }

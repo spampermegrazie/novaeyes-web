@@ -50,7 +50,7 @@ export function EngineSteps({ steps, intro }: { steps: [EngineStep, EngineStep, 
   const fills = [fill0, fill1];
 
   return (
-    <div ref={trackRef} className="lg:h-[260vh]">
+    <div ref={trackRef} className="lg:h-[220vh]">
       <div className="lg:sticky lg:top-16 lg:flex lg:h-[calc(100vh-4rem)] lg:flex-col lg:justify-center">
         <div className="mb-14">{intro}</div>
 

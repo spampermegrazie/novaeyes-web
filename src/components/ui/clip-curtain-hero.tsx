@@ -20,7 +20,7 @@ import {
 } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import type { HeroClip } from "@/content/hero-clips";
-import { LogoMark, Wordmark } from "@/components/brand";
+import { LogoMark, WordmarkSymbol, WordmarkUse } from "@/components/brand";
 
 const SPRING = { stiffness: 65, damping: 22, mass: 0.5 };
 const OPEN_AT = 0.55; // share of the scene's scroll distance it takes to fully open
@@ -149,7 +149,7 @@ function ClipPlaceholder({ clip, index }: { clip: HeroClip; index: number }) {
         <LogoMark className="w-1/2" />
       </span>
       <span className="absolute right-2 bottom-4 text-white/45 select-none">
-        <Wordmark className="h-[5px] w-auto" />
+        <WordmarkUse id="ne-hero-word" className="h-[5px] w-auto" />
       </span>
       <div className="absolute inset-x-2 bottom-2 h-0.5 overflow-hidden rounded-full bg-white/15">
         <div
@@ -262,6 +262,7 @@ export function ClipCurtainHero({ clips, children }: { clips: HeroClip[]; childr
         <div className="pointer-events-none absolute top-1/2 left-1/2 h-[520px] w-[520px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[rgb(var(--glow)/0.10)] blur-3xl" />
 
         <motion.div className="absolute inset-0" style={{ zIndex: cardsZ }} aria-hidden>
+          <WordmarkSymbol id="ne-hero-word" />
           {clips.map((clip, i) => (
             <ClipCard
               key={i}

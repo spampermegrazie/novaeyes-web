@@ -24,7 +24,8 @@ export const facts = {
   minimumBudgetUsd: 3_000,
   minimumBudgetLabel: "$3,000",
   launchTime: "Most campaigns are live within 48 hours of brief approval.",
-  // Headline stats as published on the live site.
+  // Headline stats as published on the live site. Update statsAsOf whenever the numbers change.
+  statsAsOf: "November 2026",
   stats: [
     { value: "20,000+", label: "Active clippers" },
     { value: "600M+", label: "Views delivered" },

@@ -29,6 +29,26 @@ export function Wordmark({ className, title }: Props) {
   );
 }
 
+// For repeated wordmarks (the hero placeholder cards): render WordmarkSymbol once, then
+// WordmarkUse points at it, so the long path is in the HTML once instead of once per card.
+export function WordmarkSymbol({ id }: { id: string }) {
+  return (
+    <svg width="0" height="0" className="absolute" aria-hidden>
+      <symbol id={id} viewBox={WORD_VIEWBOX}>
+        <path fillRule="evenodd" d={WORD_PATH} />
+      </symbol>
+    </svg>
+  );
+}
+
+export function WordmarkUse({ id, className }: { id: string; className?: string }) {
+  return (
+    <svg viewBox={WORD_VIEWBOX} className={className} aria-hidden fill="currentColor">
+      <use href={`#${id}`} />
+    </svg>
+  );
+}
+
 // Horizontal lockup for the header and footer: the mark, then the wordmark.
 export function Logo({ className = "" }: { className?: string }) {
   return (
