@@ -47,13 +47,14 @@ function Views() {
   );
 }
 
+// Blues only, from deep navy to the brand blue.
 const CARD_TONES = [
-  "from-[#2a2d3a] to-[#12131a]",
-  "from-[#1d2a44] to-[#10131c]",
-  "from-[#2b2433] to-[#121118]",
-  "from-[#1f2b2e] to-[#0f1416]",
-  "from-[#2d2a22] to-[#14130f]",
-  "from-[#232a3f] to-[#11131b]",
+  "from-[#1e3a8a] to-[#0b1230]",
+  "from-[#2563eb]/55 to-[#0c1633]",
+  "from-[#172554] to-[#0a0f24]",
+  "from-[#1d4ed8]/70 to-[#0d1530]",
+  "from-[#1e40af] to-[#0b1128]",
+  "from-[#3b82f6]/45 to-[#0a0f24]",
 ];
 
 function Clips() {
@@ -65,13 +66,13 @@ function Clips() {
         <span
           key={`${copy}-${i}`}
           className={`relative mr-2 h-14 w-8 shrink-0 overflow-hidden rounded-md border bg-gradient-to-b ${CARD_TONES[i % CARD_TONES.length]} ${
-            hot ? "border-accent/60 shadow-[0_0_14px_rgb(var(--glow)/0.35)]" : "border-white/10"
+            hot ? "border-accent/70 shadow-[0_0_14px_rgb(var(--glow)/0.4)]" : "border-[#3b82f6]/20"
           }`}
         >
-          <span className="absolute inset-x-1.5 bottom-1.5 h-0.5 rounded-full bg-white/15">
-            <span className={`block h-full rounded-full ${hot ? "bg-accent" : "bg-white/40"}`} style={{ width: `${30 + Math.round(rand(i + 40) * 60)}%` }} />
+          <span className="absolute inset-x-1.5 bottom-1.5 h-0.5 rounded-full bg-[#3b82f6]/20">
+            <span className={`block h-full rounded-full ${hot ? "bg-accent" : "bg-[#9cc3ff]/50"}`} style={{ width: `${30 + Math.round(rand(i + 40) * 60)}%` }} />
           </span>
-          <span className="absolute top-1.5 right-1.5 h-1 w-1 rounded-full bg-white/30" />
+          <span className="absolute top-1.5 right-1.5 h-1 w-1 rounded-full bg-[#9cc3ff]/45" />
         </span>
       );
     });
