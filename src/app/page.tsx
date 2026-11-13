@@ -143,15 +143,6 @@ export default function Home() {
 
       <FitCheck />
 
-      <section id="clipping-vs-influencers" className="mx-auto max-w-6xl px-6 pb-24 sm:px-10 lg:px-12 *:max-w-3xl">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">How is clipping different from influencer marketing?</h2>
-        <p className="mt-6 text-lg leading-relaxed text-muted">
-          An influencer deal pays a fixed fee for one post from one creator, whether it works or not. A clipping campaign
-          puts hundreds of creators on your content at once, and each one only earns when their clip gets real views. Your
-          cost follows the results instead of a promise.
-        </p>
-      </section>
-
       <section id="founder">
         <div className="mx-auto grid max-w-6xl items-center gap-10 px-6 py-24 sm:px-10 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:gap-16 lg:px-12">
           <div className="order-2 lg:order-1">

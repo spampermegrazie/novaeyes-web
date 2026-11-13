@@ -2,9 +2,10 @@ import { facts } from "@/content/facts";
 import { MARK_PATH, MARK_VIEWBOX } from "./brand";
 import { siInstagram, siTiktok, siX, siYoutubeshorts } from "simple-icons";
 
-// Homepage: what NovaEyes is. The opening paragraph still defines a clipping agency in plain
-// text (for search and AI answers), then a bento of what you actually get, each tile with a small
-// live picture. Motion lives in globals.css (wn-*) and stops with reduced motion.
+// Homepage: what NovaEyes is. The opening paragraph defines a clipping agency in plain text (for
+// search and AI answers), then two tiles on how it differs from the alternatives: one account, and
+// an influencer deal. How a campaign runs (review, budget, dashboard) lives only in the engine
+// section below. Motion lives in globals.css (wn-*) and stops with reduced motion.
 
 const PLATFORMS = [siTiktok, siInstagram, siYoutubeshorts, siX];
 const CLIPPER_Y = [22, 51, 80, 110, 139, 168];
@@ -44,17 +45,15 @@ export function WhatIsNovaEyes() {
       </h2>
       <p className="mt-6 max-w-3xl text-lg leading-relaxed text-muted">
         NovaEyes is a clipping agency. We take your long videos, cut the best moments into short clips and get them posted by
-        our network of {facts.clippersLabel} clippers on their own TikTok, Instagram, YouTube and X pages. Instead of growing one
-        account, your content shows up on hundreds of accounts at the same time, and you pay only for the views that are
-        verified.
+        our network of {facts.clippersLabel} clippers on their own TikTok, Instagram, YouTube and X pages.
       </p>
 
       <ul className="mt-12 grid gap-4 md:grid-cols-3">
         {/* one brief, the whole network */}
         <Tile
           n="01"
-          title={`${facts.clippersLabel} clippers on your content`}
-          body="One brief goes out to the network. Clippers cut your best moments and post them on their own pages, on every platform at once."
+          title="Not one account. Hundreds of pages."
+          body="Instead of growing one account, your clips go out on hundreds of clipper pages at once, each with its own audience, across TikTok, Reels, Shorts and X."
           className="md:col-span-2"
         >
           <svg viewBox="0 0 520 190" className="h-auto w-full max-w-xl overflow-visible" aria-hidden>
@@ -103,7 +102,11 @@ export function WhatIsNovaEyes() {
         </Tile>
 
         {/* the ledger: only verified views on approved clips get paid */}
-        <Tile n="02" title="Paid per verified view" body="Clippers only earn on verified views from approved clips. No retainers, no paying for clips that flop.">
+        <Tile
+          n="02"
+          title="Not an influencer deal. You pay per verified view."
+          body="An influencer deal pays a fixed fee for one post, whether it works or not. Here each clipper only earns when their clip gets verified views, so your cost follows the results, not a promise."
+        >
           <ul className="w-full max-w-60 space-y-2 font-[family-name:var(--font-geist-mono)] text-[11px]">
             {[
               { id: "clip 0841", state: "approved", paid: true },
@@ -116,65 +119,6 @@ export function WhatIsNovaEyes() {
               </li>
             ))}
           </ul>
-        </Tile>
-
-        {/* review gate */}
-        <Tile n="03" title="Every clip reviewed" body="Clips are checked against your brief and brand rules before they can earn a single view.">
-          <div className="relative h-24 w-full max-w-64">
-            <div className="absolute inset-x-0 top-1/2 h-px bg-line" />
-            <div className="absolute top-1/2 left-1/2 h-20 w-12 -translate-x-1/2 -translate-y-1/2 rounded-t-full border-x border-t border-accent/60 shadow-[0_0_24px_rgb(var(--glow)/0.25)]" />
-            <span className="wn-gate absolute top-1/2 left-1/2 flex h-6 w-6 -translate-x-1/2 -translate-y-[58px] items-center justify-center rounded-full bg-accent text-accent-ink shadow-[0_0_14px_rgb(var(--glow)/0.8)]">
-              <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="m3.5 8.5 3 3 6-7" />
-              </svg>
-            </span>
-            <span className="wn-clip absolute top-1/2 h-12 w-7 -translate-y-1/2 rounded-md border border-white/15 bg-[linear-gradient(160deg,#2a2d3a,#12131a)]" />
-          </div>
-        </Tile>
-
-        {/* budget follows the winners */}
-        <Tile n="04" title="Budget follows the winners" body="Every day, spend moves to the clips and formats that perform, so more of it goes where the views are.">
-          <div className="flex h-24 w-full max-w-56 items-end justify-between gap-2">
-            {[0, 1, 2, 3, 4, 5].map((i) => (
-              <span
-                key={i}
-                className="wn-bar h-full flex-1 origin-bottom rounded-t-md bg-gradient-to-t from-accent/25 to-accent"
-                style={{ animationDelay: `${-i * 1.1}s` }}
-              />
-            ))}
-          </div>
-        </Tile>
-
-        {/* live dashboard */}
-        <Tile n="05" title="A live dashboard" body="Views for every clip as they come in, plus a weekly report and a final report when the campaign ends.">
-          <div className="relative w-full max-w-64">
-            <span className="absolute -top-1 right-0 flex items-center gap-1.5 font-label text-[8px] tracking-[0.14em] text-muted uppercase">
-              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent shadow-[0_0_8px_rgb(var(--glow))]" />
-              Live
-            </span>
-            <svg viewBox="0 0 240 90" className="mt-4 h-auto w-full overflow-visible">
-              <defs>
-                <linearGradient id="wn-area" x1="0" x2="0" y1="0" y2="1">
-                  <stop offset="0" stopColor="rgb(59 130 246 / 0.35)" />
-                  <stop offset="1" stopColor="rgb(59 130 246 / 0)" />
-                </linearGradient>
-              </defs>
-              {[22, 45, 68].map((y) => (
-                <line key={y} x1="0" x2="240" y1={y} y2={y} stroke="var(--line)" strokeDasharray="2 4" />
-              ))}
-              <path d="M0,82 L24,76 L48,79 L72,66 L96,68 L120,52 L144,55 L168,38 L192,30 L216,22 L240,10 L240,90 L0,90 Z" fill="url(#wn-area)" />
-              <path
-                d="M0,82 L24,76 L48,79 L72,66 L96,68 L120,52 L144,55 L168,38 L192,30 L216,22 L240,10"
-                fill="none"
-                stroke="var(--accent)"
-                strokeWidth="2"
-                strokeLinejoin="round"
-                pathLength={1}
-                className="wn-spark"
-              />
-              <circle cx="240" cy="10" r="3.5" fill="var(--accent)" className="wn-motion" style={{ filter: "drop-shadow(0 0 6px rgb(59 130 246))" }} />
-            </svg>
-          </div>
         </Tile>
       </ul>
     </section>

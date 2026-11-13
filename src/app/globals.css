@@ -129,31 +129,6 @@ h2, h3, h4 { font-weight: 600; }
 }
 
 /* What is NovaEyes bento (src/components/what-is-novaeyes.tsx). */
-.wn-clip { animation: wn-clip 3.6s cubic-bezier(0.45, 0, 0.25, 1) infinite; }
-@keyframes wn-clip {
-  0% { left: 0%; opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { left: calc(100% - 1.75rem); opacity: 0; }
-}
-.wn-gate { animation: wn-gate 3.6s ease-in-out infinite; }
-@keyframes wn-gate {
-  0%, 42% { opacity: 0; scale: 0.6; }
-  50%, 70% { opacity: 1; scale: 1; }
-  80%, 100% { opacity: 0; scale: 0.9; }
-}
-.wn-bar { animation: wn-bar 6.6s ease-in-out infinite; }
-@keyframes wn-bar {
-  0%, 100% { scale: 1 0.35; opacity: 0.55; }
-  30% { scale: 1 0.95; opacity: 1; }
-  55% { scale: 1 0.5; opacity: 0.7; }
-  80% { scale: 1 0.75; opacity: 0.85; }
-}
-.wn-spark { stroke-dasharray: 1; animation: wn-spark 4.5s ease-out infinite; }
-@keyframes wn-spark {
-  0% { stroke-dashoffset: 1; }
-  60%, 100% { stroke-dashoffset: 0; }
-}
 .wn-row { animation: wn-row 4.8s ease-in-out infinite; }
 @keyframes wn-row {
   0%, 100% { border-color: var(--line); }
@@ -162,9 +137,7 @@ h2, h3, h4 { font-weight: 600; }
 }
 @media (prefers-reduced-motion: reduce) {
   .wn-motion { display: none; }
-  .wn-clip { animation: none; left: 20%; }
-  .wn-gate { animation: none; opacity: 1; }
-  .wn-bar, .wn-spark, .wn-row { animation: none; }
+  .wn-row { animation: none; }
 }
 
 /* Homepage numbers panel (src/components/stats-band.tsx). */
