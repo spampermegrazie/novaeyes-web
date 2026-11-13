@@ -6,7 +6,7 @@
 // that fills in as you go. The estimate is not in the page until the email is in;
 // after that the numbers follow any change live.
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { AnimatePresence, animate, motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "motion/react";
 import { siInstagram, siTiktok, siX, siYoutubeshorts } from "simple-icons";
 import { estimatorConfig } from "@/content/estimator-config";
@@ -15,6 +15,7 @@ import { BUDGET_SCALE, VIEWS_SCALE, parseAmount, positionOf, stepFrom, valueAt }
 import { getAttribution } from "@/lib/attribution";
 import { BookCall } from "./book-call";
 import { EstimatorPhone } from "./estimator-phone";
+import { ShinyButton } from "./ui/shiny-button";
 import { CountUp } from "./ui/count-up";
 
 type Mode = "budget" | "views";
@@ -28,6 +29,20 @@ const PLATFORM_ICONS = [
 ];
 
 const fmt = (mode: Mode, n: number) => (mode === "budget" ? formatUsd(n) : formatCompact(n));
+
+// lg and up, where the phone panel shows. Server render assumes mobile.
+const desktopQuery = "(min-width: 1024px)";
+const subscribeDesktop = (cb: () => void) => {
+  const mq = window.matchMedia(desktopQuery);
+  mq.addEventListener("change", cb);
+  return () => mq.removeEventListener("change", cb);
+};
+const useIsDesktop = () =>
+  useSyncExternalStore(
+    subscribeDesktop,
+    () => window.matchMedia(desktopQuery).matches,
+    () => false,
+  );
 
 export function ReachEstimator() {
   const reduced = useReducedMotion() ?? false;
@@ -60,6 +75,23 @@ export function ReachEstimator() {
     : "";
 
   const go = (s: number) => setStage(Math.max(0, Math.min(3, s)));
+  const isDesktop = useIsDesktop();
+  // Desktop, once the estimate is unlocked: the steps step aside and the phone takes the stage.
+  const showcase = unlocked && stage === 3;
+  const aside = useRef<HTMLElement>(null);
+  const root = useRef<HTMLDivElement>(null);
+  const wasShowcase = useRef(false);
+  // Follow the switch on desktop: down to the phone when it takes the stage, back up to the steps
+  // when they return (the page gets much shorter, so the view would otherwise be left near the end).
+  useEffect(() => {
+    const was = wasShowcase.current;
+    wasShowcase.current = showcase;
+    if (!isDesktop || showcase === was) return;
+    const el = showcase ? aside.current : root.current;
+    if (!el) return;
+    const top = el.getBoundingClientRect().top + window.scrollY - 96;
+    window.scrollTo({ top, behavior: reduced ? "auto" : "smooth" });
+  }, [showcase, isDesktop, reduced]);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -103,8 +135,8 @@ export function ReachEstimator() {
       };
 
   return (
-    <div className="grid gap-16 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:gap-20">
-      <div>
+    <div ref={root} className={`grid gap-16 lg:gap-20 ${showcase ? "lg:grid-cols-1" : "lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)]"}`}>
+      <div className={showcase ? "lg:hidden" : ""}>
         <Progress stage={stage} reached={unlocked ? 3 : furthest(mode, nicheId)} onJump={go} />
 
         <div className="relative mt-12 min-h-[440px]">
@@ -280,7 +312,7 @@ export function ReachEstimator() {
                           Try other numbers
                         </button>
                       </div>
-                      {showBooking && (
+                      {showBooking && !isDesktop && (
                         <div className="mt-8">
                           <BookCall prefill={{ email, company, estimate: summary }} />
                         </div>
@@ -294,16 +326,46 @@ export function ReachEstimator() {
         </div>
       </div>
 
-      {/* Right: a phone playing a clip, with the estimate where a post shows its views. It spans
-          the height of the steps, and stays in view beside the booking calendar. */}
-      <aside aria-label="Your campaign" className="relative isolate hidden lg:block">
-        <div className="sticky top-28 flex min-h-[min(100%,calc(100vh-9rem))] flex-col">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute top-1/2 left-1/2 -z-10 aspect-square w-[110%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgb(59_130_246/0.12),rgb(59_130_246/0.03)_45%,transparent)]"
+      {/* Right: a phone playing a clip, with the estimate laid over it. While you go through the
+          steps it spans their height. Once the estimate unlocks, the steps step aside and the phone
+          swings into the centre, bigger, with the next steps under it. */}
+      <aside ref={aside} aria-label="Your campaign" className={`relative isolate hidden ${showcase ? "lg:flex lg:flex-col lg:items-center" : "lg:block"}`}>
+        <div className={showcase ? "flex w-full flex-col items-center" : "sticky top-28 flex min-h-[min(100%,calc(100vh-9rem))] flex-col"}>
+          <EstimatorPhone
+            mode={mode}
+            value={value}
+            nicheId={nicheId}
+            estimate={result}
+            unlocked={unlocked}
+            company={company}
+            reduced={reduced}
+            stage={showcase ? "center" : "side"}
           />
-          <EstimatorPhone mode={mode} value={value} nicheId={nicheId} estimate={result} unlocked={unlocked} company={company} reduced={reduced} />
         </div>
+        {showcase && result && (
+          <motion.div
+            initial={reduced ? false : { opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: reduced ? 0 : 0.7, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            className="mt-12 flex w-full max-w-3xl flex-col items-center text-center"
+          >
+            <p className="font-label text-[10px] tracking-[0.14em] text-accent uppercase">
+              {m === "budget" ? "Estimated views" : "Estimated budget"} · {result.niche.label}
+            </p>
+            <p className="mt-3 max-w-md text-sm leading-relaxed text-muted">Based on past campaign ranges, not a guarantee. A copy is on its way to {email}.</p>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-6">
+              {!showBooking && <ShinyButton onClick={() => setShowBooking(true)}>Book a 15-minute reach audit</ShinyButton>}
+              <button type="button" onClick={() => go(1)} className="font-display text-sm font-semibold text-muted hover:text-fg">
+                Try other numbers
+              </button>
+            </div>
+            {showBooking && isDesktop && (
+              <div className="mt-10 w-full text-left">
+                <BookCall prefill={{ email, company, estimate: summary }} />
+              </div>
+            )}
+          </motion.div>
+        )}
       </aside>
     </div>
   );

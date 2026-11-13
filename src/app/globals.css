@@ -261,8 +261,7 @@ h2, h3, h4 { font-weight: 600; }
 /* Reach estimator phone (src/components/estimator-phone.tsx): digit reels spinning while the
    estimate is locked. Each reel holds 0-9 twice, so half a turn loops seamlessly. Not rendered
    with reduced motion. */
-/* steps: every frame shows whole digits, so it reads as a counter racing, not a blur */
-.est-reel { animation: est-reel steps(10) infinite; }
+.est-reel { animation: est-reel linear infinite; }
 /* the phone drifts up and down a little, on translate so the pointer tilt (transform) still applies */
 .est-float { animation: est-float 6s ease-in-out infinite; }
 @keyframes est-float {

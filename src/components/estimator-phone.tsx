@@ -10,7 +10,8 @@ import { BUDGET_SCALE, VIEWS_SCALE, positionOf } from "@/lib/scale";
 // like a slot machine while it is locked (faster for bigger amounts), then the range once it
 // unlocks. The rail shows the likes, comments and shares a clip at that reach typically gets. The
 // handle follows the company name typed in the form. The phone floats over a glow, and tilts
-// toward the pointer like a 3D object.
+// toward the pointer like a 3D object. Once the estimate unlocks (stage "center") it swings into
+// the middle of the page, bigger, turning in 3D on the way.
 
 type Mode = "budget" | "views";
 type Props = {
@@ -21,10 +22,9 @@ type Props = {
   unlocked: boolean;
   company: string;
   reduced: boolean;
+  stage: "side" | "center";
 };
 
-// Typical engagement on short-form clips, per view. Used only to sketch the rail counts.
-const RATES = { likes: 0.05, comments: 0.0012, shares: 0.003 };
 
 type Scene = { caption: string; icon: React.ReactNode };
 const SCENES: Record<string, Scene> = {
@@ -54,9 +54,9 @@ const SCENES: Record<string, Scene> = {
     caption: "this song has been stuck in my head all week",
     icon: (
       <>
-        <path d="M8 6.2 20 3.6v12.2h-2V7.4L10 9.1v9H8V6.2Z" />
-        <circle cx="6.2" cy="18.2" r="3" />
-        <circle cx="18.2" cy="16" r="3" />
+        <path d="M8.4 5.6 20.6 3v3.1L10.2 8.4v9H8.4V5.6Z M18.8 6.5h1.8v9h-1.8z" />
+        <ellipse cx="6.7" cy="17.4" rx="3.3" ry="2.6" transform="rotate(-22 6.7 17.4)" />
+        <ellipse cx="17.1" cy="15.4" rx="3.3" ry="2.6" transform="rotate(-22 17.1 15.4)" />
       </>
     ),
   },
@@ -77,15 +77,16 @@ const SCENES: Record<string, Scene> = {
 
 const handleOf = (company: string) => `@${company.toLowerCase().replace(/[^a-z0-9]+/g, "").slice(0, 18) || "yourbrand"}`;
 
-export function EstimatorPhone({ mode, value, nicheId, estimate, unlocked, company, reduced }: Props) {
+export function EstimatorPhone({ mode, value, nicheId, estimate, unlocked, company, reduced, stage }: Props) {
+  const center = stage === "center";
   const scene = SCENES[nicheId ?? "none"] ?? SCENES.none;
   const level = mode ? positionOf(mode === "budget" ? BUDGET_SCALE : VIEWS_SCALE, value) : 0;
   const final = unlocked && estimate ? (mode === "views" ? formatRange(estimate.budgetUsd, formatUsd) : formatRange(estimate.views, formatCompact)) : null;
   const heading = mode === null ? "Your estimate" : mode === "budget" ? "Estimated views" : "Estimated budget";
   const basis = mode === null ? "pick a starting point" : mode === "budget" ? `from a ${formatUsd(value)} budget` : `for ${formatCompact(value)} views`;
-  // views the rail counts are sketched from: your target, or the middle of the unlocked range
-  const views = mode === "views" ? value : unlocked && estimate ? Math.sqrt(estimate.views.low * estimate.views.high) : null;
-  const count = (rate: number) => (views ? formatCompact(views * rate) : "•••");
+  // likes, comments and shares come with the full report, so the rail only spins
+  const count = (seed: number) =>
+    reduced || mode === null ? <span className="text-white/60">•••</span> : <Reels prefix="" digits={3} speed={0.9 + seed * 0.25} size="sm" />;
 
   // tilt toward the pointer
   const px = useMotionValue(0);
@@ -98,9 +99,16 @@ export function EstimatorPhone({ mode, value, nicheId, estimate, unlocked, compa
   const glare = useMotionTemplate`radial-gradient(circle at ${glareX}% ${glareY}%, rgb(255 255 255 / 0.1), transparent 45%)`;
 
   return (
-    <div className="flex flex-1 items-center justify-center [perspective:1100px]">
-      <div
-        className="relative"
+    <div className={`flex items-center justify-center [perspective:1400px] ${center ? "w-full pt-4" : "flex-1"}`}>
+      <motion.div
+        layout={!reduced}
+        animate={center && !reduced ? { rotateY: [-34, 14, 0], rotateX: [12, -3, 0] } : { rotateY: 0, rotateX: 0 }}
+        transition={{
+          layout: { duration: 1.05, ease: [0.16, 1, 0.3, 1] },
+          rotateY: { duration: 1.3, ease: [0.22, 1, 0.36, 1], times: [0, 0.55, 1] },
+          rotateX: { duration: 1.3, ease: [0.22, 1, 0.36, 1], times: [0, 0.55, 1] },
+        }}
+        className="relative [transform-style:preserve-3d]"
         onPointerMove={(e) => {
           if (reduced || e.pointerType !== "mouse") return;
           const r = e.currentTarget.getBoundingClientRect();
@@ -118,7 +126,7 @@ export function EstimatorPhone({ mode, value, nicheId, estimate, unlocked, compa
 
         <motion.div
           style={reduced ? undefined : { rotateX, rotateY, transformStyle: "preserve-3d" }}
-          className={`relative aspect-[9/19] h-[min(540px,66vh)] ${reduced ? "" : "est-float"}`}
+          className={`relative aspect-[9/19] ${center ? "h-[min(700px,72vh)]" : "h-[min(540px,66vh)]"} ${reduced ? "" : "est-float"}`}
         >
           {/* bezel */}
           <div className="absolute inset-0 rounded-[44px] bg-[linear-gradient(145deg,#2a2d3a,#0b0c11_45%,#1b1e2a)] p-[2px] shadow-[0_40px_90px_rgb(0_0_0/0.65),0_0_0_1px_rgb(255_255_255/0.06)]">
@@ -172,16 +180,16 @@ export function EstimatorPhone({ mode, value, nicheId, estimate, unlocked, compa
                     </svg>
                     <span className="absolute -bottom-2 flex h-4 w-4 items-center justify-center rounded-full bg-[#fe2c55] text-[11px] leading-none font-bold">+</span>
                   </span>
-                  <RailItem label={count(RATES.likes)}>
+                  <RailItem label={count(0)}>
                     <path d="M12 21.2C6.3 17 2.4 13.5 2.4 9.2A5 5 0 0 1 7.5 4c1.9 0 3.5 1 4.5 2.5C13 5 14.6 4 16.5 4a5 5 0 0 1 5.1 5.2c0 4.3-3.9 7.8-9.6 12Z" />
                   </RailItem>
-                  <RailItem label={count(RATES.comments)}>
+                  <RailItem label={count(1)}>
                     <path d="M12 3c5.2 0 9.4 3.6 9.4 8s-4.2 8-9.4 8c-1.2 0-2.4-.2-3.5-.6L3.6 20.6l1.5-4.2C3.6 15 2.6 13.1 2.6 11c0-4.4 4.2-8 9.4-8Z" />
                     <circle cx="7.8" cy="11" r="1.25" fill="#0b0c12" />
                     <circle cx="12" cy="11" r="1.25" fill="#0b0c12" />
                     <circle cx="16.2" cy="11" r="1.25" fill="#0b0c12" />
                   </RailItem>
-                  <RailItem label={count(RATES.shares)}>
+                  <RailItem label={count(2)}>
                     <path d="M13.2 3.5 22 11.6l-8.8 8v-4.4C7.6 15.2 4.2 17.1 2 20.6c.8-6.1 4.4-10.7 11.2-11.6V3.5Z" />
                   </RailItem>
                   <span className={`mt-1 flex h-8 w-8 items-center justify-center rounded-full bg-[conic-gradient(#2b2f3d,#0d0e14,#2b2f3d,#0d0e14,#2b2f3d)] ring-[5px] ring-[#15171f] ${reduced ? "" : "animate-[spin_5s_linear_infinite]"}`}>
@@ -203,34 +211,36 @@ export function EstimatorPhone({ mode, value, nicheId, estimate, unlocked, compa
             </div>
           </div>
         </motion.div>
-      </div>
+      </motion.div>
     </div>
   );
 }
 
-function RailItem({ label, children }: { label: string; children: React.ReactNode }) {
+function RailItem({ label, children }: { label: React.ReactNode; children: React.ReactNode }) {
   return (
     <span className="flex flex-col items-center">
       <svg viewBox="0 0 24 24" className="h-7 w-7 fill-white drop-shadow-[0_1px_3px_rgb(0_0_0/0.5)]" aria-hidden>
         {children}
       </svg>
-      <span className="mt-0.5 text-[10px] font-semibold tabular-nums [text-shadow:0_1px_3px_rgb(0_0_0/0.6)]">{label}</span>
+      <span className="mt-0.5 flex h-3.5 items-center text-[10px] leading-3.5 font-semibold tabular-nums [text-shadow:0_1px_3px_rgb(0_0_0/0.6)]">{label}</span>
     </span>
   );
 }
 
-// Digits spinning like a slot machine while the estimate is being worked out.
-function Reels({ prefix, digits, speed }: { prefix: string; digits: number; speed: number }) {
+// Digits spinning like a slot machine: the estimate while it is locked, and the engagement on the
+// rail, which only comes with the full report.
+function Reels({ prefix, digits, speed, size = "lg" }: { prefix: string; digits: number; speed: number; size?: "lg" | "sm" }) {
   const comma = (i: number) => (digits - i) % 3 === 0 && i !== 0;
+  const h = size === "lg" ? "h-9" : "h-3.5";
   return (
-    <span className="inline-flex h-9 items-start overflow-hidden text-white/85 [mask-image:linear-gradient(transparent,#000_28%,#000_72%,transparent)]" aria-hidden>
+    <span className={`inline-flex ${h} items-start overflow-hidden text-white/85 [mask-image:linear-gradient(transparent,#000_28%,#000_72%,transparent)]`} aria-hidden>
       {prefix}
       {Array.from({ length: digits }, (_, i) => (
         <span key={i} className="inline-flex">
           {comma(i) && <span>,</span>}
-          <span className="est-reel flex flex-col" style={{ animationDuration: `${(0.7 + ((i * 7) % 5) * 0.15) / speed}s` }}>
+          <span className="est-reel flex flex-col" style={{ animationDuration: `${(0.5 + ((i * 7) % 5) * 0.12) / speed}s` }}>
             {Array.from({ length: 20 }, (_, d) => (
-              <span key={d} className="block h-9">
+              <span key={d} className={`block ${h}`}>
                 {(d + i * 3) % 10}
               </span>
             ))}
