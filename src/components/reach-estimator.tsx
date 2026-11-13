@@ -59,6 +59,7 @@ export function ReachEstimator() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showBooking, setShowBooking] = useState(false);
+  const [emailed, setEmailed] = useState(false);
 
   const m: Mode = mode ?? "budget";
   const niche = estimatorConfig.niches.find((n) => n.id === nicheId) ?? null;
@@ -112,10 +113,9 @@ export function ReachEstimator() {
           attribution: getAttribution(),
         }),
       });
-      if (!res.ok) {
-        const body = (await res.json().catch(() => ({}))) as { error?: string };
-        throw new Error(body.error ?? "Something went wrong. Try again.");
-      }
+      const body = (await res.json().catch(() => ({}))) as { error?: string; emailed?: boolean };
+      if (!res.ok) throw new Error(body.error ?? "Something went wrong. Try again.");
+      setEmailed(body.emailed === true);
       setRevealedFor(summary);
       setUnlocked(true);
     } catch (err) {
@@ -297,7 +297,7 @@ export function ReachEstimator() {
                           <dt className="mt-1 font-label text-[9px] tracking-[0.12em] text-muted uppercase">Platforms</dt>
                         </div>
                       </dl>
-                      <p className="mt-4 text-sm leading-relaxed text-muted">Based on past campaign ranges, not a guarantee. A copy is on its way to {email}.</p>
+                      <p className="mt-4 text-sm leading-relaxed text-muted">Based on past campaign ranges, not a guarantee.{emailed && ` A copy is on its way to ${email}.`}</p>
                       <div className="mt-8 flex flex-wrap items-center gap-6">
                         {!showBooking && (
                           <button
@@ -352,7 +352,7 @@ export function ReachEstimator() {
             <p className="font-label text-[10px] tracking-[0.14em] text-accent uppercase">
               {m === "budget" ? "Estimated views" : "Estimated budget"} · {result.niche.label}
             </p>
-            <p className="mt-3 max-w-md text-sm leading-relaxed text-muted">Based on past campaign ranges, not a guarantee. A copy is on its way to {email}.</p>
+            <p className="mt-3 max-w-md text-sm leading-relaxed text-muted">Based on past campaign ranges, not a guarantee.{emailed && ` A copy is on its way to ${email}.`}</p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-6">
               {!showBooking && <ShinyButton onClick={() => setShowBooking(true)}>Book a 15-minute reach audit</ShinyButton>}
               <button type="button" onClick={() => go(1)} className="font-display text-sm font-semibold text-muted hover:text-fg">

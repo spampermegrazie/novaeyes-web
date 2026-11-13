@@ -23,7 +23,7 @@ Copy `.env.example` to `.env.local` for local work, and set the same keys in Ver
 | `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` | Lead storage (server only) |
 | `RESEND_API_KEY`, `LEADS_FROM_EMAIL` | Estimate emails |
 
-In production, the estimator refuses to accept a lead if storage isn't configured, so no lead is ever dropped silently.
+In production, the estimator refuses to accept a lead if it can't be saved, so no lead is ever dropped silently. The exception is test mode: with `LEADS_ALLOW_UNSAVED=1` the form always unlocks the estimate and unsaved leads are only logged. Remove it before launch.
 
 ## Setup checklist
 
@@ -67,4 +67,5 @@ In the dashboard's Vercel project: set `VITE_BASE_PATH=/app/` and the output dir
 - [ ] Oktagon case study approved by the client (`publicApproved` in `campaigns.ts`)
 - [ ] Competitor rows on `/best-clipping-agencies` checked on each agency's own site, then remove `noindex`
 - [ ] Real contact email in the footer
+- [ ] Lead capture for real: run `supabase/leads.sql`, set `RESEND_API_KEY` and `LEADS_FROM_EMAIL`, then **delete `LEADS_ALLOW_UNSAVED` in Vercel**. While it is set, the estimator form unlocks the estimate even when the lead can't be saved, and those leads are lost (test mode, see `src/app/api/leads/route.ts`)
 - [ ] Scroll stages and motion pass
