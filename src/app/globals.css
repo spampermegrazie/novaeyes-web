@@ -129,15 +129,40 @@ h2, h3, h4 { font-weight: 600; }
 }
 
 /* What is NovaEyes bento (src/components/what-is-novaeyes.tsx). */
-.wn-row { animation: wn-row 4.8s ease-in-out infinite; }
-@keyframes wn-row {
-  0%, 100% { border-color: var(--line); }
-  15% { border-color: rgb(var(--glow) / 0.6); }
-  35% { border-color: var(--line); }
+.wi-flat, .wi-low, .wi-grow { animation-duration: 6s; animation-iteration-count: infinite; animation-fill-mode: backwards; }
+.wi-flat { animation-name: wi-flat; animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
+.wi-low { animation-name: wi-low; animation-timing-function: ease-out; }
+.wi-grow { animation-name: wi-grow; animation-timing-function: cubic-bezier(0.45, 0, 0.25, 1); }
+@keyframes wi-flat {
+  0% { transform: scaleX(0); opacity: 1; }
+  6%, 86% { transform: scaleX(1); opacity: 1; }
+  96%, 100% { transform: scaleX(1); opacity: 0; }
+}
+@keyframes wi-low {
+  0%, 10% { transform: scaleX(0); opacity: 1; }
+  45%, 86% { transform: scaleX(0.2); opacity: 1; }
+  96%, 100% { transform: scaleX(0.2); opacity: 0; }
+}
+@keyframes wi-grow {
+  0%, 10% { transform: scaleX(0); opacity: 1; }
+  76%, 86% { transform: scaleX(0.9); opacity: 1; }
+  96%, 100% { transform: scaleX(0.9); opacity: 0; }
+}
+.wa-tire { animation: wa-tire 3.3s ease-in-out infinite; }
+@keyframes wa-tire {
+  0%, 100% { opacity: 1; }
+  60% { opacity: 0.35; }
+}
+.wa-pop { animation: wa-pop 6s cubic-bezier(0.16, 1, 0.3, 1) infinite; }
+@keyframes wa-pop {
+  0%, 30%, 100% { scale: 1; opacity: 1; filter: none; }
+  4% { scale: 0.3; opacity: 0; }
+  12% { scale: 1.12; opacity: 1; filter: brightness(1.35); }
 }
 @media (prefers-reduced-motion: reduce) {
   .wn-motion { display: none; }
-  .wn-row { animation: none; }
+  .wa-tire, .wa-pop { animation: none; }
+  .wi-flat, .wi-low, .wi-grow { animation: none; transform: scaleX(var(--to, 1)); }
 }
 
 /* Homepage numbers panel (src/components/stats-band.tsx). */
