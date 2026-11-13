@@ -6,7 +6,7 @@ import { Cta } from "@/components/cta";
 // agency's own site. A list that only names us is exactly the self-promotion
 // this page is meant to beat.
 export const metadata: Metadata = {
-  title: "Best Clipping Agencies in 2026: How to Compare Them",
+  title: "Best Clipping Agencies in 2026, Compared",
   description:
     "How to compare clipping agencies on view verification, CPM transparency, case studies and minimum budget, with a side-by-side table.",
   alternates: { canonical: "/best-clipping-agencies" },

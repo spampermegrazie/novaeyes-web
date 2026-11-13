@@ -10,6 +10,7 @@ import { ShinyButton } from "@/components/ui/shiny-button";
 import { CountUp } from "@/components/ui/count-up";
 import { StatsBand } from "./stats-band";
 import { ClipPhone, WhoWeClipFor } from "./who-we-clip-for";
+import { MarketsRow } from "./markets-row";
 
 // Service pages (combat sports, music, podcasts, logo, product), in the homepage style: a hero with
 // the vertical's clip, documented results, why it works, how a campaign runs, what you send and who
@@ -26,7 +27,7 @@ function Hero({ vertical, index }: { vertical: Vertical; index: number }) {
   return (
     <header className="mx-auto grid max-w-6xl items-center gap-12 px-6 pt-16 pb-20 sm:px-10 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-10 lg:px-12 lg:pt-20">
       <div>
-        <nav aria-label="Breadcrumb" className="font-label text-[10px] tracking-[0.14em] text-muted uppercase">
+        <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-y-1 font-label text-[10px] tracking-[0.14em] text-muted uppercase">
           <Link href="/" className="transition-colors hover:text-fg">
             Home
           </Link>
@@ -200,7 +201,11 @@ function Check() {
 export function VerticalPage({ vertical }: { vertical: Vertical }) {
   const index = Math.max(0, verticals.findIndex((v) => v.path === vertical.path));
   const proof = vertical.campaignSlugs.map((slug) => getCampaign(slug)).filter((c): c is Campaign => c !== undefined);
-  const faqs = [...vertical.faqs, { q: "How fast can a campaign go live?", a: facts.launchTime }];
+  const faqs = [
+    ...vertical.faqs,
+    { q: "Can you target a specific country or audience?", a: facts.targeting },
+    { q: "How fast can a campaign go live?", a: facts.launchTime },
+  ];
   const cols = vertical.sections.length >= 3 ? "lg:grid-cols-3" : "md:grid-cols-2";
 
   return (
@@ -369,8 +374,9 @@ export function VerticalPage({ vertical }: { vertical: Vertical }) {
             Same network. <span className="text-muted">Other kinds of content.</span>
           </>
         }
-        className="pb-4"
+        className="pb-8"
       />
+      <MarketsRow className="pb-4" />
       <Cta />
     </>
   );

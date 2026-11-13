@@ -24,6 +24,9 @@ export const facts = {
   minimumBudgetUsd: 3_000,
   minimumBudgetLabel: "$3,000",
   launchTime: "Campaigns launch within 24 hours of the onboarding call.",
+  // Audience targeting: a hard filter, not a hope. Used across the site (FAQ, service and location pages).
+  targeting:
+    "Yes. You choose the countries and the audience you want, like age and gender, and only views from that audience count. We brief clippers for it, track where every clip's viewers are, and show the audience split in your dashboard and every report. Clips that miss your audience are not paid, even if they go viral and the views are real.",
   // Headline stats as published on the live site. Update statsAsOf whenever the numbers change.
   statsAsOf: "November 2026",
   stats: [
@@ -37,6 +40,7 @@ export const facts = {
 } as const;
 
 export const nav = [
+  { href: "/solutions", label: "Solutions" },
   { href: "/how-it-works", label: "How it works" },
   { href: "/case-studies", label: "Case studies" },
   { href: "/pricing", label: "Pricing" },

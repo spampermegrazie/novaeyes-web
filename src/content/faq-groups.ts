@@ -125,7 +125,11 @@ export const faqGroups: FaqGroup[] = [
       },
       {
         q: "How do you count views?",
-        a: "We pull view counts from TikTok, Instagram, YouTube and X themselves, then total them per clip, per clipper and per platform. You see them in your dashboard and in a weekly report.",
+        a: "We pull view counts from TikTok, Instagram, YouTube and X themselves, then total them per clip, per clipper and per platform. Views also have to come from your target audience, meaning the countries, ages and genders you choose. You see it all in your dashboard and in a weekly report.",
+      },
+      {
+        q: "Can I target a specific country or audience?",
+        a: facts.targeting,
       },
       {
         q: "Do views turn into followers or sales?",
@@ -192,11 +196,11 @@ export const faqGroups: FaqGroup[] = [
     items: [
       {
         q: "What do you report on?",
-        a: "Verified views, CPM, how many clips went out, results per platform, your top clips, and results further down the funnel when they can be tracked.",
+        a: "Verified views, CPM, how many clips went out, results per platform, your audience split by country, age and gender, your top clips, and results further down the funnel when they can be tracked.",
       },
       {
         q: "Do I get a dashboard?",
-        a: "Yes. Every client gets a live dashboard with views, spend, CPM, clip count, platform split and top clips. It updates as new data comes in.",
+        a: "Yes. Every client gets a live dashboard with views, spend, CPM, clip count, platform split, audience data and top clips. It updates as new data comes in.",
       },
       {
         q: "How often do I get reports?",

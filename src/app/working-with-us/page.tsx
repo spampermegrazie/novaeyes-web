@@ -6,6 +6,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Working With NovaEyes",
+  description: "What it is like to work with NovaEyes, from the first call to the final report.",
   robots: { index: false, follow: false },
   alternates: { canonical: "/working-with-us" },
 };

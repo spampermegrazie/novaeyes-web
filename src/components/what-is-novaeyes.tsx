@@ -189,7 +189,7 @@ export function WhatIsNovaEyes() {
         <Tile
           n="02"
           title="Not an influencer deal. You pay per verified view."
-          body="An influencer deal pays a fixed fee for one post, whether it works or not. Here each clipper only earns when their clip gets verified views, so your cost follows the results, not a promise."
+          body="An influencer deal pays a fixed fee for one post, whether it works or not. Here each clipper only earns when their clip gets verified views from your target audience, so your cost follows the results, not a promise."
         >
           <FeeVsViews />
         </Tile>

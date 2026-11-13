@@ -18,7 +18,7 @@ const STOPS = [
   { key: "source", x: 0.2282, y: 0.5375, title: "Source desk", body: "Your long videos come in here. We mark the best moments and the vertical crops." },
   { key: "clippers", x: 0.5809, y: 0.4828, title: "The clippers", body: "Clippers cut, caption and hook every clip. They only earn when their clips get views." },
   { key: "posting", x: 0.5865, y: 0.2106, title: "Posting", body: "Each clip goes live on TikTok, Instagram Reels, YouTube Shorts and X, across many accounts." },
-  { key: "review", x: 0.6557, y: 0.2889, title: "Review gate", body: "Every clip is checked against your brief, and every view is verified on the platform before it counts." },
+  { key: "review", x: 0.6557, y: 0.2889, title: "Review gate", body: "Every clip is checked against your brief, and every view is verified on the platform, and against your target audience, before it counts." },
   { key: "views", x: 0.3515, y: 0.2443, title: "Live tracking", body: "Views are tracked live, so you see what is working while the campaign runs." },
   { key: "payout", x: 0.4752, y: 0.49, title: "Payouts", body: "Clippers are paid on verified views only. No views, no payout." },
   { key: "control", x: 0.8009, y: 0.2731, title: "Control room", body: "We move the budget to the formats that win, and the loop runs again." },

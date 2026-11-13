@@ -38,7 +38,12 @@ export const organizationJsonLd = {
       founder: { "@id": PERSON_ID },
       email: "andrea@nova-eyes.com",
       address: { "@type": "PostalAddress", addressLocality: "Ferrara", addressCountry: "IT" },
-      areaServed: "Worldwide",
+      // The markets with their own page; campaigns can also run worldwide.
+      areaServed: [
+        "United States", "United Kingdom", "Germany", "Austria", "Switzerland", "Italy",
+        "Spain", "France", "Netherlands", "United Arab Emirates", "Canada", "Australia",
+      ].map((name) => ({ "@type": "Country", name })),
+      knowsLanguage: ["en", "de"],
       knowsAbout: [
         "Clipping campaigns",
         "Short-form video distribution",
@@ -50,6 +55,8 @@ export const organizationJsonLd = {
         "App marketing",
         "TikTok slideshows",
         "Logo clipping",
+        "Product clipping",
+        "Audience targeting by country and demographic",
       ],
       ...(facts.sameAs.length ? { sameAs: facts.sameAs } : {}),
     },
@@ -105,14 +112,30 @@ export function breadcrumbJsonLd(items: { name: string; path: string }[]) {
   };
 }
 
-export function serviceJsonLd(name: string, description: string, path: string) {
+export function serviceJsonLd(name: string, description: string, path: string, country?: string) {
   return {
     "@context": "https://schema.org",
     "@type": "Service",
     name,
+    serviceType: "Clipping agency",
     description,
     url: `${facts.url}${path}`,
     provider: { "@id": ORG_ID },
-    areaServed: "Worldwide",
+    areaServed: country ? { "@type": "Country", name: country } : "Worldwide",
+  };
+}
+
+// A list of pages (the solutions hub).
+export function itemListJsonLd(name: string, items: { name: string; path: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name,
+    itemListElement: items.map((it, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: it.name,
+      url: `${facts.url}${it.path}`,
+    })),
   };
 }

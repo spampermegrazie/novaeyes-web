@@ -13,7 +13,12 @@ export function SiteHeader() {
         </Link>
         <nav aria-label="Main" className="hidden items-center gap-6 font-display text-sm font-medium whitespace-nowrap text-muted lg:flex xl:gap-7">
           {nav.map((item) => (
-            <Link key={item.href} href={item.href} className="transition-colors hover:text-fg">
+            <Link
+              key={item.href}
+              href={item.href}
+              // Blog and FAQ only from xl; between lg and xl they live in the footer.
+              className={`transition-colors hover:text-fg ${item.href === "/blog" || item.href === "/faq" ? "hidden xl:inline" : ""}`}
+            >
               {item.label}
             </Link>
           ))}

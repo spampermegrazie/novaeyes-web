@@ -1,10 +1,18 @@
 import { facts, verticalLinks } from "@/content/facts";
+import { locations } from "@/content/locations";
 import BeamWordmarkFooter, { type FooterColumn, type FooterSocial } from "@/components/ui/beam-wordmark-footer";
 
 // Site footer: link columns over a giant NOVAEYES wordmark (Manrope ExtraBold, the heading face)
 // that a slow beam of light runs through, lined up with the site's content column.
 const columns: FooterColumn[] = [
-  { title: "Clipping for", links: verticalLinks.map((v) => ({ label: v.label, href: v.href })) },
+  {
+    title: "Clipping for",
+    links: [...verticalLinks.map((v) => ({ label: v.label, href: v.href })), { label: "All solutions", href: "/solutions" }],
+  },
+  {
+    title: "Markets",
+    links: locations.map((l) => ({ label: l.name === "United Arab Emirates" ? "UAE" : l.name, href: `/clipping-agency/${l.slug}` })),
+  },
   {
     title: "Company",
     links: [

@@ -27,7 +27,7 @@ export const verticals: Vertical[] = [
     path: "/sports-clipping",
     name: "Sports",
     campaignSlugs: ["brave-cf", "oktagon-mma"],
-    title: "Sports Clipping for Clubs, Leagues, Events and Athletes",
+    title: "Sports Clipping for Clubs, Leagues and Athletes",
     description:
       "We turn sports footage into thousands of short clips across TikTok, Reels, Shorts and X, for any sport. You pay only for verified views.",
     h1: "Sports clipping",
@@ -165,9 +165,9 @@ export const verticals: Vertical[] = [
     path: "/gaming-clipping",
     name: "Gaming",
     campaignSlugs: [],
-    title: "Gaming Clipping for Studios, Publishers and Esports",
+    title: "Gaming Clipping for Game Studios and Esports",
     description:
-      "We turn gameplay, trailers and updates into thousands of short clips across TikTok, Reels, Shorts and X, to push wishlists, downloads and players. Pay per verified view.",
+      "We turn gameplay, trailers and updates into thousands of short clips on TikTok, Reels, Shorts and X to push wishlists and downloads. Pay per verified view.",
     h1: "Gaming clipping",
     lead: [
       "Gaming clipping means turning your gameplay, trailers, updates and esports footage into short clips that thousands of creators post on their own pages. Each clip points people to one place, like your store page, a wishlist or a pre-registration link. You pay only for the views that are verified.",
@@ -371,7 +371,7 @@ export const verticals: Vertical[] = [
     path: "/app-and-startup-clipping",
     name: "Apps and startups",
     campaignSlugs: [],
-    title: "App and Startup Clipping: Clips and TikTok Slideshows",
+    title: "App Clipping and TikTok Slideshows for Startups",
     description:
       "Demo clips, founder clips and TikTok slideshows posted by thousands of creators, to drive downloads and sign-ups for apps, SaaS and AI tools. Pay per verified view.",
     h1: "App and startup clipping",

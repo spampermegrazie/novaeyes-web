@@ -12,9 +12,9 @@ import { JsonLd, faqJsonLd, breadcrumbJsonLd } from "@/components/json-ld";
 // where they overlap (pricing, verification, reporting, timing).
 
 export const metadata: Metadata = {
-  title: "How It Works: Clipping Campaigns From Brief to Verified Views",
+  title: "How a Clipping Campaign Works, Step by Step",
   description:
-    "How a NovaEyes campaign runs: you send content and a budget, thousands of clippers post clips on their own pages, every clip is reviewed and you pay only for verified views.",
+    "How a NovaEyes campaign runs: launch within 24 hours, thousands of clippers post your clips, every clip is reviewed, and you pay only for verified views.",
   alternates: { canonical: "/how-it-works" },
 };
 
@@ -29,8 +29,8 @@ const TIMELINE = [
   {
     when: "Day 0",
     title: "Onboarding call",
-    you: "Walk us through your content, your goal, your brand rules and your budget.",
-    us: "Turn it into one brief for the whole network: what to clip, what to avoid, where to send people, and the payout per 1,000 views.",
+    you: "Walk us through your content, your goal, your target audience, your brand rules and your budget.",
+    us: "Turn it into one brief for the whole network: what to clip, what to avoid, who it is for, where to send people, and the payout per 1,000 views.",
   },
   {
     when: "Within 24 hours",
@@ -61,13 +61,14 @@ const TIMELINE = [
 const MONEY = [
   { n: "01", title: "You fund a view pool", body: "The pool is what pays the clippers. Your full cost, including our fee for running the campaign, is set out in writing before anything is signed." },
   { n: "02", title: "Clippers earn per verified view", body: "Each clipper is paid per 1,000 verified views on clips we approved. The best clips earn the most, so the network chases what works." },
-  { n: "03", title: "Everything else costs nothing", body: "A clip that is not approved, or does not get views, earns nothing. Views that cannot be verified are not paid." },
+  { n: "03", title: "Everything else costs nothing", body: "A clip that is not approved, or does not get views, earns nothing. Views that cannot be verified, or that come from outside your target audience, are not paid." },
 ];
 
 const VERIFY = [
   "View counts come from TikTok, Instagram, YouTube and X themselves.",
   "Duplicates are removed.",
   "Each clip is checked against the account that posted it.",
+  "Views must come from your target countries and audience. Clips that miss it are not paid, even if they go viral.",
   "Views that cannot be verified are not paid.",
 ];
 
@@ -78,7 +79,7 @@ const PRINCIPLES = [
 ];
 
 const YOU_GET = [
-  { title: "A live dashboard", body: "Views, spend, CPM, clip count, platform split and top clips, updated as new data comes in." },
+  { title: "A live dashboard", body: "Views, spend, CPM, clip count, platform split, audience by country, age and gender, and top clips, updated as new data comes in." },
   { title: "Weekly reports", body: "What to scale, what to change and what to drop, every week." },
   { title: "Every clip reviewed", body: "Checked against your brief and brand rules before it can earn a single view." },
   { title: "A final report", body: "The full picture when the campaign ends, so you know what the budget bought." },
@@ -116,6 +117,10 @@ const FAQS = [
     a: `${facts.launchTime} The first clips usually go up within 48 hours of launch, and views build over the first one to two weeks as more clippers join and the best clips keep spreading.`,
   },
   {
+    q: "Can you target a specific country or audience?",
+    a: facts.targeting,
+  },
+  {
     q: "Can you guarantee a number of views?",
     a: "No. We aim for a CPM, not a fixed view count. Because clippers are paid per verified view, your budget turns into views at the agreed rate, but the final number depends on your content and the campaign settings.",
   },
@@ -151,7 +156,7 @@ export default function HowItWorks() {
       <article>
         {/* hero */}
         <header className="mx-auto max-w-6xl px-6 pt-16 pb-12 sm:px-10 lg:px-12 lg:pt-20">
-          <nav aria-label="Breadcrumb" className="font-label text-[10px] tracking-[0.14em] text-muted uppercase">
+          <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-y-1 font-label text-[10px] tracking-[0.14em] text-muted uppercase">
             <Link href="/" className="transition-colors hover:text-fg">
               Home
             </Link>
@@ -166,8 +171,8 @@ export default function HowItWorks() {
               <p className="mt-7 max-w-2xl text-lg leading-relaxed text-fg/85">
                 A NovaEyes campaign runs as a weekly loop. You send your content and a budget, and we launch within 24 hours of the onboarding call. Our network of{" "}
                 {facts.clippersLabel} clippers cuts the best moments into short clips and posts them on their own TikTok,
-                Instagram, YouTube and X pages. Every clip is reviewed, every view is verified, and you pay only for the
-                views that are.
+                Instagram, YouTube and X pages. Every clip is reviewed, every view is verified against the audience you choose, and you pay only for
+                the views that are.
               </p>
               <div className="mt-9 flex flex-col gap-3 sm:flex-row">
                 <ShinyButton href="/book">Book a 15-minute reach audit</ShinyButton>

@@ -1,6 +1,6 @@
 # NovaEyes
 
-> NovaEyes is a performance-based clipping agency founded in 2025 by Andrea Corindo in Ferrara, Italy. Clients fund a view pool and pay per 1,000 verified short-form views, delivered by a network of 20,000 clippers across TikTok, Instagram Reels, YouTube Shorts and X. Campaigns start at $3,000, and they launch within 24 hours of the onboarding call.
+> NovaEyes is a performance-based clipping agency founded in 2025 by Andrea Corindo in Ferrara, Italy. Clients fund a view pool and pay per 1,000 verified short-form views, delivered by a network of 20,000 clippers across TikTok, Instagram Reels, YouTube Shorts and X. Campaigns start at $3,000, and they launch within 24 hours of the onboarding call. Every campaign can be locked to the countries and audience the client chooses (age, gender): only views from that audience count, and clips that miss it are not paid, even if they go viral. Audience data is shown in the client dashboard and every report.
 
 ## Core pages
 
@@ -9,9 +9,11 @@
 - [Case studies](https://nova-eyes.com/case-studies): campaign results with views, CPM and clip counts
 - [Pricing](https://nova-eyes.com/pricing): how clipping is priced, what changes the CPM, and CPMs from past campaigns
 - [Reach estimator](https://nova-eyes.com/reach-estimator): views for a budget, or the budget for a view target
+- [All solutions](https://nova-eyes.com/solutions): every kind of content we clip and every market we run campaigns in, on one page
 - [How it works](https://nova-eyes.com/how-it-works): how a campaign runs from brief to final report, who does what and when, where the budget goes and how views are verified
 - [FAQ](https://nova-eyes.com/faq): pricing, results, reporting, brand safety and rights
-- [Book a call](https://nova-eyes.com/book)
+- [Book a call](https://nova-eyes.com/book): a 15-minute reach audit
+- [Pricing in plain text](https://nova-eyes.com/pricing.md)
 
 ## Clipping by vertical
 
@@ -23,6 +25,23 @@
 - [App and startup clipping](https://nova-eyes.com/app-and-startup-clipping): demo clips, founder clips and TikTok slideshows that drive downloads and sign-ups for apps, SaaS and AI tools
 - [Logo clipping](https://nova-eyes.com/logo-clipping): a brand's logo, promo code and link on clips that already perform
 - [Product clipping](https://nova-eyes.com/product-clipping): creators showing a product in new short clips
+
+## Clipping by location
+
+Each page covers the audience size (DataReportal, Digital 2026), the local ad disclosure rules with a source, and our results there.
+
+- [Clipping agency in the United States](https://nova-eyes.com/clipping-agency/united-states): 153M TikTok users 18+
+- [Clipping agency in the UK](https://nova-eyes.com/clipping-agency/united-kingdom): 26.8M TikTok users 18+
+- [Clipping agency in Germany](https://nova-eyes.com/clipping-agency/germany): 23.7M TikTok users 18+, campaigns in German and English
+- [Clipping agency in Austria](https://nova-eyes.com/clipping-agency/austria): 2.49M TikTok users 18+, campaigns in German
+- [Clipping agency in Switzerland](https://nova-eyes.com/clipping-agency/switzerland): 2.46M TikTok users 18+, campaigns in German and English
+- [Clipping agency in Italy](https://nova-eyes.com/clipping-agency/italy): 22.0M TikTok users 18+, NovaEyes is based in Italy
+- [Clipping agency in Spain](https://nova-eyes.com/clipping-agency/spain): 20.9M TikTok users 18+
+- [Clipping agency in France](https://nova-eyes.com/clipping-agency/france): 23.4M TikTok users 18+
+- [Clipping agency in the Netherlands](https://nova-eyes.com/clipping-agency/netherlands): 6.30M TikTok users 18+
+- [Clipping agency in the UAE](https://nova-eyes.com/clipping-agency/uae): 12.5M TikTok users 18+, campaigns in English
+- [Clipping agency in Canada](https://nova-eyes.com/clipping-agency/canada): 16.6M TikTok users 18+
+- [Clipping agency in Australia](https://nova-eyes.com/clipping-agency/australia): 10.9M TikTok users 18+
 
 ## Selected results
 

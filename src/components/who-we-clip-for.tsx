@@ -7,7 +7,7 @@ import { RailArrows } from "./ui/rail-arrows";
 // one row tall however many services there are.
 // Motion lives in globals.css (wc-*) and stops with reduced motion.
 
-const BLURBS: Record<string, string> = {
+export const BLURBS: Record<string, string> = {
   "/sports-clipping": "Any sport, from match footage to behind the scenes, cut into clips.",
   "/gaming-clipping": "Gameplay, trailers and updates that push wishlists and downloads.",
   "/app-and-startup-clipping": "Demo clips, founder clips and TikTok slideshows that drive sign-ups.",
@@ -281,6 +281,7 @@ type WhoProps = {
   eyebrow?: string;
   title?: React.ReactNode;
   className?: string;
+  id?: string;
 };
 
 export function WhoWeClipFor({
@@ -292,11 +293,12 @@ export function WhoWeClipFor({
     </>
   ),
   className = "pb-24",
+  id,
 }: WhoProps) {
   const list = verticals.filter((v) => v.path !== exclude);
   const railId = exclude ? "other-services-rail" : "services-rail";
   return (
-    <section id={exclude ? "other-services" : "who-we-clip-for"} className={`mx-auto max-w-6xl px-6 sm:px-10 lg:px-12 ${className}`}>
+    <section id={id ?? (exclude ? "other-services" : "who-we-clip-for")} className={`mx-auto max-w-6xl px-6 sm:px-10 lg:px-12 ${className}`}>
       <div className="flex items-end justify-between gap-6">
         <div>
           <p className="font-label text-[10px] tracking-[0.14em] text-muted uppercase">{eyebrow}</p>

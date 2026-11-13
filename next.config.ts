@@ -37,6 +37,7 @@ const nextConfig: NextConfig = {
       { source: "/familyties-case", destination: "/case-studies/family-ties", permanent: true },
       { source: "/contact", destination: "/book", permanent: true },
       { source: "/attention-monopoly-system", destination: "/how-it-works", permanent: true },
+      { source: "/clipping-agency", destination: "/solutions#locations", permanent: true },
       { source: "/client", destination: "/app/client", permanent: false },
       { source: "/admin", destination: "/app/admin", permanent: false },
     ];

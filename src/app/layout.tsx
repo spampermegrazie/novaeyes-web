@@ -24,10 +24,10 @@ export const metadata: Metadata = {
     template: "%s | NovaEyes",
   },
   description: facts.oneLiner,
+  // No og:url here: a layout-level url would point every page's og:url at the homepage.
   openGraph: {
     type: "website",
     siteName: facts.name,
-    url: facts.url,
   },
   twitter: { card: "summary_large_image" },
   alternates: { canonical: "/" },

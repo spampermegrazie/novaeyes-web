@@ -5,7 +5,8 @@ import { notFound } from "next/navigation";
 import { cpmText, getCampaign, publicCampaigns } from "@/content/campaigns";
 import { Cta } from "@/components/cta";
 import { CountUp } from "@/components/ui/count-up";
-import { JsonLd, breadcrumbJsonLd } from "@/components/json-ld";
+import { JsonLd, breadcrumbJsonLd, faqJsonLd } from "@/components/json-ld";
+import { facts } from "@/content/facts";
 
 // Unknown slugs fall through to notFound() below.
 export function generateStaticParams() {
@@ -42,8 +43,24 @@ export default async function CaseStudy(props: PageProps<"/case-studies/[slug]">
       ? "linear-gradient(to bottom, #000 55%, transparent 95%), linear-gradient(to right, transparent 0%, #000 45%)"
       : "linear-gradient(to right, transparent 0%, #000 50%)";
 
+  // Short answers built only from the campaign's own numbers, so search and AI answers can quote
+  // the result in one passage. Nothing here that is not already in campaigns.ts.
+  const outcomeText = c.outcomes.map((o) => (/[.!?]$/.test(o) ? o : `${o}.`)).join(" ");
+  const qa = [
+    {
+      q: `How many views did the ${c.client} clipping campaign get?`,
+      a: `${exact} verified views${c.clips !== undefined ? ` from ${c.clips.toLocaleString("en-US")} clips` : ""}${c.timeframe ? ` in ${c.timeframe}` : ""}${cpm ? `, at ${cpm} per 1,000 views` : ""}.`,
+    },
+    ...(c.outcomes.length ? [{ q: `What did the campaign achieve for ${c.client}?`, a: outcomeText }] : []),
+    {
+      q: `Can NovaEyes run a campaign like this for me?`,
+      a: `Yes. Campaigns start at ${facts.minimumBudgetLabel}, launch within 24 hours of the onboarding call, and you pay only for verified views from your target audience.`,
+    },
+  ];
+
   return (
     <>
+      <JsonLd data={faqJsonLd(qa)} />
       <JsonLd
         data={breadcrumbJsonLd([
           { name: "Home", path: "/" },
@@ -105,6 +122,20 @@ export default async function CaseStudy(props: PageProps<"/case-studies/[slug]">
             <span aria-hidden className="mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-accent shadow-[0_0_8px_rgb(var(--glow))]" />
             {c.highlight}
           </p>
+
+          <section aria-labelledby="in-short" className="mt-12">
+            <h2 id="in-short" className="font-label text-[10px] tracking-[0.14em] text-muted uppercase">
+              The {c.client} campaign in short
+            </h2>
+            <dl className="mt-4 grid gap-3 md:grid-cols-3">
+              {qa.map((x) => (
+                <div key={x.q} className="rounded-2xl border border-line bg-bg-raised/40 p-5">
+                  <dt className="font-display font-semibold">{x.q}</dt>
+                  <dd className="mt-2 text-sm leading-relaxed text-muted">{x.a}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
 
           {c.story ? (
             <div className="max-w-3xl py-10">

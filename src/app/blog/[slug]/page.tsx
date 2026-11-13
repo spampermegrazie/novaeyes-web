@@ -7,6 +7,14 @@ import { JsonLd, breadcrumbJsonLd } from "@/components/json-ld";
 
 // Cache Components needs at least one param at build time. If the posts can't be
 // fetched during the build, a placeholder keeps the build valid and 404s at runtime.
+function clip(text: string, max: number) {
+  const t = text.replace(/\s+/g, " ").trim();
+  if (t.length <= max) return t;
+  const cut = t.slice(0, max);
+  const end = Math.max(cut.lastIndexOf(". "), cut.lastIndexOf("? "));
+  return end > max * 0.6 ? cut.slice(0, end + 1) : `${cut.slice(0, cut.lastIndexOf(" "))}...`;
+}
+
 export async function generateStaticParams() {
   const posts = await getPosts();
   return posts.length ? posts.map((p) => ({ slug: p.slug })) : [{ slug: "__no-posts__" }];
@@ -16,15 +24,19 @@ export async function generateMetadata(props: PageProps<"/blog/[slug]">): Promis
   const { slug } = await props.params;
   const post = await getPost(slug);
   if (!post) return { robots: { index: false } };
+  // Post titles and excerpts come from the CMS and often run long. Long titles drop the brand
+  // suffix (Google cuts at ~60 characters anyway); descriptions are cut at a word to ~155.
+  const description = clip(post.excerpt ?? "", 155);
   return {
-    title: post.title,
-    description: post.excerpt,
+    title: post.title.length > 48 ? { absolute: post.title } : post.title,
+    description,
     alternates: { canonical: `/blog/${post.slug}` },
     openGraph: {
       type: "article",
       title: post.title,
-      description: post.excerpt,
-      ...(post.cover_image_url ? { images: [post.cover_image_url] } : {}),
+      description,
+      url: `/blog/${post.slug}`,
+      images: [post.cover_image_url ?? "/opengraph-image.png"],
     },
   };
 }

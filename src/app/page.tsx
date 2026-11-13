@@ -15,6 +15,7 @@ import { ShinyButton } from "@/components/ui/shiny-button";
 import { WhatIsNovaEyes } from "@/components/what-is-novaeyes";
 import { FitCheck } from "@/components/fit-check";
 import { WhoWeClipFor } from "@/components/who-we-clip-for";
+import { MarketsRow } from "@/components/markets-row";
 
 // Every word on this page is in the server HTML. The hero animates its text in,
 // but never injects it, so crawlers and AI tools read the full page.
@@ -30,7 +31,7 @@ const steps: [EngineStep, EngineStep, EngineStep] = [
   },
   {
     title: "Feedback loop",
-    body: "The views come back from the platforms and we verify them. You pay only for verified views on approved clips. Every day the budget moves to the clips and formats that win, and the loop runs again. You can watch it all in a live dashboard.",
+    body: "The views come back from the platforms and we verify them, including that they come from your target countries and audience. You pay only for verified views on approved clips. Every day the budget moves to the clips and formats that win, and the loop runs again. You can watch it all in a live dashboard.",
   },
 ];
 
@@ -119,7 +120,8 @@ export default function Home() {
         </div>
       </section>
 
-      <WhoWeClipFor />
+      <WhoWeClipFor className="pb-8" />
+      <MarketsRow />
 
       <FitCheck />
 

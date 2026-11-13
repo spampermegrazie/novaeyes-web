@@ -31,7 +31,7 @@ const faqs = [
   },
   {
     q: "Do I pay for clips that get no views?",
-    a: "No. Clippers are only paid for approved clips, per 1,000 verified views. A clip that flops costs you nothing.",
+    a: "No. Clippers are only paid for approved clips, per 1,000 verified views from your target audience. A clip that flops, or reaches the wrong audience, costs you nothing.",
   },
   {
     q: "Is there a contract or retainer?",
