@@ -108,7 +108,7 @@ export function EstimatorPhone({ mode, value, nicheId, estimate, unlocked, compa
           rotateY: { duration: 1.3, ease: [0.22, 1, 0.36, 1], times: [0, 0.55, 1] },
           rotateX: { duration: 1.3, ease: [0.22, 1, 0.36, 1], times: [0, 0.55, 1] },
         }}
-        className="relative [transform-style:preserve-3d]"
+        className="relative [perspective:1200px]"
         onPointerMove={(e) => {
           if (reduced || e.pointerType !== "mouse") return;
           const r = e.currentTarget.getBoundingClientRect();
@@ -125,13 +125,26 @@ export function EstimatorPhone({ mode, value, nicheId, estimate, unlocked, compa
         <div aria-hidden className="pointer-events-none absolute -bottom-9 left-1/2 -z-10 h-12 w-[85%] -translate-x-1/2 rounded-[100%] bg-[radial-gradient(closest-side,rgb(0_0_0/0.85),rgb(var(--glow)/0.12)_70%,transparent)] blur-lg" />
 
         <motion.div
-          style={reduced ? undefined : { rotateX, rotateY, transformStyle: "preserve-3d" }}
+          style={reduced ? undefined : { rotateX, rotateY }}
           className={`relative aspect-[9/19] ${center ? "h-[min(700px,72vh)]" : "h-[min(540px,66vh)]"} ${reduced ? "" : "est-float"}`}
         >
           {/* bezel */}
           <div className="absolute inset-0 rounded-[44px] bg-[linear-gradient(145deg,#2a2d3a,#0b0c11_45%,#1b1e2a)] p-[2px] shadow-[0_40px_90px_rgb(0_0_0/0.65),0_0_0_1px_rgb(255_255_255/0.06)]">
             <div className="h-full w-full rounded-[42px] bg-[#06070a] p-[7px]">
               <div className="relative h-full w-full overflow-hidden rounded-[35px] bg-[linear-gradient(170deg,#141623_0%,#0b0c12_55%,#0f1830_100%)]">
+                <div aria-hidden className="absolute top-2.5 left-1/2 z-10 h-[22px] w-[32%] -translate-x-1/2 rounded-full bg-black" />
+                <div aria-hidden className="absolute inset-x-0 top-[46px] z-10 flex items-center justify-center text-white">
+                  <span className="text-[12px] font-semibold text-white/60">Following</span>
+                  <span className="mx-2.5 h-3 w-px bg-white/25" />
+                  <span className="relative text-[12px] font-bold">
+                    For You
+                    <span className="absolute -bottom-1.5 left-1/2 h-[2px] w-5 -translate-x-1/2 rounded-full bg-white" />
+                  </span>
+                  <svg viewBox="0 0 24 24" className="absolute right-4 h-[18px] w-[18px]" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+                    <circle cx="10.5" cy="10.5" r="6.5" />
+                    <path d="m15.5 15.5 4.5 4.5" />
+                  </svg>
+                </div>
                 {/* the clip: your niche, lit like a product shot */}
                 <motion.div
                   key={nicheId ?? "none"}
