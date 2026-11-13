@@ -165,6 +165,45 @@ h2, h3, h4 { font-weight: 600; }
   .wi-flat, .wi-low, .wi-grow { animation: none; transform: scaleX(var(--to, 1)); }
 }
 
+/* Who we clip for (src/components/who-we-clip-for.tsx): a small clip per vertical. */
+.wc-progress { transform-origin: left; animation: wc-progress 7s linear infinite; }
+@keyframes wc-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.wc-impact { transform-box: fill-box; transform-origin: center; animation: wc-impact 2.4s cubic-bezier(0.2, 0.7, 0.3, 1) infinite; }
+@keyframes wc-impact {
+  0% { transform: scale(0.3); opacity: 0; }
+  8% { opacity: 1; }
+  100% { transform: scale(2.6); opacity: 0; }
+}
+.wc-cut { animation: wc-cut 4.8s cubic-bezier(0.65, 0, 0.35, 1) infinite; }
+@keyframes wc-cut {
+  0%, 12% { transform: translateX(0); }
+  30%, 45% { transform: translateX(22px); }
+  63%, 78% { transform: translateX(46px); }
+  100% { transform: translateX(0); }
+}
+.wc-eq { transform-origin: bottom; animation: wc-eq 1s ease-in-out infinite alternate; }
+@keyframes wc-eq { from { transform: scaleY(0.25); } to { transform: scaleY(1); } }
+.wc-spin { animation: wc-spin 4s linear infinite; }
+@keyframes wc-spin { to { rotate: 360deg; } }
+.wc-word { background: rgb(255 255 255 / 0.22); animation: wc-word 3s linear infinite; }
+@keyframes wc-word {
+  0%, 15% { background: var(--accent); box-shadow: 0 0 8px rgb(var(--glow) / 0.8); }
+  17%, 100% { background: rgb(255 255 255 / 0.22); box-shadow: none; }
+}
+.wc-pill { animation: wc-pill 4s cubic-bezier(0.16, 1, 0.3, 1) infinite; }
+@keyframes wc-pill {
+  0%, 12% { opacity: 0; translate: 0 6px; }
+  22%, 82% { opacity: 1; translate: 0 0; }
+  92%, 100% { opacity: 0; translate: 0 0; }
+}
+.wc-bob { animation: wc-bob 3.2s ease-in-out infinite; }
+@keyframes wc-bob { 0%, 100% { translate: -50% 0; } 50% { translate: -50% -4px; } }
+.wc-glow { animation: wc-glow 2.4s ease-in-out infinite; }
+@keyframes wc-glow { 0%, 100% { box-shadow: 0 0 0 rgb(var(--glow) / 0); } 50% { box-shadow: 0 0 14px rgb(var(--glow) / 0.8); } }
+@media (prefers-reduced-motion: reduce) {
+  .wc-progress, .wc-impact, .wc-cut, .wc-eq, .wc-spin, .wc-word, .wc-pill, .wc-bob, .wc-glow { animation: none; }
+}
+
 /* Homepage numbers panel (src/components/stats-band.tsx). */
 .sb-sweep { animation: sb-sweep 7s cubic-bezier(0.45, 0, 0.25, 1) infinite; }
 @keyframes sb-sweep {

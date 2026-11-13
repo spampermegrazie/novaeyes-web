@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { facts } from "@/content/facts";
 import { publicCampaigns } from "@/content/campaigns";
-import { verticals } from "@/content/verticals";
 import { homeFaqs } from "@/content/faqs";
 import { heroClips } from "@/content/hero-clips";
 import { Cta } from "@/components/cta";
@@ -15,6 +14,7 @@ import { EngineSteps, type EngineStep } from "@/components/ui/engine-steps";
 import { ShinyButton } from "@/components/ui/shiny-button";
 import { WhatIsNovaEyes } from "@/components/what-is-novaeyes";
 import { FitCheck } from "@/components/fit-check";
+import { WhoWeClipFor } from "@/components/who-we-clip-for";
 
 // Every word on this page is in the server HTML. The hero animates its text in,
 // but never injects it, so crawlers and AI tools read the full page.
@@ -119,25 +119,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="who-we-clip-for" className="mx-auto max-w-6xl px-6 pb-24 sm:px-10 lg:px-12">
-        <p className="font-label text-[10px] tracking-[0.14em] text-muted uppercase">Who we clip for</p>
-        <h2 className="mt-4 max-w-3xl text-3xl tracking-tight text-balance sm:text-4xl">
-          Five kinds of content. <span className="text-muted">Pick yours.</span>
-        </h2>
-        <ul className="mt-8 flex flex-wrap gap-2.5">
-          {verticals.map((v) => (
-            <li key={v.path}>
-              <Link
-                href={v.path}
-                className="group inline-flex items-center gap-2.5 rounded-xl border border-line bg-bg-raised/40 px-4 py-3 font-display text-sm font-semibold transition-colors hover:border-accent/50 hover:bg-accent/[0.06]"
-              >
-                {v.h1}
-                <span className="text-muted transition-[color,translate] group-hover:translate-x-0.5 group-hover:text-accent">→</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </section>
+      <WhoWeClipFor />
 
       <FitCheck />
 
