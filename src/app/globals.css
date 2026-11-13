@@ -128,6 +128,12 @@ h2, h3, h4 { font-weight: 600; }
   .ne-dash, .ne-ring, .ne-live { animation: none; }
 }
 
+/* Clipping explainer (src/components/clipping-explainer.tsx): its SMIL pulses can't be paused
+   by the reduced-motion rule above, so they are hidden instead. */
+@media (prefers-reduced-motion: reduce) {
+  .cx-motion { display: none; }
+}
+
 /* Story-style progress line in the homepage results list. */
 .ne-story { animation-name: ne-story; animation-timing-function: linear; animation-fill-mode: forwards; transform: scaleX(0); }
 @keyframes ne-story { to { transform: scaleX(1); } }

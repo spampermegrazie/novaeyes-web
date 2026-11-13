@@ -14,6 +14,8 @@ import { FounderPortrait } from "@/components/founder-portrait";
 import { CountUp } from "@/components/ui/count-up";
 import { EngineSteps, type EngineStep } from "@/components/ui/engine-steps";
 import { ShinyButton } from "@/components/ui/shiny-button";
+import { ClippingExplainer } from "@/components/clipping-explainer";
+import { FitCheck } from "@/components/fit-check";
 
 // Every word on this page is in the server HTML. The hero animates its text in,
 // but never injects it, so crawlers and AI tools read the full page.
@@ -88,18 +90,7 @@ export default function Home() {
         </dl>
       </section>
 
-      <section id="what-is-a-clipping-agency" className="mx-auto max-w-6xl px-6 pb-24 sm:px-10 lg:px-12 *:max-w-3xl">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">What is a clipping agency?</h2>
-        <p className="mt-6 text-lg leading-relaxed text-muted">
-          A clipping agency takes your long videos, cuts the best moments into short clips and gets them posted by a large
-          network of creators, called clippers, on their own TikTok, Instagram, YouTube and X pages. Instead of growing one
-          account, your content shows up on hundreds of accounts at the same time.
-        </p>
-        <p className="mt-4 text-lg leading-relaxed text-muted">
-          NovaEyes works on performance. You fund a view pool, our {facts.clippersLabel} clippers post, and you pay only for
-          the views that are verified. Campaigns start at {facts.minimumBudgetLabel}.
-        </p>
-      </section>
+      <ClippingExplainer />
 
       {/* Stage 2: the engine. Title, steps and diagram pin together as one unit. */}
       <section id="how-it-works">
@@ -160,6 +151,8 @@ export default function Home() {
           ))}
         </ul>
       </section>
+
+      <FitCheck />
 
       <section id="clipping-vs-influencers" className="mx-auto max-w-6xl px-6 pb-24 sm:px-10 lg:px-12 *:max-w-3xl">
         <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">How is clipping different from influencer marketing?</h2>

@@ -84,9 +84,17 @@ export function EstimatorPhone({ mode, value, nicheId, estimate, unlocked, compa
   const final = unlocked && estimate ? (mode === "views" ? formatRange(estimate.budgetUsd, formatUsd) : formatRange(estimate.views, formatCompact)) : null;
   const heading = mode === null ? "Your estimate" : mode === "budget" ? "Estimated views" : "Estimated budget";
   const basis = mode === null ? "pick a starting point" : mode === "budget" ? `from a ${formatUsd(value)} budget` : `for ${formatCompact(value)} views`;
-  // likes, comments and shares come with the full report, so the rail only spins
+  // likes, comments and shares are part of the report: they spin until the estimate unlocks,
+  // then show the low end of each range (the full ranges sit under the phone)
+  const report = unlocked && estimate ? [estimate.likes.low, estimate.comments.low, estimate.shares.low] : null;
   const count = (seed: number) =>
-    reduced || mode === null ? <span className="text-white/60">•••</span> : <Reels prefix="" digits={3} speed={0.9 + seed * 0.25} size="sm" />;
+    report ? (
+      formatCompact(report[seed])
+    ) : reduced || mode === null ? (
+      <span className="text-white/60">•••</span>
+    ) : (
+      <Reels prefix="" digits={3} speed={0.9 + seed * 0.25} size="sm" />
+    );
 
   // tilt toward the pointer
   const px = useMotionValue(0);

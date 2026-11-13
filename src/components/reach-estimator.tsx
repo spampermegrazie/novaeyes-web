@@ -10,7 +10,7 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { AnimatePresence, animate, motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "motion/react";
 import { siInstagram, siTiktok, siX, siYoutubeshorts } from "simple-icons";
 import { estimatorConfig } from "@/content/estimator-config";
-import { estimate, formatCompact, formatRange, formatUsd } from "@/lib/estimator";
+import { estimate, formatCompact, formatRange, formatUsd, type Estimate } from "@/lib/estimator";
 import { BUDGET_SCALE, VIEWS_SCALE, parseAmount, positionOf, stepFrom, valueAt } from "@/lib/scale";
 import { getAttribution } from "@/lib/attribution";
 import { BookCall } from "./book-call";
@@ -275,28 +275,15 @@ export function ReachEstimator() {
                         {revealedFor === summary ? <CountUpRange text={headline} /> : headline}
                       </p>
                       <p className="mt-3 text-muted">{m === "budget" ? `for a ${formatUsd(value)} budget` : `to reach ${formatCompact(value)} views`}</p>
-                      <dl className="mt-10 grid grid-cols-3 border-y border-line py-6">
-                        <div className="pr-3">
-                          <dd className="font-display text-lg font-bold tabular-nums sm:text-xl">{formatRange(result.cpmUsd, formatUsd)}</dd>
-                          <dt className="mt-1 font-label text-[9px] tracking-[0.12em] text-muted uppercase">Per 1,000 views</dt>
-                        </div>
-                        <div className="pr-3">
-                          <dd className="font-display text-lg font-bold tabular-nums sm:text-xl">
-                            {formatRange(result.clips, (n) => n.toLocaleString("en-US"))}
-                          </dd>
-                          <dt className="mt-1 font-label text-[9px] tracking-[0.12em] text-muted uppercase">Clips</dt>
-                        </div>
-                        <div>
-                          <dd className="flex h-7 items-center gap-3">
-                            {PLATFORM_ICONS.map((p) => (
-                              <svg key={p.name} viewBox="0 0 24 24" className="h-4 w-4 fill-fg" role="img" aria-label={p.name}>
-                                <path d={p.path} />
-                              </svg>
-                            ))}
-                          </dd>
-                          <dt className="mt-1 font-label text-[9px] tracking-[0.12em] text-muted uppercase">Platforms</dt>
-                        </div>
-                      </dl>
+                      <ResultStats result={result} className="mt-10" />
+                      <div className="mt-4 flex items-center gap-3">
+                        <span className="font-label text-[9px] tracking-[0.12em] text-muted uppercase">Posted on</span>
+                        {PLATFORM_ICONS.map((p) => (
+                          <svg key={p.name} viewBox="0 0 24 24" className="h-4 w-4 fill-fg" role="img" aria-label={p.name}>
+                            <path d={p.path} />
+                          </svg>
+                        ))}
+                      </div>
                       <p className="mt-4 text-sm leading-relaxed text-muted">Based on past campaign ranges, not a guarantee.{emailed && ` A copy is on its way to ${email}.`}</p>
                       <div className="mt-8 flex flex-wrap items-center gap-6">
                         {!showBooking && (
@@ -352,7 +339,8 @@ export function ReachEstimator() {
             <p className="font-label text-[10px] tracking-[0.14em] text-accent uppercase">
               {m === "budget" ? "Estimated views" : "Estimated budget"} · {result.niche.label}
             </p>
-            <p className="mt-3 max-w-md text-sm leading-relaxed text-muted">Based on past campaign ranges, not a guarantee.{emailed && ` A copy is on its way to ${email}.`}</p>
+            <ResultStats result={result} className="mt-8 w-full text-left" />
+            <p className="mt-5 max-w-md text-sm leading-relaxed text-muted">Based on past campaign ranges, not a guarantee.{emailed && ` A copy is on its way to ${email}.`}</p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-6">
               {!showBooking && <ShinyButton onClick={() => setShowBooking(true)}>Book a 15-minute reach audit</ShinyButton>}
               <button type="button" onClick={() => go(1)} className="font-display text-sm font-semibold text-muted hover:text-fg">
@@ -368,6 +356,28 @@ export function ReachEstimator() {
         )}
       </aside>
     </div>
+  );
+}
+
+// The estimate report: cost, clips and the engagement a campaign like this usually gets.
+function ResultStats({ result, className = "" }: { result: Estimate; className?: string }) {
+  const items = [
+    { label: "Per 1,000 views", value: formatRange(result.cpmUsd, formatUsd) },
+    { label: "Clips", value: formatRange(result.clips, (n) => n.toLocaleString("en-US")) },
+    { label: "Engagement rate", value: `${result.engagementPct}%` },
+    { label: "Likes", value: formatRange(result.likes, formatCompact) },
+    { label: "Comments", value: formatRange(result.comments, formatCompact) },
+    { label: "Shares", value: formatRange(result.shares, formatCompact) },
+  ];
+  return (
+    <dl className={`grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-3 ${className}`}>
+      {items.map((it) => (
+        <div key={it.label} className="flex flex-col-reverse justify-end bg-bg px-4 py-4 sm:px-5">
+          <dt className="mt-1.5 font-label text-[9px] tracking-[0.12em] text-muted uppercase">{it.label}</dt>
+          <dd className="font-display text-base leading-tight font-bold tabular-nums sm:text-lg">{it.value}</dd>
+        </div>
+      ))}
+    </dl>
   );
 }
 
