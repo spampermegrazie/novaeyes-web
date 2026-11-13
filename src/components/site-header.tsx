@@ -2,6 +2,7 @@ import Link from "next/link";
 import { nav } from "@/content/facts";
 import { Logo } from "./brand";
 import { ShinyButton } from "./ui/shiny-button";
+import { MobileMenu } from "./mobile-menu";
 
 export function SiteHeader() {
   return (
@@ -17,14 +18,15 @@ export function SiteHeader() {
             </Link>
           ))}
         </nav>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5 sm:gap-3">
           {/* Dashboard lives in another zone, so a plain anchor, not <Link>. */}
           <a href="/app" className="hidden font-display text-sm font-medium text-muted hover:text-fg sm:inline">
             Client login
           </a>
-          <ShinyButton href="/book" className="px-4 py-2 text-sm">
+          <ShinyButton href="/book" className="px-3.5 py-2 text-[13px] whitespace-nowrap sm:px-4 sm:text-sm">
             Book a call
           </ShinyButton>
+          <MobileMenu />
         </div>
       </div>
     </header>

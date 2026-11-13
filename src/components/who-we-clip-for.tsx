@@ -142,48 +142,77 @@ const SCENES: Record<string, () => React.ReactNode> = {
   "/product-clipping": Product,
 };
 
-export function WhoWeClipFor() {
+// The small clip for one vertical (84x150). Scale it with a wrapper for bigger uses.
+export function ClipPhone({ path, delay = 0, hoverGlow = false }: { path: string; delay?: number; hoverGlow?: boolean }) {
+  const Scene = SCENES[path];
   return (
-    <section id="who-we-clip-for" className="mx-auto max-w-6xl px-6 pb-24 sm:px-10 lg:px-12">
-      <p className="font-label text-[10px] tracking-[0.14em] text-muted uppercase">Who we clip for</p>
-      <h2 className="mt-4 max-w-3xl text-3xl tracking-tight text-balance sm:text-4xl">
-        Five kinds of content. <span className="text-muted">One network.</span>
-      </h2>
+    <div
+      className={`relative h-[150px] w-[84px] overflow-hidden rounded-xl border border-white/10 bg-[linear-gradient(160deg,#1e2232_0%,#0f1018_60%,#13213f_100%)] shadow-[0_14px_30px_rgb(0_0_0/0.45)] transition-shadow duration-300 ${
+        hoverGlow ? "group-hover:shadow-[0_14px_30px_rgb(0_0_0/0.45),0_0_28px_rgb(var(--glow)/0.35)]" : ""
+      }`}
+    >
+      {Scene && <Scene />}
+      <div className="absolute inset-x-2 bottom-2 h-0.5 overflow-hidden rounded-full bg-white/15" aria-hidden>
+        <div className="wc-progress h-full bg-white/70" style={{ animationDelay: `${delay}s` }} />
+      </div>
+    </div>
+  );
+}
 
-      <ul className="-mx-6 mt-10 flex snap-x snap-mandatory scroll-px-6 gap-3 overflow-x-auto px-6 pb-2 sm:scroll-px-10 [scrollbar-width:none] sm:-mx-10 sm:px-10 lg:mx-0 lg:grid lg:grid-cols-5 lg:overflow-visible lg:px-0 lg:pb-0 [&::-webkit-scrollbar]:hidden">
-        {verticals.map((v, i) => {
-          const Scene = SCENES[v.path];
-          return (
-            <li key={v.path} className="w-[68%] shrink-0 snap-start sm:w-[38%] lg:w-auto">
-              <Link
-                href={v.path}
-                className="group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-bg-raised/40 transition-[border-color,translate,background-color] duration-300 hover:-translate-y-1 hover:border-accent/50 hover:bg-bg-raised/70"
-              >
-                <div className="relative flex h-48 items-center justify-center">
-                  <div
-                    aria-hidden
-                    className="pointer-events-none absolute inset-0 bg-[radial-gradient(45%_55%_at_50%_55%,rgb(var(--glow)/0.16),transparent)] opacity-60 transition-opacity duration-300 group-hover:opacity-100"
-                  />
-                  <div className="relative h-[150px] w-[84px] overflow-hidden rounded-xl border border-white/10 bg-[linear-gradient(160deg,#1e2232_0%,#0f1018_60%,#13213f_100%)] shadow-[0_14px_30px_rgb(0_0_0/0.45)] transition-shadow duration-300 group-hover:shadow-[0_14px_30px_rgb(0_0_0/0.45),0_0_28px_rgb(var(--glow)/0.35)]">
-                    {Scene && <Scene />}
-                    <div className="absolute inset-x-2 bottom-2 h-0.5 overflow-hidden rounded-full bg-white/15" aria-hidden>
-                      <div className="wc-progress h-full bg-white/70" style={{ animationDelay: `${-i * 1.7}s` }} />
-                    </div>
-                  </div>
-                </div>
-                <div className="flex flex-1 flex-col p-5 pt-4">
-                  <h3 className="flex items-center justify-between gap-2 text-base">
-                    {v.h1}
-                    <span className="text-muted transition-[color,translate] duration-300 group-hover:translate-x-0.5 group-hover:text-accent" aria-hidden>
-                      →
-                    </span>
-                  </h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-muted">{BLURBS[v.path]}</p>
-                </div>
-              </Link>
-            </li>
-          );
-        })}
+type WhoProps = {
+  // Leave one vertical out (its own service page).
+  exclude?: string;
+  eyebrow?: string;
+  title?: React.ReactNode;
+  className?: string;
+};
+
+export function WhoWeClipFor({
+  exclude,
+  eyebrow = "Who we clip for",
+  title = (
+    <>
+      Five kinds of content. <span className="text-muted">One network.</span>
+    </>
+  ),
+  className = "pb-24",
+}: WhoProps) {
+  const list = verticals.filter((v) => v.path !== exclude);
+  return (
+    <section id={exclude ? "other-services" : "who-we-clip-for"} className={`mx-auto max-w-6xl px-6 sm:px-10 lg:px-12 ${className}`}>
+      <p className="font-label text-[10px] tracking-[0.14em] text-muted uppercase">{eyebrow}</p>
+      <h2 className="mt-4 max-w-3xl text-3xl tracking-tight text-balance sm:text-4xl">{title}</h2>
+
+      <ul
+        className={`-mx-6 mt-10 flex snap-x snap-mandatory scroll-px-6 gap-3 overflow-x-auto px-6 pb-2 sm:scroll-px-10 [scrollbar-width:none] sm:-mx-10 sm:px-10 lg:mx-0 lg:grid lg:overflow-visible lg:px-0 lg:pb-0 [&::-webkit-scrollbar]:hidden ${
+          list.length === 5 ? "lg:grid-cols-5" : "lg:grid-cols-4"
+        }`}
+      >
+        {list.map((v, i) => (
+          <li key={v.path} className="w-[68%] shrink-0 snap-start sm:w-[38%] lg:w-auto">
+            <Link
+              href={v.path}
+              className="group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-bg-raised/40 transition-[border-color,translate,background-color] duration-300 hover:-translate-y-1 hover:border-accent/50 hover:bg-bg-raised/70"
+            >
+              <div className="relative flex h-48 items-center justify-center">
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0 bg-[radial-gradient(45%_55%_at_50%_55%,rgb(var(--glow)/0.16),transparent)] opacity-60 transition-opacity duration-300 group-hover:opacity-100"
+                />
+                <ClipPhone path={v.path} delay={-i * 1.7} hoverGlow />
+              </div>
+              <div className="flex flex-1 flex-col p-5 pt-4">
+                <h3 className="flex items-center justify-between gap-2 text-base">
+                  {v.h1}
+                  <span className="text-muted transition-[color,translate] duration-300 group-hover:translate-x-0.5 group-hover:text-accent" aria-hidden>
+                    →
+                  </span>
+                </h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-muted">{BLURBS[v.path]}</p>
+              </div>
+            </Link>
+          </li>
+        ))}
       </ul>
     </section>
   );

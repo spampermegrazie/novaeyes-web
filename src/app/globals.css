@@ -204,6 +204,11 @@ h2, h3, h4 { font-weight: 600; }
   .wc-progress, .wc-impact, .wc-cut, .wc-eq, .wc-spin, .wc-word, .wc-pill, .wc-bob, .wc-glow { animation: none; }
 }
 
+/* Service pages (src/components/vertical-page.tsx): chips floating by the hero clip. */
+.vp-float { animation: vp-float 5s ease-in-out infinite; }
+@keyframes vp-float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -7px; } }
+@media (prefers-reduced-motion: reduce) { .vp-float { animation: none; } }
+
 /* Homepage numbers panel (src/components/stats-band.tsx). */
 .sb-sweep { animation: sb-sweep 7s cubic-bezier(0.45, 0, 0.25, 1) infinite; }
 @keyframes sb-sweep {

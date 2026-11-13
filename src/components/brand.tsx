@@ -52,9 +52,9 @@ export function WordmarkUse({ id, className }: { id: string; className?: string 
 // Horizontal lockup for the header and footer: the mark, then the wordmark.
 export function Logo({ className = "" }: { className?: string }) {
   return (
-    <span className={`inline-flex items-center gap-2.5 ${className}`}>
-      <LogoMark className="h-[14px] w-auto" />
-      <Wordmark className="h-[11px] w-auto" title="NovaEyes" />
+    <span className={`inline-flex items-center gap-2 sm:gap-2.5 ${className}`}>
+      <LogoMark className="h-3 w-auto sm:h-[14px]" />
+      <Wordmark className="h-[9px] w-auto max-[359px]:hidden sm:h-[11px]" title="NovaEyes" />
     </span>
   );
 }
