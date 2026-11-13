@@ -11,7 +11,7 @@ import { ClipCurtainHero } from "@/components/ui/clip-curtain-hero";
 import { ResultsShowcase } from "@/components/ui/results-showcase";
 import { StudioTour } from "@/components/studio-tour";
 import { FounderPortrait } from "@/components/founder-portrait";
-import { CountUp } from "@/components/ui/count-up";
+import { StatsBand } from "@/components/stats-band";
 import { EngineSteps, type EngineStep } from "@/components/ui/engine-steps";
 import { ShinyButton } from "@/components/ui/shiny-button";
 import { WhatIsNovaEyes } from "@/components/what-is-novaeyes";
@@ -77,18 +77,7 @@ export default function Home() {
         </div>
       </ClipCurtainHero>
 
-      <section aria-label="NovaEyes in numbers" className="mx-auto max-w-6xl px-6 pb-24 sm:px-10 lg:px-12">
-        <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line md:grid-cols-4">
-          {facts.stats.map((s, i) => (
-            <div key={s.label} className="bg-bg px-6 py-8">
-              <dd className="font-display text-3xl font-bold tracking-tight">
-                <CountUp value={s.value} delay={i * 0.12} />
-              </dd>
-              <dt className="mt-1 text-sm text-muted">{s.label}</dt>
-            </div>
-          ))}
-        </dl>
-      </section>
+      <StatsBand />
 
       <WhatIsNovaEyes />
 

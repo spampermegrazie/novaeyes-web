@@ -167,6 +167,39 @@ h2, h3, h4 { font-weight: 600; }
   .wn-bar, .wn-spark, .wn-row { animation: none; }
 }
 
+/* Homepage numbers panel (src/components/stats-band.tsx). */
+.sb-sweep { animation: sb-sweep 7s cubic-bezier(0.45, 0, 0.25, 1) infinite; }
+@keyframes sb-sweep {
+  0% { transform: translateX(-100%); }
+  55%, 100% { transform: translateX(400%); }
+}
+.sb-dot { fill: var(--line-strong); }
+.sb-blink { animation: sb-blink 6s ease-in-out infinite; }
+@keyframes sb-blink {
+  0%, 100% { fill: var(--line-strong); }
+  12%, 30% { fill: var(--accent); }
+  44% { fill: var(--line-strong); }
+}
+.sb-glint { stroke-dasharray: 0.16 1; animation: sb-glint 3.6s cubic-bezier(0.45, 0, 0.25, 1) infinite; }
+@keyframes sb-glint {
+  from { stroke-dashoffset: 0.16; }
+  to { stroke-dashoffset: -1; }
+}
+.sb-belt { animation: sb-belt 22s linear infinite; }
+@keyframes sb-belt { to { transform: translateX(-50%); } }
+.sb-ripple { transform-box: fill-box; transform-origin: center; opacity: 0; animation: sb-ripple 4.2s cubic-bezier(0.2, 0.6, 0.3, 1) infinite; }
+@keyframes sb-ripple {
+  0% { transform: scale(0.08); opacity: 0; }
+  15% { opacity: 0.9; }
+  100% { transform: scale(1); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sb-sweep, .sb-glint { display: none; }
+  .sb-blink, .sb-belt { animation: none; }
+  .sb-blink.sb-keep { fill: var(--accent); }
+  .sb-ripple { animation: none; opacity: 0.35; transform: scale(var(--s, 1)); }
+}
+
 /* Story-style progress line in the homepage results list. */
 .ne-story { animation-name: ne-story; animation-timing-function: linear; animation-fill-mode: forwards; transform: scaleX(0); }
 @keyframes ne-story { to { transform: scaleX(1); } }
