@@ -63,7 +63,8 @@ In the dashboard's Vercel project: set `VITE_BASE_PATH=/app/` and the output dir
 
 - [ ] Real palette, logo and favicon (placeholder tokens in `src/app/globals.css`)
 - [ ] Estimator CPM ranges from the campaign dashboards
-- [ ] Port copy for `/attention-monopoly-system`, case study details and the blog
+- [ ] Port case study details and the blog
+- [ ] Write `/working-with-us` (what it is like working with us: the timeline from first call to final report). Placeholder page only, noindex and unlinked; add it to the sitemap and nav once it has content
 - [ ] Oktagon case study approved by the client (`publicApproved` in `campaigns.ts`)
 - [ ] Competitor rows on `/best-clipping-agencies` checked on each agency's own site, then remove `noindex`
 - [ ] Real contact email in the footer

@@ -288,7 +288,7 @@ export const faqGroups: FaqGroup[] = [
     items: [
       {
         q: "How do I start a campaign?",
-        a: "Book a call at nova-eyes.com/book or email andrea@nova-eyes.com. We reply within 24 hours, and setup usually takes a few days once your content is ready.",
+        a: "Book a call at nova-eyes.com/book or email andrea@nova-eyes.com. We reply within 24 hours, and campaigns launch within 24 hours of the onboarding call.",
       },
       {
         q: "How long is the call?",

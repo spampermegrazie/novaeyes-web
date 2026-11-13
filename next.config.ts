@@ -36,6 +36,7 @@ const nextConfig: NextConfig = {
       { source: "/robthebank-case", destination: "/case-studies/rob-the-bank", permanent: true },
       { source: "/familyties-case", destination: "/case-studies/family-ties", permanent: true },
       { source: "/contact", destination: "/book", permanent: true },
+      { source: "/attention-monopoly-system", destination: "/how-it-works", permanent: true },
       { source: "/client", destination: "/app/client", permanent: false },
       { source: "/admin", destination: "/app/admin", permanent: false },
     ];

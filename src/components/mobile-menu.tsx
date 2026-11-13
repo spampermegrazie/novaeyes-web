@@ -7,7 +7,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { nav, verticalLinks } from "@/content/facts";
 import { ShinyButton } from "./ui/shiny-button";
 
-// Phones only (hidden from md up): a menu button that opens a panel under the header with the
+// Phones and tablets (hidden from lg up): a menu button that opens a panel under the header with the
 // main links, the services and the two actions. The panel hangs off the header (absolute, not
 // fixed), because the header's backdrop blur would trap a fixed panel inside its 64px box.
 // Closes on Escape, on any link and when the route changes; the page behind does not scroll.
@@ -46,7 +46,7 @@ export function MobileMenu() {
   const close = () => setOpen(false);
 
   return (
-    <div className="md:hidden">
+    <div className="lg:hidden">
       <button
         ref={button}
         type="button"

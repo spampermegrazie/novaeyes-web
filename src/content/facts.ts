@@ -23,7 +23,7 @@ export const facts = {
   model: "Clients fund a view pool and pay only for verified views.",
   minimumBudgetUsd: 3_000,
   minimumBudgetLabel: "$3,000",
-  launchTime: "Most campaigns are live within 48 hours of brief approval.",
+  launchTime: "Campaigns launch within 24 hours of the onboarding call.",
   // Headline stats as published on the live site. Update statsAsOf whenever the numbers change.
   statsAsOf: "November 2026",
   stats: [
@@ -37,6 +37,7 @@ export const facts = {
 } as const;
 
 export const nav = [
+  { href: "/how-it-works", label: "How it works" },
   { href: "/case-studies", label: "Case studies" },
   { href: "/pricing", label: "Pricing" },
   { href: "/reach-estimator", label: "Estimate reach" },

@@ -37,7 +37,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: url("/faq"), lastModified: UPDATED, changeFrequency: "monthly", priority: 0.7 },
     { url: url("/book"), lastModified: UPDATED, changeFrequency: "yearly", priority: 0.6 },
     { url: url("/blog"), lastModified: UPDATED, changeFrequency: "weekly", priority: 0.8 },
-    { url: url("/attention-monopoly-system"), lastModified: UPDATED, changeFrequency: "monthly", priority: 0.7 },
+    { url: url("/how-it-works"), lastModified: UPDATED, changeFrequency: "monthly", priority: 0.7 },
     // /best-clipping-agencies joins the sitemap once competitor rows are verified and it is indexable.
   ];
 }

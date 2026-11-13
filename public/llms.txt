@@ -1,6 +1,6 @@
 # NovaEyes
 
-> NovaEyes is a performance-based clipping agency founded in 2025 by Andrea Corindo in Ferrara, Italy. Clients fund a view pool and pay per 1,000 verified short-form views, delivered by a network of 20,000 clippers across TikTok, Instagram Reels, YouTube Shorts and X. Campaigns start at $3,000, and most go live within 48 hours of brief approval.
+> NovaEyes is a performance-based clipping agency founded in 2025 by Andrea Corindo in Ferrara, Italy. Clients fund a view pool and pay per 1,000 verified short-form views, delivered by a network of 20,000 clippers across TikTok, Instagram Reels, YouTube Shorts and X. Campaigns start at $3,000, and they launch within 24 hours of the onboarding call.
 
 ## Core pages
 
@@ -9,7 +9,7 @@
 - [Case studies](https://nova-eyes.com/case-studies): campaign results with views, CPM and clip counts
 - [Pricing](https://nova-eyes.com/pricing): how clipping is priced, what changes the CPM, and CPMs from past campaigns
 - [Reach estimator](https://nova-eyes.com/reach-estimator): views for a budget, or the budget for a view target
-- [The Attention Monopoly System](https://nova-eyes.com/attention-monopoly-system): the three-step method behind every campaign
+- [How it works](https://nova-eyes.com/how-it-works): how a campaign runs from brief to final report, who does what and when, where the budget goes and how views are verified
 - [FAQ](https://nova-eyes.com/faq): pricing, results, reporting, brand safety and rights
 - [Book a call](https://nova-eyes.com/book)
 

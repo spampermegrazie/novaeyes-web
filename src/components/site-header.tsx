@@ -11,7 +11,7 @@ export function SiteHeader() {
         <Link href="/" aria-label="NovaEyes home" className="text-fg">
           <Logo />
         </Link>
-        <nav aria-label="Main" className="hidden items-center gap-7 font-display text-sm font-medium text-muted md:flex">
+        <nav aria-label="Main" className="hidden items-center gap-6 font-display text-sm font-medium whitespace-nowrap text-muted lg:flex xl:gap-7">
           {nav.map((item) => (
             <Link key={item.href} href={item.href} className="transition-colors hover:text-fg">
               {item.label}

@@ -93,7 +93,7 @@ export default function Home() {
             }
           />
           <Link
-            href="/attention-monopoly-system#the-team"
+            href="/how-it-works#studio"
             className="mt-10 inline-block font-display text-sm font-semibold text-accent transition-colors hover:text-fg lg:mt-6"
           >
             See the whole operation, station by station →
