@@ -479,13 +479,13 @@ h2, h3, h4 { font-weight: 600; }
 .pr-bid { transform-origin: bottom; animation: pr-bid 1.8s ease-in-out infinite alternate; }
 @keyframes pr-bid { from { scale: 1 var(--a); } to { scale: 1 var(--b); } }
 .pr-pulse { animation: ne-pulse 2.2s ease-in-out infinite; }
-.pr-fill { transform-origin: left; animation: pr-fill 7s cubic-bezier(0.45, 0, 0.25, 1) infinite; }
-@keyframes pr-fill {
-  0% { scale: 0 1; opacity: 1; }
-  82%, 92% { scale: 1 1; opacity: 1; }
-  100% { scale: 1 1; opacity: 0; }
+.pr-draw { stroke-dasharray: 1; animation: pr-draw 5.5s cubic-bezier(0.45, 0, 0.25, 1) infinite backwards; }
+@keyframes pr-draw {
+  0% { stroke-dashoffset: 1; opacity: 1; }
+  55%, 88% { stroke-dashoffset: 0; opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .pr-lit, .pr-rise, .pr-bid, .pr-pulse, .pr-fill { animation: none; }
+  .pr-lit, .pr-rise, .pr-bid, .pr-pulse, .pr-draw { animation: none; }
   .pr-bid { scale: 1 var(--b); }
 }

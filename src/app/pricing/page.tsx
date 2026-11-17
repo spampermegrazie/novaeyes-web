@@ -7,8 +7,8 @@ import { ShinyButton } from "@/components/ui/shiny-button";
 import { CountUp } from "@/components/ui/count-up";
 import { FeeSplit } from "@/components/pricing/fee-split";
 import { ViewsCalculator } from "@/components/pricing/views-calculator";
-import { QuoteCard } from "@/components/pricing/quote-card";
-import { Eyebrow, FeeCovers, FeeDrivers, PayoutClips, CpmChart, CompareTiles } from "@/components/pricing/pricing-visuals";
+import { DashboardMock } from "@/components/pricing/dashboard-mock";
+import { Eyebrow, FeeCovers, FeeDrivers, PayoutClips, CpmChart, CompareTable } from "@/components/pricing/pricing-visuals";
 import { formatUsd } from "@/lib/estimator";
 import { JsonLd, faqJsonLd, breadcrumbJsonLd, serviceJsonLd } from "@/components/json-ld";
 
@@ -161,7 +161,7 @@ export default function Pricing() {
             <span className="mx-2 text-muted/50">/</span>
             <span className="text-fg/80">Pricing</span>
           </nav>
-          <div className="mt-6 grid items-center gap-12 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:gap-16">
+          <div className="mt-6 grid grid-cols-1 items-center gap-12 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:gap-16">
             <div className="min-w-0">
               <h1 className="text-[2.6rem] leading-[1.02] font-bold tracking-tight text-balance min-[400px]:text-5xl sm:text-6xl">
                 Clipping agency pricing. <span className="text-muted">From {facts.minimumBudgetLabel}, paid per verified view.</span>
@@ -187,7 +187,7 @@ export default function Pricing() {
                 Updated <time dateTime={UPDATED}>{UPDATED_LABEL}</time>
               </p>
             </div>
-            <QuoteCard />
+            <DashboardMock />
           </div>
         </header>
 
@@ -328,7 +328,7 @@ export default function Pricing() {
           <h2 className="mt-4 max-w-3xl text-3xl tracking-tight text-balance sm:text-4xl">
             How does clipping pricing compare? <span className="text-muted">You pay for views, not posts.</span>
           </h2>
-          <CompareTiles />
+          <CompareTable />
         </section>
 
         {/* FAQ */}

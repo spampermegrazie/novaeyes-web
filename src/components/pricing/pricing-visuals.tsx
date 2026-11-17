@@ -269,143 +269,124 @@ export function CpmChart({ rows }: { rows: Row[] }) {
   );
 }
 
-/* Compared: clipping vs influencer deals vs paid ads, each with a small picture of how the money behaves. */
+/* Compared: one table, three columns, with a line showing how the cost moves against the views. */
 
-function Meter({ label, fill, anim, to, delay = 0 }: { label: string; fill: string; anim: string; to: number; delay?: number }) {
-  return (
-    <div className="mt-2.5 flex items-center gap-2.5">
-      <span className="w-9 shrink-0 font-[family-name:var(--font-geist-mono)] text-[10px] text-muted">{label}</span>
-      <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-line">
-        <span className={`block h-full origin-left rounded-full ${fill} ${anim}`} style={{ animationDelay: `${delay}s`, ["--to" as string]: to }} />
-      </span>
-    </div>
-  );
-}
-
-function ClippingPic() {
-  return (
-    <div className="w-full max-w-60 rounded-xl border border-accent/40 bg-accent/[0.05] p-4 shadow-[0_0_30px_rgb(var(--glow)/0.12)]">
-      <div className="flex items-baseline justify-between gap-2 text-xs">
-        <span className="font-semibold">NovaEyes</span>
-        <span className="font-[family-name:var(--font-geist-mono)] text-[10px] text-accent">per verified view</span>
-      </div>
-      <Meter label="Views" fill="bg-accent" anim="wi-grow" to={0.9} />
-      <Meter label="Cost" fill="bg-accent/55" anim="wi-grow" to={0.9} delay={0.18} />
-      <p className="mt-3 text-[10px] text-muted">Cost follows the views</p>
-    </div>
-  );
-}
-
-function InfluencerPic() {
-  return (
-    <div className="w-full max-w-60 rounded-xl border border-line bg-bg p-4">
-      <div className="flex items-baseline justify-between gap-2 text-xs">
-        <span className="text-muted">Influencer post</span>
-        <span className="font-[family-name:var(--font-geist-mono)] text-[10px] text-muted/70">fixed fee</span>
-      </div>
-      <Meter label="Views" fill="bg-fg/30" anim="wi-low" to={0.2} />
-      <Meter label="Cost" fill="bg-fg/60" anim="wi-flat" to={1} />
-      <p className="mt-3 text-[10px] text-muted">Paid up front, whatever it gets</p>
-    </div>
-  );
-}
-
-function AdsPic() {
-  const bids = [
-    [0.35, 0.7],
-    [0.6, 0.3],
-    [0.45, 0.9],
-    [0.8, 0.5],
-    [0.3, 0.65],
-    [0.7, 0.4],
-    [0.5, 0.95],
-    [0.9, 0.55],
-  ];
-  return (
-    <div className="w-full max-w-60 rounded-xl border border-line bg-bg p-4">
-      <div className="flex items-baseline justify-between gap-2 text-xs">
-        <span className="text-muted">Ad auction</span>
-        <span className="font-[family-name:var(--font-geist-mono)] text-[10px] text-muted/70">CPM moves</span>
-      </div>
-      <div className="mt-3 flex h-14 items-end gap-1.5">
-        {bids.map(([a, b], i) => (
-          <span key={i} className="flex h-full flex-1 items-end">
-            <span
-              className="pr-bid block h-full w-full rounded-t-[3px] bg-fg/40"
-              style={{ ["--a" as string]: a, ["--b" as string]: b, animationDelay: `${-i * 0.37}s` }}
-            />
-          </span>
-        ))}
-      </div>
-      <p className="mt-3 text-[10px] text-muted">Price set by demand, every day</p>
-    </div>
-  );
-}
-
-const COMPARE = [
+const OPTIONS = [
   {
     name: "Clipping with NovaEyes",
+    short: "NovaEyes",
     us: true,
-    Pic: ClippingPic,
-    rows: [
-      { k: "You pay for", v: "Verified views from your audience, plus a management fee" },
-      { k: "Price set by", v: "A CPM agreed before launch" },
-      { k: "If a post flops", v: "The clipper earns nothing from your pool" },
-      { k: "Who posts", v: "Thousands of clipper pages" },
-    ],
+    note: "Cost follows the views",
+    views: "M0,60 C40,56 70,40 100,28 S140,10 160,6",
+    cost: "M0,60 C40,57 70,45 100,34 S140,17 160,13",
   },
   {
     name: "Influencer deals",
+    short: "Influencer",
     us: false,
-    Pic: InfluencerPic,
-    rows: [
-      { k: "You pay for", v: "Posts, usually at a flat rate per post or package" },
-      { k: "Price set by", v: "The creator's rate" },
-      { k: "If a post flops", v: "The post is already paid for" },
-      { k: "Who posts", v: "One creator, or a handful" },
-    ],
+    note: "Paid up front, whatever it gets",
+    views: "M0,60 C30,54 60,50 100,49 S140,48 160,48",
+    cost: "M0,60 L10,60 L10,12 L160,12",
   },
   {
     name: "Paid social ads",
+    short: "Ads",
     us: false,
-    Pic: AdsPic,
-    rows: [
-      { k: "You pay for", v: "Impressions, clicks or actions, bought in an auction" },
-      { k: "Price set by", v: "The auction, which moves with demand" },
-      { k: "If a post flops", v: "On impression bidding, you pay for what was served" },
-      { k: "Who posts", v: "Your own account, as an ad" },
-    ],
+    note: "Price moves with the auction",
+    views: "M0,60 C40,55 80,46 120,40 S150,36 160,35",
+    cost: "M0,60 L16,50 L28,54 L44,40 L58,46 L74,32 L90,38 L106,24 L122,30 L138,18 L160,22",
   },
 ];
 
-export function CompareTiles() {
+const ROWS = [
+  { k: "You pay for", v: ["Verified views from your audience, plus a management fee", "Posts, usually at a flat rate per post or package", "Impressions, clicks or actions, bought in an auction"] },
+  { k: "Price set by", v: ["A CPM agreed before launch", "The creator's rate", "The auction, which moves with demand"] },
+  { k: "If a post flops", v: ["The clipper earns nothing from your pool", "The post is already paid for", "On impression bidding, you pay for what was served"] },
+  { k: "Who posts", v: ["Thousands of clipper pages", "One creator, or a handful", "Your own account, as an ad"] },
+  { k: "Commitment", v: ["Per campaign, no retainer", "Per deal", "Ongoing, while the ads run"] },
+];
+
+const GRID = "grid md:grid-cols-[9.5rem_repeat(3,minmax(0,1fr))]";
+const usCell = "border-l-2 border-accent bg-accent/[0.07] md:border-l-0";
+
+function CostLine({ o, i }: { o: (typeof OPTIONS)[number]; i: number }) {
   return (
-    <ul className="mt-12 grid gap-4 lg:grid-cols-3">
-      {COMPARE.map(({ name, us, Pic, rows }) => (
-        <li
-          key={name}
-          className={`relative flex flex-col overflow-hidden rounded-2xl border ${
-            us ? "border-accent/50 bg-accent/[0.04] shadow-[0_0_50px_rgb(var(--glow)/0.12)]" : "border-line bg-bg-raised/40"
-          }`}
-        >
-          {us && <span aria-hidden className="sb-sweep pointer-events-none absolute top-0 left-0 z-10 h-px w-1/3 bg-gradient-to-r from-transparent via-accent to-transparent" />}
-          <div className="relative flex h-44 items-center justify-center px-6 pt-6" aria-hidden>
-            <Pic />
+    <svg viewBox="0 0 160 64" className="h-16 w-full max-w-72 overflow-visible" aria-hidden>
+      <line x1="0" x2="160" y1="62" y2="62" stroke="var(--line)" />
+      <path d={o.views} fill="none" stroke="var(--muted)" strokeOpacity="0.55" strokeWidth="1.4" strokeDasharray="3 3" />
+      <path
+        d={o.cost}
+        fill="none"
+        stroke={o.us ? "var(--accent)" : "var(--fg)"}
+        strokeOpacity={o.us ? 1 : 0.65}
+        strokeWidth="2.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        pathLength={1}
+        className="pr-draw"
+        style={{ animationDelay: `${i * 0.25}s`, filter: o.us ? "drop-shadow(0 0 5px rgb(59 130 246 / 0.8))" : undefined }}
+      />
+    </svg>
+  );
+}
+
+export function CompareTable() {
+  return (
+    <div role="table" aria-label="Clipping pricing compared with influencer deals and paid social ads" className="mt-12 overflow-hidden rounded-3xl border border-line bg-bg-raised/20">
+      {/* column headers (desktop) */}
+      <div role="row" className={`${GRID} hidden md:grid`}>
+        <div role="columnheader" className="p-5">
+          <span className="sr-only">Compared on</span>
+        </div>
+        {OPTIONS.map((o) => (
+          <div key={o.name} role="columnheader" className={`relative p-5 ${o.us ? "bg-accent/[0.07]" : ""}`}>
+            {o.us && <span aria-hidden className="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-accent/20 via-accent to-accent/20 shadow-[0_0_12px_rgb(var(--glow)/0.8)]" />}
+            <span className={`font-display text-base font-semibold tracking-tight ${o.us ? "text-fg" : "text-fg/70"}`}>{o.name}</span>
           </div>
-          <div className="flex-1 p-6 pt-5">
-            <h3 className={`text-lg tracking-tight ${us ? "text-fg" : "text-fg/80"}`}>{name}</h3>
-            <dl className="mt-4">
-              {rows.map((r) => (
-                <div key={r.k} className="border-t border-line py-3.5 last:pb-0">
-                  <dt className="font-label text-[9px] tracking-[0.14em] text-muted uppercase">{r.k}</dt>
-                  <dd className={`mt-1 text-sm leading-relaxed ${us ? "text-fg/90" : "text-muted"}`}>{r.v}</dd>
-                </div>
-              ))}
-            </dl>
+        ))}
+      </div>
+
+      {/* how the cost moves */}
+      <div role="row" className={`${GRID} md:border-t md:border-line`}>
+        <div role="rowheader" className="px-5 pt-5 pb-2 md:py-5">
+          <span className="font-label text-[9px] tracking-[0.14em] text-muted uppercase">How cost moves</span>
+          <span className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5 text-[11px] text-muted md:flex-col">
+            <span className="flex items-center gap-2">
+              <span aria-hidden className="h-0.5 w-4 rounded-full bg-fg/70" />
+              Cost
+            </span>
+            <span className="flex items-center gap-2">
+              <span aria-hidden className="w-4 border-t-[1.5px] border-dashed border-muted/70" />
+              Views
+            </span>
+          </span>
+        </div>
+        {OPTIONS.map((o, i) => (
+          <div key={o.name} role="cell" className={`px-5 py-4 md:py-5 ${o.us ? usCell : ""}`}>
+            <span className={`mb-2 block font-display text-sm font-semibold md:hidden ${o.us ? "text-fg" : "text-fg/70"}`}>{o.name}</span>
+            <CostLine o={o} i={i} />
+            <span className={`mt-2 block text-xs ${o.us ? "text-accent" : "text-muted"}`}>{o.note}</span>
           </div>
-        </li>
+        ))}
+      </div>
+
+      {ROWS.map((r) => (
+        <div key={r.k} role="row" className={`${GRID} border-t border-line`}>
+          <div role="rowheader" className="px-5 pt-5 pb-2 md:py-5">
+            <span className="font-label text-[9px] tracking-[0.14em] text-muted uppercase">{r.k}</span>
+          </div>
+          {r.v.map((v, i) => {
+            const o = OPTIONS[i];
+            return (
+              <div key={o.name} role="cell" className={`px-5 py-2.5 text-sm leading-relaxed last:pb-5 md:py-5 md:last:pb-5 ${o.us ? `${usCell} text-fg/90` : "text-muted"}`}>
+                <span className={`mr-2 font-label text-[8px] tracking-[0.14em] uppercase md:hidden ${o.us ? "text-accent" : "text-muted/70"}`}>{o.short}</span>
+                {v}
+              </div>
+            );
+          })}
+        </div>
       ))}
-    </ul>
+    </div>
   );
 }
 
