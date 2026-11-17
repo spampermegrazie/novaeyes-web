@@ -452,3 +452,14 @@ h2, h3, h4 { font-weight: 600; }
 }
 .ne-range:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 7px rgb(var(--glow) / 0.35), 0 0 26px rgb(var(--glow)); }
 .ne-range:active::-webkit-slider-thumb { box-shadow: 0 0 0 8px rgb(var(--glow) / 0.25), 0 0 30px rgb(var(--glow)); }
+
+/* Pricing: the CPM slider (src/components/pricing/views-calculator.tsx). --p is the filled share. */
+.pr-range { -webkit-appearance: none; appearance: none; display: block; width: 100%; height: 24px; background: transparent; cursor: pointer; }
+.pr-range:focus { outline: none; }
+.pr-range::-webkit-slider-runnable-track { height: 4px; border-radius: 999px; background: linear-gradient(90deg, #1e3a8a, var(--accent) var(--p, 25%), var(--line-strong) var(--p, 25%)); }
+.pr-range::-moz-range-track { height: 4px; border-radius: 999px; background: var(--line-strong); }
+.pr-range::-moz-range-progress { height: 4px; border-radius: 999px; background: var(--accent); }
+.pr-range::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 20px; height: 20px; margin-top: -8px; border-radius: 999px; background: #fff; border: 4px solid var(--accent); box-shadow: 0 0 18px rgb(var(--glow) / 0.75); }
+.pr-range::-moz-range-thumb { width: 12px; height: 12px; border-radius: 999px; background: #fff; border: 4px solid var(--accent); box-shadow: 0 0 18px rgb(var(--glow) / 0.75); }
+.pr-range:focus-visible::-webkit-slider-thumb { outline: 2px solid #fff; outline-offset: 2px; }
+.pr-range:focus-visible::-moz-range-thumb { outline: 2px solid #fff; outline-offset: 2px; }

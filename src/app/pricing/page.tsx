@@ -4,12 +4,15 @@ import { facts } from "@/content/facts";
 import { publicCampaigns } from "@/content/campaigns";
 import { Cta } from "@/components/cta";
 import { ShinyButton } from "@/components/ui/shiny-button";
+import { CountUp } from "@/components/ui/count-up";
+import { FeeSplit } from "@/components/pricing/fee-split";
+import { ViewsCalculator } from "@/components/pricing/views-calculator";
 import { JsonLd, faqJsonLd, breadcrumbJsonLd, serviceJsonLd } from "@/components/json-ld";
-import { formatUsd } from "@/lib/estimator";
 
-// Pricing. Written for buyers and for AI answers: every section opens with the direct answer.
-// What is public: the $3,000 minimum, pay per verified view, and a management fee that is a percentage
-// of the budget, on top of it or taken out of it. What is not: the percentage itself, or any other fee.
+// Pricing, in the homepage's language: one idea per section, one picture per idea, every answer
+// in the server HTML. What is public: the $3,000 minimum, pay per verified view, and a management
+// fee that is a percentage of the budget, on top of it or taken out of it. What is not: the
+// percentage itself, or any other fee.
 
 const UPDATED = "2026-11-17";
 const UPDATED_LABEL = "November 17, 2026";
@@ -71,147 +74,75 @@ const faqs = [
   },
 ];
 
-const AT_A_GLANCE = [
-  { k: "Minimum campaign", v: facts.minimumBudgetLabel },
-  { k: "You pay", v: "Per 1,000 views" },
-  { k: "Management fee", v: "% of budget" },
-  { k: "Past CPMs", v: facts.cpmRangeLabel },
-  { k: "Retainer", v: "None" },
-  { k: "Live within", v: "24 hours" },
+const STATS = [
+  { value: facts.minimumBudgetLabel, label: "Minimum campaign" },
+  { value: "$0.13", label: "Lowest past CPM, per 1,000 views" },
+  { value: "15M", label: `Views a ${facts.minimumBudgetLabel} pool buys at a $0.20 CPM` },
+  { value: "24h", label: "From onboarding call to live" },
 ];
 
-const FEE_COVERS = [
-  "Strategy and the creative brief",
-  "Briefing and managing the clipper network",
-  "Reviewing every clip before it can earn",
-  "Verifying views and your target audience",
-  "Live dashboard, weekly reports and a final report",
-  "Moving budget to what works, every week",
-];
-
-const FEE_DRIVERS = [
+const PARTS = [
   {
     n: "01",
-    title: "Complexity",
-    body: "How many formats, platforms, countries and languages the campaign runs in, how tight the audience targeting is and how strict the brand rules are. More moving parts means more briefing and more review.",
+    title: "The view pool",
+    body: "Pays clippers per 1,000 verified views on approved clips, from the countries and audience you choose. Nothing else earns from it.",
   },
   {
     n: "02",
-    title: "Deadlines",
-    body: "A campaign tied to a release, a fight night, a drop or a launch date needs clippers briefed and clips reviewed in a tighter window.",
+    title: "The management fee",
+    body: "A percentage of the budget, for running the campaign: the brief, the clipper network, reviewing every clip, verifying every view, your dashboard and reports.",
+  },
+];
+
+const FEE_DRIVERS = [
+  { n: "01", title: "Complexity", body: "Formats, platforms, countries, languages, audience targeting and brand rules. More moving parts, more briefing and review." },
+  { n: "02", title: "Deadlines", body: "A release, a fight night, a drop. A fixed date means clippers briefed and clips reviewed in a tighter window." },
+  { n: "03", title: "Scale", body: "The size of the budget and how many clippers, clips and markets the campaign runs on." },
+];
+
+const COMPARE = [
+  {
+    name: "Clipping with NovaEyes",
+    us: true,
+    rows: [
+      { k: "You pay for", v: "Verified views from your audience, plus a management fee" },
+      { k: "Price set by", v: "A CPM agreed before launch" },
+      { k: "If a post flops", v: "The clipper earns nothing from your pool" },
+      { k: "Who posts", v: "Thousands of clipper pages" },
+    ],
   },
   {
-    n: "03",
-    title: "Scale",
-    body: "The size of the budget and how many clippers, clips and markets the campaign runs on. Scale changes how much work a campaign takes and how it is run.",
+    name: "Influencer deals",
+    us: false,
+    rows: [
+      { k: "You pay for", v: "Posts, usually at a flat rate per post or package" },
+      { k: "Price set by", v: "The creator's rate" },
+      { k: "If a post flops", v: "The post is already paid for" },
+      { k: "Who posts", v: "One creator, or a handful" },
+    ],
+  },
+  {
+    name: "Paid social ads",
+    us: false,
+    rows: [
+      { k: "You pay for", v: "Impressions, clicks or actions, bought in an auction" },
+      { k: "Price set by", v: "The auction, which moves with demand" },
+      { k: "If a post flops", v: "On impression bidding, you pay for what was served" },
+      { k: "Who posts", v: "Your own account, as an ad" },
+    ],
   },
 ];
 
-const CPM_FACTORS = [
-  { title: "Your content", body: "Videos with strong moments, like a knockout, a hot take or a catchy hook, give clippers more to work with, and their clips spread further." },
-  { title: "Your niche", body: "Some audiences share more than others. Music and combat sports tend to move fast." },
-  { title: "The platforms", body: "Views cost more on some platforms than others, so the mix changes the average." },
-  { title: "Your audience", body: "The tighter the targeting, the fewer views qualify. Locking a campaign to one country or a narrow age range can raise the CPM, but every view you pay for is one you wanted." },
-  { title: "Your brand rules", body: "Strict rules mean fewer clips get approved. That keeps you safe, but it can raise the CPM." },
-];
-
-const COMPARE = {
-  cols: ["Clipping with NovaEyes", "Influencer deals", "Paid social ads"],
-  rows: [
-    { k: "You pay for", v: ["Verified views from your audience, plus a management fee", "Posts, usually at a flat rate per post or package", "Impressions, clicks or actions, bought in an auction"] },
-    { k: "Price set by", v: ["A CPM agreed before launch", "The creator's rate", "The auction, which moves with demand"] },
-    { k: "If a post flops", v: ["The clipper earns nothing from your pool", "The post is already paid for", "On impression bidding, you pay for what was served"] },
-    { k: "Who posts", v: ["Thousands of clipper pages", "One creator, or a handful", "Your own account, as an ad"] },
-    { k: "Commitment", v: ["Per campaign, no retainer", "Per deal", "Ongoing, while the ads run"] },
-  ],
-};
-
-function Eyebrow({ children }: { children: React.ReactNode }) {
-  return <p className="font-label text-[10px] tracking-[0.14em] text-muted uppercase">{children}</p>;
-}
-
-function Check() {
-  return (
-    <svg viewBox="0 0 16 16" className="mt-1 h-4 w-4 shrink-0 text-accent" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
-      <path d="m3.5 8.5 3 3 6-7" />
-    </svg>
-  );
-}
-
-// Fee on top vs taken out, drawn against the same budget line. Not to scale, no percentage.
-function FeeBars() {
-  const rows = [
-    {
-      label: "Fee on top",
-      pool: "84%",
-      body: "The whole budget funds the view pool. The fee is added to it.",
-    },
-    {
-      label: "Fee taken out",
-      pool: "68%",
-      body: "The fee comes out of the budget. The rest funds the view pool.",
-    },
-  ];
-  return (
-    <div className="rounded-2xl border border-line bg-bg-raised/40 p-6 sm:p-7">
-      <h3 className="text-xl tracking-tight">On top, or taken out of the budget?</h3>
-      <p className="mt-2 leading-relaxed text-muted">
-        Both happen. Which one applies depends on the campaign&apos;s complexity, deadlines and scale, and is agreed in writing before launch.
-      </p>
-      <div className="relative mt-8" aria-hidden>
-        {/* the budget line, shared by both rows */}
-        <div className="absolute -top-5 bottom-0 left-[84%] w-px bg-fg/40">
-          <span className="absolute -top-0.5 right-1.5 font-label text-[9px] tracking-[0.14em] whitespace-nowrap text-fg/70 uppercase">
-            Your budget
-          </span>
-        </div>
-        <div className="space-y-6">
-          {rows.map((r) => (
-            <div key={r.label}>
-              <p className="font-label text-[10px] tracking-[0.14em] text-accent uppercase">{r.label}</p>
-              <div className="mt-2 flex h-9 overflow-hidden rounded-lg">
-                <div
-                  className="flex items-center rounded-l-lg bg-gradient-to-r from-accent/45 to-accent/80 px-3 font-display text-xs font-semibold text-fg"
-                  style={{ width: r.pool }}
-                >
-                  View pool
-                </div>
-                <div className="flex w-[16%] items-center justify-center rounded-r-lg border border-dashed border-accent/60 bg-accent/10 font-display text-xs font-semibold text-fg/80">
-                  Fee
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-      <ul className="mt-6 grid gap-3 sm:grid-cols-2">
-        {rows.map((r) => (
-          <li key={r.label} className="rounded-xl border border-line bg-bg px-4 py-3 text-sm leading-relaxed text-fg/85">
-            <span className="font-display font-semibold">{r.label}.</span> {r.body}
-          </li>
-        ))}
-      </ul>
-      <p className="mt-4 text-xs text-muted">Illustration, not to scale. Your percentage is set per campaign.</p>
-    </div>
-  );
-}
-
-function millions(pool: number, cpm: number) {
-  const m = pool / cpm / 1000;
-  return `${m.toFixed(1).replace(/\.0$/, "")}M`;
+function Eyebrow({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+  return <p className={`font-label text-[10px] tracking-[0.14em] text-muted uppercase ${className}`}>{children}</p>;
 }
 
 export default function Pricing() {
-  const withCpm = publicCampaigns.filter((c) => c.cpmUsd !== undefined).sort((a, b) => a.cpmUsd! - b.cpmUsd!);
+  const past = publicCampaigns
+    .filter((c) => c.cpmUsd !== undefined)
+    .sort((a, b) => a.cpmUsd! - b.cpmUsd!)
+    .map((c) => ({ client: c.client, cpm: c.cpmUsd! }));
   const threeK = publicCampaigns.filter((c) => c.spendUsd === facts.minimumBudgetUsd);
-  const low = withCpm[0];
-  const high = withCpm[withCpm.length - 1];
-  const pool = facts.minimumBudgetUsd;
-  const examples = [
-    { cpm: low.cpmUsd!, note: `Lowest past CPM, ${low.client}` },
-    { cpm: 0.2, note: "Example rate" },
-    { cpm: high.cpmUsd!, note: `Highest past CPM, ${high.client}` },
-  ];
 
   const offer = {
     ...serviceJsonLd(
@@ -223,11 +154,7 @@ export default function Pricing() {
       "@type": "Offer",
       url: `${facts.url}/pricing`,
       priceCurrency: "USD",
-      priceSpecification: {
-        "@type": "PriceSpecification",
-        minPrice: facts.minimumBudgetUsd,
-        priceCurrency: "USD",
-      },
+      priceSpecification: { "@type": "PriceSpecification", minPrice: facts.minimumBudgetUsd, priceCurrency: "USD" },
       description: facts.pricingSummary,
     },
   };
@@ -254,340 +181,217 @@ export default function Pricing() {
       />
 
       <article>
-        {/* hero: the answer first */}
-        <header className="mx-auto max-w-6xl px-6 pt-16 pb-16 sm:px-10 lg:px-12 lg:pt-20">
-          <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-y-1 font-label text-[10px] tracking-[0.14em] text-muted uppercase">
-            <Link href="/" className="transition-colors hover:text-fg">
-              Home
-            </Link>
-            <span className="mx-2 text-muted/50">/</span>
-            <span className="text-fg/80">Pricing</span>
-          </nav>
-          <h1 className="mt-6 max-w-4xl text-[2.6rem] leading-[1.02] font-bold tracking-tight text-balance min-[400px]:text-5xl sm:text-6xl">
-            Clipping agency pricing. <span className="text-muted">From {facts.minimumBudgetLabel}, paid per verified view.</span>
-          </h1>
-          <div className="mt-7 grid gap-10 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:items-start">
-            <div className="min-w-0">
-              <p className="max-w-2xl text-lg leading-relaxed text-fg/85">
-                NovaEyes clipping campaigns start at {facts.minimumBudgetLabel}. Every campaign has two costs: a view pool that pays clippers per
-                1,000 verified views from your target audience, and a management fee for running the campaign. The fee is a percentage of the
-                budget, added on top of it or taken out of it, depending on the campaign&apos;s complexity, deadlines and scale.
-              </p>
-              <p className="mt-4 max-w-2xl leading-relaxed text-muted">
-                You get the full cost in writing before anything is signed. There is no retainer, clips that miss your audience are not paid, and
-                past campaigns ran {facts.cpmRangeLabel} per 1,000 views.
-              </p>
-              <p className="mt-5 text-xs text-muted">
-                Updated <time dateTime={UPDATED}>{UPDATED_LABEL}</time>
-              </p>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <ShinyButton href="/book">Get your exact cost</ShinyButton>
-                <Link
-                  href="/reach-estimator"
-                  className="rounded-xl border border-line bg-bg/60 px-6 py-3 text-center font-display text-sm font-semibold backdrop-blur transition-colors hover:border-muted/50"
-                >
-                  Estimate your reach
-                </Link>
-              </div>
+        {/* hero: centered, like the homepage */}
+        <header className="relative overflow-hidden">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(var(--line)_1px,transparent_1px)] [mask-image:radial-gradient(ellipse_60%_70%_at_50%_45%,#000_30%,transparent_100%)] [background-size:24px_24px]"
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute top-1/2 left-1/2 h-[520px] w-[520px] max-w-[120vw] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[rgb(var(--glow)/0.10)] blur-3xl"
+          />
+          <div className="relative mx-auto max-w-6xl px-6 pt-24 pb-20 text-center sm:px-10 sm:pt-28 lg:px-12 lg:pt-32">
+            <h1>
+              <span className="block font-label text-[10px] leading-normal font-normal tracking-[0.14em] text-muted uppercase sm:text-xs sm:tracking-[0.18em]">
+                Clipping agency pricing
+              </span>
+              <span className="sr-only">: </span>
+              <span className="mx-auto mt-6 block text-5xl leading-[1.02] font-bold tracking-tight text-balance sm:text-6xl lg:text-[64px]">
+                From {facts.minimumBudgetLabel}. <br className="hidden md:block" />
+                Paid per verified view.
+              </span>
+            </h1>
+            <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
+              Your view pool pays clippers per 1,000 verified views from your audience. A management fee, a percentage of the budget, pays for
+              running it. You get the full cost in writing before you sign.
+            </p>
+            <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <ShinyButton href="/book">Get your exact cost</ShinyButton>
+              <Link
+                href="/reach-estimator"
+                className="rounded-xl border border-line bg-bg/60 px-6 py-3 text-center font-display text-sm font-semibold backdrop-blur transition-colors hover:border-muted/50"
+              >
+                Estimate your reach
+              </Link>
             </div>
-            <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line">
-              {AT_A_GLANCE.map((f) => (
-                <div key={f.k} className="flex min-w-0 flex-col justify-between bg-bg px-5 py-5">
-                  <dt className="text-xs text-muted">{f.k}</dt>
-                  <dd className="mt-1.5 font-display text-lg font-bold tracking-tight sm:text-2xl">{f.v}</dd>
+            <p className="mt-8 font-label text-[9px] tracking-[0.14em] text-muted/70 uppercase">
+              Updated <time dateTime={UPDATED}>{UPDATED_LABEL}</time>
+            </p>
+          </div>
+        </header>
+
+        {/* the numbers, in the same panel as the homepage stats */}
+        <section aria-label="Pricing in numbers" className="mx-auto max-w-6xl px-6 pb-24 sm:px-10 lg:px-12">
+          <div className="relative overflow-hidden rounded-2xl border border-line bg-line">
+            <span aria-hidden className="sb-sweep pointer-events-none absolute top-0 left-0 z-10 h-px w-1/4 bg-gradient-to-r from-transparent via-accent to-transparent" />
+            <dl className="grid grid-cols-2 gap-px md:grid-cols-4">
+              {STATS.map((s, i) => (
+                <div key={s.label} className="group relative flex min-h-36 flex-col overflow-hidden bg-bg px-5 pt-6 pb-6 transition-colors duration-300 hover:bg-[#101016] sm:min-h-44 sm:px-6 sm:pt-7">
+                  <div
+                    aria-hidden
+                    className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-[radial-gradient(60%_100%_at_50%_100%,rgb(var(--glow)/0.12),transparent)] opacity-60 transition-opacity duration-300 group-hover:opacity-100"
+                  />
+                  <dt className="relative order-2 mt-1 text-sm text-muted">{s.label}</dt>
+                  <dd className="relative order-1 font-display text-[28px] leading-tight font-bold tracking-tight sm:text-4xl lg:text-[44px]">
+                    <CountUp value={s.value} delay={i * 0.12} />
+                  </dd>
                 </div>
               ))}
             </dl>
           </div>
-        </header>
+        </section>
 
-        {/* the two costs */}
-        <section id="how-pricing-works" className="mx-auto max-w-6xl scroll-mt-24 px-6 pb-24 sm:px-10 lg:px-12">
-          <Eyebrow>How it is priced</Eyebrow>
-          <h2 className="mt-4 max-w-3xl text-3xl tracking-tight text-balance sm:text-4xl">
-            How is a clipping campaign priced? <span className="text-muted">A view pool and a management fee.</span>
-          </h2>
-          <div className="mt-10 grid gap-4 md:grid-cols-2">
-            <div className="rounded-2xl border border-line bg-bg-raised/40 p-6 sm:p-7">
-              <p className="font-label text-[10px] tracking-[0.14em] text-accent">01</p>
-              <h3 className="mt-3 text-xl tracking-tight">The view pool pays the clippers</h3>
-              <p className="mt-2 leading-relaxed text-muted">
-                Each clipper earns per 1,000 verified views on clips we approved, from the countries and audience you chose. A clip that is not
-                approved, can&apos;t be verified or misses your audience earns nothing. When the pool is spent, the campaign is done. Budgets are not
-                refunded: if you stop early, what is left moves to a new campaign.
+        {/* how it is priced */}
+        <section id="how-pricing-works" className="mx-auto max-w-6xl scroll-mt-24 px-6 py-24 sm:px-10 lg:px-12">
+          <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16">
+            <div className="min-w-0">
+              <Eyebrow>How it is priced</Eyebrow>
+              <h2 className="mt-4 text-3xl tracking-tight text-balance sm:text-4xl">
+                How is a campaign priced? <span className="text-muted">Two parts.</span>
+              </h2>
+              <p className="mt-5 leading-relaxed text-muted">
+                Campaigns start at {facts.minimumBudgetLabel}. The fee is added on top of the budget or taken out of it, depending on the
+                campaign&apos;s complexity, deadlines and scale.
               </p>
-              <Link href="/how-it-works#budget" className="mt-5 inline-block font-display text-sm font-semibold text-accent transition-colors hover:text-fg">
+              <ol className="mt-10 space-y-8">
+                {PARTS.map((p) => (
+                  <li key={p.n} className="grid grid-cols-[2.25rem_minmax(0,1fr)]">
+                    <span className="font-label text-[10px] leading-7 tracking-[0.14em] text-accent">{p.n}</span>
+                    <span>
+                      <span className="block font-display text-lg font-semibold tracking-tight">{p.title}</span>
+                      <span className="mt-1.5 block leading-relaxed text-muted">{p.body}</span>
+                    </span>
+                  </li>
+                ))}
+              </ol>
+              <Link href="/how-it-works#budget" className="mt-10 inline-block font-display text-sm font-semibold text-accent transition-colors hover:text-fg">
                 How views are verified →
               </Link>
             </div>
-            <div className="rounded-2xl border border-accent/40 bg-accent/[0.05] p-6 shadow-[0_0_40px_rgb(var(--glow)/0.08)] sm:p-7">
-              <p className="font-label text-[10px] tracking-[0.14em] text-accent">02</p>
-              <h3 className="mt-3 text-xl tracking-tight">The management fee pays for running it</h3>
-              <p className="mt-2 leading-relaxed text-muted">A percentage of the budget. It covers:</p>
-              <ul className="mt-4 space-y-2">
-                {FEE_COVERS.map((f) => (
-                  <li key={f} className="flex gap-3 leading-relaxed text-fg/85">
-                    <Check />
-                    {f}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-          <div className="mt-4">
-            <FeeBars />
+            <FeeSplit />
           </div>
         </section>
 
         {/* what decides the fee */}
-        <section id="management-fee" className="mx-auto max-w-6xl scroll-mt-24 px-6 pb-24 sm:px-10 lg:px-12">
+        <section id="management-fee" className="mx-auto max-w-6xl scroll-mt-24 px-6 py-24 sm:px-10 lg:px-12">
           <Eyebrow>Management fee</Eyebrow>
           <h2 className="mt-4 max-w-3xl text-3xl tracking-tight text-balance sm:text-4xl">
             What decides the management fee? <span className="text-muted">Complexity, deadlines and scale.</span>
           </h2>
-          <p className="mt-5 max-w-2xl leading-relaxed text-muted">
-            The percentage, and whether it sits on top of the budget or inside it, is set per campaign. These are the three things that move it.
-          </p>
-          <ol className="mt-10 grid gap-4 md:grid-cols-3">
+          <ol className="mt-14 grid gap-10 md:grid-cols-3 md:gap-8">
             {FEE_DRIVERS.map((d) => (
-              <li key={d.n} className="rounded-2xl border border-line bg-bg-raised/40 p-6 sm:p-7">
-                <p className="font-label text-[10px] tracking-[0.14em] text-accent">{d.n}</p>
-                <h3 className="mt-3 text-xl tracking-tight">{d.title}</h3>
+              <li key={d.n}>
+                <span aria-hidden className="block h-px bg-gradient-to-r from-accent/80 via-accent/20 to-transparent" />
+                <p className="mt-6 font-display text-4xl font-bold tracking-tight text-accent/90 [text-shadow:0_0_24px_rgb(var(--glow)/0.35)]">{d.n}</p>
+                <h3 className="mt-4 text-xl tracking-tight">{d.title}</h3>
                 <p className="mt-2 leading-relaxed text-muted">{d.body}</p>
               </li>
             ))}
           </ol>
+          <p className="mt-14 max-w-2xl leading-relaxed text-muted">
+            The percentage, and whether it sits on top of the budget or inside it, is set per campaign and agreed in writing before launch.
+          </p>
         </section>
 
         {/* what the minimum buys */}
-        <section id="minimum" className="mx-auto max-w-6xl scroll-mt-24 px-6 pb-24 sm:px-10 lg:px-12">
-          <Eyebrow>The minimum</Eyebrow>
-          <h2 className="mt-4 max-w-3xl text-3xl tracking-tight text-balance sm:text-4xl">
-            What does {facts.minimumBudgetLabel} get you? <span className="text-muted">Two past campaigns at that budget.</span>
-          </h2>
-          <ul className="mt-10 grid gap-4 md:grid-cols-2">
-            {threeK.map((c) => (
-              <li key={c.slug}>
-                <Link
-                  href={`/case-studies/${c.slug}`}
-                  className="group flex h-full flex-col rounded-2xl border border-line bg-bg-raised/40 p-6 transition-[border-color,background-color] duration-300 hover:border-accent/50 hover:bg-bg-raised/70 sm:p-7"
-                >
-                  <span className="font-label text-[10px] tracking-[0.14em] text-muted uppercase">{c.category}</span>
-                  <span className="mt-3 flex items-center justify-between gap-2 font-display text-xl font-semibold tracking-tight">
-                    {c.client}
-                    <span className="text-muted transition-[color,translate] duration-300 group-hover:translate-x-0.5 group-hover:text-accent" aria-hidden>
-                      →
-                    </span>
-                  </span>
-                  <span className="mt-5 flex flex-wrap items-baseline gap-x-6 gap-y-2">
-                    <span>
-                      <span className="block font-display text-4xl font-bold tabular-nums">{c.viewsLabel}</span>
-                      <span className="text-xs text-muted">verified views</span>
-                    </span>
-                    {c.cpmUsd !== undefined && (
-                      <span>
-                        <span className="block font-display text-4xl font-bold tabular-nums">${c.cpmUsd.toFixed(2)}</span>
-                        <span className="text-xs text-muted">per 1,000 views</span>
-                      </span>
-                    )}
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-          <p className="mt-5 max-w-2xl text-sm leading-relaxed text-muted">
-            Past results, not a promise. Your number depends on your content, your niche and your audience.
-          </p>
-        </section>
-
-        {/* CPM */}
-        <section id="cpm" className="mx-auto max-w-6xl scroll-mt-24 px-6 pb-24 sm:px-10 lg:px-12">
-          <div className="grid gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16">
-            <div className="min-w-0">
-              <Eyebrow>CPM</Eyebrow>
-              <h2 className="mt-4 text-3xl tracking-tight text-balance sm:text-4xl">
-                What is CPM in clipping? <span className="text-muted">The cost per 1,000 views.</span>
-              </h2>
-              <p className="mt-5 leading-relaxed text-fg/85">
-                CPM is what 1,000 verified views cost. At a $0.20 CPM, 1,000 views cost 20 cents, so a {facts.minimumBudgetLabel} view pool buys
-                about 15 million views.
-              </p>
-              <p className="mt-4 leading-relaxed text-muted">
-                We agree a target CPM before launch, then watch it every week and move budget to the clips and pages that bring views in
-                cheapest. If the fee is taken out of the budget, the view pool is smaller than the budget, and the views scale with the pool.
-              </p>
-            </div>
-            <div className="min-w-0 rounded-2xl border border-line bg-bg-raised/40 p-6 sm:p-7">
-              <p className="font-[family-name:var(--font-geist-mono)] text-xs text-muted">views = view pool ÷ CPM × 1,000</p>
-              <ul className="mt-5 space-y-2.5">
-                {examples.map((e) => (
-                  <li key={e.cpm} className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 rounded-lg border border-line bg-bg px-4 py-3">
-                    <span className="min-w-0">
-                      <span className="block font-display text-sm font-semibold tabular-nums">
-                        {formatUsd(pool)} at ${e.cpm.toFixed(2)}
-                      </span>
-                      <span className="text-xs text-muted">{e.note}</span>
-                    </span>
-                    <span className="font-display text-2xl font-bold text-accent tabular-nums">{millions(pool, e.cpm)} views</span>
-                  </li>
-                ))}
-              </ul>
-              <p className="mt-4 text-xs text-muted">View pool only. Arithmetic, not a forecast.</p>
-            </div>
+        <section id="cpm" className="mx-auto max-w-6xl scroll-mt-24 px-6 py-24 sm:px-10 lg:px-12">
+          <div className="text-center">
+            <Eyebrow>CPM</Eyebrow>
+            <h2 className="mx-auto mt-4 max-w-3xl text-3xl tracking-tight text-balance sm:text-4xl">
+              What does {facts.minimumBudgetLabel} buy? <span className="text-muted">It depends on the CPM.</span>
+            </h2>
+            <p className="mx-auto mt-5 max-w-2xl leading-relaxed text-muted">
+              CPM is the cost per 1,000 views. At a $0.20 CPM, a {facts.minimumBudgetLabel} view pool buys about 15 million views. Past
+              campaigns ran {facts.cpmRangeLabel}, depending on the content, the niche, the platforms, the audience and the brand rules.
+            </p>
           </div>
-        </section>
-
-        {/* what moves the CPM */}
-        <section id="cpm-factors" className="mx-auto max-w-6xl scroll-mt-24 px-6 pb-24 sm:px-10 lg:px-12">
-          <Eyebrow>What moves the CPM</Eyebrow>
-          <h2 className="mt-4 max-w-3xl text-3xl tracking-tight text-balance sm:text-4xl">
-            What makes views cheaper or more expensive? <span className="text-muted">Five things.</span>
-          </h2>
-          <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {CPM_FACTORS.map((f) => (
-              <li key={f.title} className="rounded-2xl border border-line bg-bg-raised/40 p-6">
-                <h3 className="text-lg tracking-tight">{f.title}</h3>
-                <p className="mt-2 leading-relaxed text-muted">{f.body}</p>
-              </li>
-            ))}
-            <li className="flex flex-col justify-between rounded-2xl border border-accent/40 bg-accent/[0.05] p-6">
-              <p className="leading-relaxed text-fg/85">Want a number for your niche and your market?</p>
-              <Link href="/reach-estimator" className="mt-4 font-display text-sm font-semibold text-accent transition-colors hover:text-fg">
-                Run the reach estimator →
-              </Link>
-            </li>
-          </ul>
-        </section>
-
-        {/* past CPMs */}
-        <section id="past-cpms" className="mx-auto max-w-6xl scroll-mt-24 px-6 pb-24 sm:px-10 lg:px-12">
-          <Eyebrow>Past campaigns</Eyebrow>
-          <h2 className="mt-4 max-w-3xl text-3xl tracking-tight text-balance sm:text-4xl">
-            What did past clipping campaigns cost? <span className="text-muted">{facts.cpmRangeLabel} per 1,000 views.</span>
-          </h2>
-          <div className="mt-10 overflow-x-auto rounded-2xl border border-line">
-            <table className="w-full min-w-[560px] text-left text-sm">
-              <caption className="sr-only">Cost per 1,000 views on past NovaEyes clipping campaigns</caption>
-              <thead className="border-b border-line bg-bg-raised/40">
-                <tr className="font-label text-[10px] tracking-[0.14em] text-muted uppercase">
-                  <th scope="col" className="px-5 py-3.5 font-normal">Campaign</th>
-                  <th scope="col" className="px-5 py-3.5 font-normal">Type</th>
-                  <th scope="col" className="px-5 py-3.5 font-normal">Views</th>
-                  <th scope="col" className="px-5 py-3.5 font-normal">Budget</th>
-                  <th scope="col" className="px-5 py-3.5 font-normal">CPM</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-line">
-                {withCpm.map((c) => (
-                  <tr key={c.slug} className="transition-colors hover:bg-bg-raised/40">
-                    <th scope="row" className="px-5 py-4 text-left font-display font-semibold">
-                      <Link href={`/case-studies/${c.slug}`} className="transition-colors hover:text-accent">
-                        {c.client}
-                      </Link>
-                    </th>
-                    <td className="px-5 py-4 text-muted">{c.category}</td>
-                    <td className="px-5 py-4 font-display font-semibold tabular-nums">{c.viewsLabel}</td>
-                    <td className="px-5 py-4 font-display font-semibold tabular-nums">{c.spendUsd ? formatUsd(c.spendUsd) : <span className="font-sans font-normal text-muted">Not public</span>}</td>
-                    <td className="px-5 py-4 font-display font-semibold text-accent tabular-nums">${c.cpmUsd!.toFixed(2)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="mt-12">
+            <ViewsCalculator past={past} />
           </div>
-          <p className="mt-4 text-sm text-muted">
-            CPMs as published in each{" "}
-            <Link href="/case-studies" className="text-fg underline decoration-line underline-offset-4 hover:text-accent">
-              case study
-            </Link>
-            .
-          </p>
+          {threeK.length > 0 && (
+            <p className="mx-auto mt-8 max-w-2xl text-center text-sm leading-relaxed text-muted">
+              Real {facts.minimumBudgetLabel} campaigns:{" "}
+              {threeK.map((c, i) => (
+                <span key={c.slug}>
+                  {i > 0 && (i === threeK.length - 1 ? " and " : ", ")}
+                  <Link href={`/case-studies/${c.slug}`} className="text-fg underline decoration-line underline-offset-4 transition-colors hover:text-accent">
+                    {c.client}, {c.viewsLabel} views
+                  </Link>
+                </span>
+              ))}
+              . Past results, not a promise.
+            </p>
+          )}
         </section>
 
         {/* compared */}
-        <section id="compare" className="mx-auto max-w-6xl scroll-mt-24 px-6 pb-24 sm:px-10 lg:px-12">
+        <section id="compare" className="mx-auto max-w-6xl scroll-mt-24 px-6 py-24 sm:px-10 lg:px-12">
           <Eyebrow>Compared</Eyebrow>
           <h2 className="mt-4 max-w-3xl text-3xl tracking-tight text-balance sm:text-4xl">
-            How does clipping pricing compare? <span className="text-muted">Against influencer deals and paid ads.</span>
+            How does clipping pricing compare? <span className="text-muted">You pay for views, not posts.</span>
           </h2>
-          <p className="mt-5 max-w-2xl leading-relaxed text-muted">
-            The difference is what you pay for. Clipping pays per verified view, influencer deals pay per post, and paid social pays for what the
-            auction serves.
-          </p>
-          <div className="mt-10 overflow-x-auto rounded-2xl border border-line">
-            <table className="w-full min-w-[680px] text-left text-sm">
-              <caption className="sr-only">Clipping pricing compared with influencer deals and paid social ads</caption>
-              <thead className="border-b border-line bg-bg-raised/40">
-                <tr>
-                  <td className="w-[18%] px-5 py-3.5" />
-                  {COMPARE.cols.map((c, i) => (
-                    <th
-                      key={c}
-                      scope="col"
-                      className={`px-5 py-3.5 font-display text-sm font-semibold ${i === 0 ? "text-accent" : "text-fg/80"}`}
-                    >
-                      {c}
-                    </th>
+          <div className="mt-12 grid gap-4 md:grid-cols-3">
+            {COMPARE.map((c) => (
+              <div
+                key={c.name}
+                className={`relative overflow-hidden rounded-2xl border p-6 sm:p-7 ${
+                  c.us ? "border-accent/50 bg-accent/[0.05] shadow-[0_0_50px_rgb(var(--glow)/0.12)]" : "border-line bg-bg-raised/20"
+                }`}
+              >
+                {c.us && (
+                  <span aria-hidden className="sb-sweep pointer-events-none absolute top-0 left-0 h-px w-1/3 bg-gradient-to-r from-transparent via-accent to-transparent" />
+                )}
+                <h3 className={`font-display text-lg font-semibold tracking-tight ${c.us ? "text-fg" : "text-fg/70"}`}>{c.name}</h3>
+                <dl className="mt-5">
+                  {c.rows.map((r) => (
+                    <div key={r.k} className="border-t border-line py-4 last:pb-0">
+                      <dt className="font-label text-[9px] tracking-[0.14em] text-muted uppercase">{r.k}</dt>
+                      <dd className={`mt-1.5 leading-relaxed ${c.us ? "text-fg/90" : "text-muted"}`}>{r.v}</dd>
+                    </div>
                   ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-line">
-                {COMPARE.rows.map((r) => (
-                  <tr key={r.k}>
-                    <th scope="row" className="px-5 py-4 align-top font-label text-[10px] font-normal tracking-[0.14em] text-muted uppercase">
-                      {r.k}
-                    </th>
-                    {r.v.map((v, i) => (
-                      <td key={i} className={`px-5 py-4 align-top leading-relaxed ${i === 0 ? "bg-accent/[0.04] text-fg" : "text-muted"}`}>
-                        {v}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                </dl>
+              </div>
+            ))}
           </div>
         </section>
 
         {/* FAQ */}
-        <section id="faq" className="mx-auto max-w-6xl scroll-mt-24 px-6 pb-16 sm:px-10 lg:px-12">
+        <section id="faq" className="mx-auto max-w-6xl scroll-mt-24 px-6 py-24 sm:px-10 lg:px-12">
           <div className="grid gap-10 lg:grid-cols-[minmax(0,4fr)_minmax(0,7fr)] lg:gap-16">
             <div className="min-w-0 lg:sticky lg:top-28 lg:self-start">
               <Eyebrow>FAQ</Eyebrow>
               <h2 className="mt-4 text-3xl tracking-tight text-balance sm:text-4xl">
                 Questions about pricing. <span className="text-muted">Short answers.</span>
               </h2>
-              <p className="mt-5 leading-relaxed text-muted">
-                More on how campaigns run in{" "}
-                <Link href="/how-it-works" className="text-fg underline decoration-line underline-offset-4 hover:text-accent">
-                  how it works
-                </Link>{" "}
-                and the{" "}
-                <Link href="/faq" className="text-fg underline decoration-line underline-offset-4 hover:text-accent">
-                  full FAQ
-                </Link>
-                .
-              </p>
-              <div className="mt-8">
-                <ShinyButton href="/book" className="px-6 py-3 text-sm">
-                  Get your exact cost
-                </ShinyButton>
-              </div>
+              <Link href="/faq" className="mt-6 inline-block font-display text-sm font-semibold text-accent transition-colors hover:text-fg">
+                All questions →
+              </Link>
             </div>
-            <dl className="space-y-3">
+            <div className="space-y-3">
               {faqs.map((f, i) => (
-                <div key={f.q} className="rounded-2xl border border-line bg-bg-raised/40 p-5 sm:p-6">
-                  <dt className="flex gap-4 font-display font-semibold">
+                <details key={f.q} open={i === 0} className="group rounded-2xl border border-line bg-bg-raised/40 transition-colors open:border-accent/30">
+                  <summary className="flex cursor-pointer list-none items-start gap-4 p-5 font-display font-semibold sm:p-6 [&::-webkit-details-marker]:hidden">
                     <span className="font-label text-[10px] leading-6 tracking-[0.14em] text-accent">{String(i + 1).padStart(2, "0")}</span>
-                    {f.q}
-                  </dt>
-                  <dd className="mt-2 leading-relaxed text-muted sm:pl-9">{f.a}</dd>
-                </div>
+                    <span className="flex-1">{f.q}</span>
+                    <span
+                      aria-hidden
+                      className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-line text-base leading-none text-muted transition-[rotate,color,border-color] duration-300 group-open:rotate-45 group-open:border-accent/50 group-open:text-accent"
+                    >
+                      +
+                    </span>
+                  </summary>
+                  <p className="-mt-2 px-5 pb-5 leading-relaxed text-muted sm:-mt-3 sm:pr-14 sm:pb-6 sm:pl-[3.75rem]">{f.a}</p>
+                </details>
               ))}
-            </dl>
+            </div>
           </div>
         </section>
       </article>
-      <Cta />
+      <Cta
+        title="Get your exact cost"
+        body="Book a 15-minute call. You get the view pool, the fee and the full cost in writing before anything is signed."
+      />
     </>
   );
 }
