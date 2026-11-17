@@ -54,7 +54,7 @@ export default async function CaseStudy(props: PageProps<"/case-studies/[slug]">
     ...(c.outcomes.length ? [{ q: `What did the campaign achieve for ${c.client}?`, a: outcomeText }] : []),
     {
       q: `Can NovaEyes run a campaign like this for me?`,
-      a: `Yes. Campaigns start at ${facts.minimumBudgetLabel}, launch within 24 hours of the onboarding call, and you pay only for verified views from your target audience.`,
+      a: `Yes. ${facts.pricingSummary} ${facts.launchTime}`,
     },
   ];
 

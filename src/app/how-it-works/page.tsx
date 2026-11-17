@@ -54,12 +54,12 @@ const TIMELINE = [
     when: "The end",
     title: "Final report",
     you: "Decide what comes next.",
-    us: "Send the final numbers: verified views, CPM, clips posted, platform split and top clips. Budget left over rolls into the next campaign or is refunded, depending on your agreement.",
+    us: "Send the final numbers: verified views, CPM, clips posted, platform split and top clips. Budget left over moves to your next campaign. Budgets are not refunded.",
   },
 ];
 
 const MONEY = [
-  { n: "01", title: "You fund a view pool", body: "The pool is what pays the clippers. Your full cost, including our fee for running the campaign, is set out in writing before anything is signed." },
+  { n: "01", title: "You fund a view pool", body: "The pool is what pays the clippers. NovaEyes charges a management fee on top of it or out of it, a percentage of the budget. Your full cost is set out in writing before anything is signed." },
   { n: "02", title: "Clippers earn per verified view", body: "Each clipper is paid per 1,000 verified views on clips we approved. The best clips earn the most, so the network chases what works." },
   { n: "03", title: "Everything else costs nothing", body: "A clip that is not approved, or does not get views, earns nothing. Views that cannot be verified, or that come from outside your target audience, are not paid." },
 ];

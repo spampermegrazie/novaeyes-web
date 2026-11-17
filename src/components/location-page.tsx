@@ -41,7 +41,7 @@ export function LocationPage({ location: l }: { location: Location }) {
     { q: `How fast can a campaign ${l.inName} go live?`, a: facts.launchTime },
     {
       q: `What does a clipping campaign ${l.inName} cost?`,
-      a: `Campaigns start at ${facts.minimumBudgetLabel} and you pay per 1,000 verified views from your target audience. Past campaigns ran $0.13 to $0.41 per 1,000 views; your rate depends on your content, your audience and your goals.`,
+      a: `${facts.pricingSummary} Past campaigns ran ${facts.cpmRangeLabel} per 1,000 views; your rate depends on your content, your audience and your goals.`,
     },
   ];
   const stats = [

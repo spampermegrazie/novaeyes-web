@@ -6,7 +6,7 @@ import { locations } from "@/content/locations";
 import { getPosts } from "@/lib/blog";
 
 // Update a page's date here when its content changes, so lastmod stays honest.
-const UPDATED = "2026-11-13";
+const UPDATED = "2026-11-17";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const url = (path: string) => `${facts.url}${path}`;

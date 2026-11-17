@@ -8,7 +8,7 @@ export const facts = {
   url: "https://nova-eyes.com",
   tagline: "Performance-based clipping agency",
   oneLiner:
-    "NovaEyes is a performance-based clipping agency. Clients fund a view pool and pay only for verified short-form views, delivered by a network of 20,000 clippers across TikTok, Instagram Reels, YouTube Shorts and X.",
+    "NovaEyes is a performance-based clipping agency. Clients fund a view pool that pays out only for verified short-form views, delivered by a network of 20,000 clippers across TikTok, Instagram Reels, YouTube Shorts and X.",
   foundingYear: 2025,
   founder: "Andrea Corindo",
   founderProfiles: [
@@ -20,9 +20,19 @@ export const facts = {
   clippers: 20_000,
   clippersLabel: "20,000",
   platforms: ["TikTok", "Instagram Reels", "YouTube Shorts", "X"],
-  model: "Clients fund a view pool and pay only for verified views.",
+  model: "Clients fund a view pool that pays out only for verified views.",
   minimumBudgetUsd: 3_000,
   minimumBudgetLabel: "$3,000",
+  // Public pricing. The management fee is published as a percentage of the budget, never as a number:
+  // the percentage is set per campaign and agreed in writing. Use these lines wherever cost comes up.
+  feeClause:
+    "NovaEyes charges a management fee: a percentage of the budget, added on top of it or taken out of it, depending on the campaign's complexity, deadlines and scale.",
+  pricingSummary:
+    "Campaigns start at $3,000. Your view pool pays clippers per 1,000 verified views from your target audience, and NovaEyes charges a management fee: a percentage of the budget, added on top of it or taken out of it, depending on the campaign's complexity, deadlines and scale.",
+  cpmRangeLabel: "$0.13 to $0.41",
+  // Budgets are never refunded. Leftover budget only ever moves to a new campaign.
+  noRefunds:
+    "Budgets are not refundable. Once a campaign is funded, the budget stays with NovaEyes: if you stop a campaign early, or budget is left at the end, it moves to a new campaign.",
   launchTime: "Campaigns launch within 24 hours of the onboarding call.",
   // Audience targeting: a hard filter, not a hope. Used across the site (FAQ, service and location pages).
   targeting:

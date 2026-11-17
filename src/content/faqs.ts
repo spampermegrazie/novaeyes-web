@@ -3,11 +3,11 @@ import { faqGroups } from "./faq-groups";
 
 // Homepage FAQ, the four questions buyers ask first. Written to answer the question in the first
 // sentence, in plain words. Everything else lives on /faq.
-// The pricing answer leaves out the fee structure until Andrea decides whether to publish it.
+// The pricing answer names the management fee as a percentage only. The percentage itself stays off the site.
 export const homeFaqs = [
   {
     q: "How does pricing work?",
-    a: `You fund a view pool, and that budget is paid out to clippers per 1,000 verified views their clips earn. There are no retainers, and you never pay for a clip that doesn't perform. Campaigns start at ${facts.minimumBudgetLabel}.`,
+    a: `${facts.pricingSummary} There are no retainers, and a clip that doesn't perform earns nothing from your pool.`,
   },
   {
     q: "How do you keep clips on brand?",

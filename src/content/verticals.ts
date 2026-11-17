@@ -89,7 +89,7 @@ export const verticals: Vertical[] = [
       },
       {
         q: "How much does a sports campaign cost?",
-        a: "Campaigns start at $3,000 and you pay per verified view. Your cost per 1,000 views depends on your footage, the sport and your goals.",
+        a: "Campaigns start at $3,000 and you pay per verified view. NovaEyes also charges a management fee: a percentage of the budget, added on top of it or taken out of it, depending on the campaign's complexity, deadlines and scale. Your cost per 1,000 views depends on your footage, the sport and your goals.",
       },
     ],
     guides: [
@@ -153,7 +153,7 @@ export const verticals: Vertical[] = [
       },
       {
         q: "How much does a combat sports campaign cost?",
-        a: "Campaigns start at $3,000 and you pay per verified view. At the $0.21 CPM from the BRAVE CF campaign, $3,000 would buy about 14 million views, but your CPM depends on your footage and your goals.",
+        a: "Campaigns start at $3,000 and you pay per verified view. NovaEyes also charges a management fee: a percentage of the budget, added on top of it or taken out of it, depending on the campaign's complexity, deadlines and scale. At the $0.21 CPM from the BRAVE CF campaign, a $3,000 view pool would buy about 14 million views, but your CPM depends on your footage and your goals.",
       },
       {
         q: "How was the $700,000 revenue figure for BRAVE CF worked out?",
@@ -234,7 +234,7 @@ export const verticals: Vertical[] = [
       },
       {
         q: "How much does a gaming campaign cost?",
-        a: "Campaigns start at $3,000 and you pay per verified view. Your cost per 1,000 views depends on your footage, your audience and your goals.",
+        a: "Campaigns start at $3,000 and you pay per verified view. NovaEyes also charges a management fee: a percentage of the budget, added on top of it or taken out of it, depending on the campaign's complexity, deadlines and scale. Your cost per 1,000 views depends on your footage, your audience and your goals.",
       },
     ],
     guides: [
@@ -297,7 +297,7 @@ export const verticals: Vertical[] = [
       },
       {
         q: "How much does a music campaign cost?",
-        a: "Campaigns start at $3,000 and you pay per verified view. Our past music campaigns ran at $0.13 and $0.21 per thousand views.",
+        a: "Campaigns start at $3,000 and you pay per verified view. NovaEyes also charges a management fee: a percentage of the budget, added on top of it or taken out of it, depending on the campaign's complexity, deadlines and scale. Our past music campaigns ran at $0.13 and $0.21 per thousand views.",
       },
       {
         q: "Do I need a music video?",
@@ -360,7 +360,7 @@ export const verticals: Vertical[] = [
       },
       {
         q: "How much does a podcast campaign cost?",
-        a: "Campaigns start at $3,000 and you pay per verified view. Family Ties ran at $0.41 per thousand views.",
+        a: "Campaigns start at $3,000 and you pay per verified view. NovaEyes also charges a management fee: a percentage of the budget, added on top of it or taken out of it, depending on the campaign's complexity, deadlines and scale. Family Ties ran at $0.41 per thousand views.",
       },
     ],
     guides: [
@@ -437,7 +437,7 @@ export const verticals: Vertical[] = [
       },
       {
         q: "How much does an app campaign cost?",
-        a: "Campaigns start at $3,000 and you pay per verified view. Your cost per 1,000 views depends on the formats, your niche and your goals.",
+        a: "Campaigns start at $3,000 and you pay per verified view. NovaEyes also charges a management fee: a percentage of the budget, added on top of it or taken out of it, depending on the campaign's complexity, deadlines and scale. Your cost per 1,000 views depends on the formats, your niche and your goals.",
       },
     ],
   },
@@ -491,7 +491,7 @@ export const verticals: Vertical[] = [
       },
       {
         q: "How much does logo clipping cost?",
-        a: "Campaigns start at $3,000 and you pay per verified view. Across our past campaigns, CPMs ranged from $0.13 to $0.41 per thousand views.",
+        a: "Campaigns start at $3,000 and you pay per verified view. NovaEyes also charges a management fee: a percentage of the budget, added on top of it or taken out of it, depending on the campaign's complexity, deadlines and scale. Across our past campaigns, CPMs ranged from $0.13 to $0.41 per thousand views.",
       },
       {
         q: "How do I measure results?",
@@ -563,7 +563,7 @@ export const verticals: Vertical[] = [
       },
       {
         q: "How much does product clipping cost?",
-        a: "Campaigns start at $3,000 and you pay per verified view. Across our past campaigns, CPMs ranged from $0.13 to $0.41 per thousand views.",
+        a: "Campaigns start at $3,000 and you pay per verified view. NovaEyes also charges a management fee: a percentage of the budget, added on top of it or taken out of it, depending on the campaign's complexity, deadlines and scale. Across our past campaigns, CPMs ranged from $0.13 to $0.41 per thousand views.",
       },
     ],
     guides: [

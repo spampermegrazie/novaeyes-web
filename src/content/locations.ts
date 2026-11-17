@@ -76,7 +76,7 @@ export const locations: Location[] = [
       },
       {
         q: "How much does a US clipping campaign cost?",
-        a: "Campaigns start at $3,000 and you pay per 1,000 verified views. Past campaigns ran $0.13 to $0.41 per 1,000 views. US audiences usually cost more per view than global ones, and the exact CPM depends on your content and target.",
+        a: "Campaigns start at $3,000 and you pay per 1,000 verified views. NovaEyes also charges a management fee: a percentage of the budget, added on top of it or taken out of it, depending on the campaign's complexity, deadlines and scale. Past campaigns ran $0.13 to $0.41 per 1,000 views. US audiences usually cost more per view than global ones, and the exact CPM depends on your content and target.",
       },
       {
         q: "Do your clippers label paid clips for the FTC?",

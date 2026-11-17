@@ -1,13 +1,13 @@
 # NovaEyes
 
-> NovaEyes is a performance-based clipping agency founded in 2025 by Andrea Corindo in Ferrara, Italy. Clients fund a view pool and pay per 1,000 verified short-form views, delivered by a network of 20,000 clippers across TikTok, Instagram Reels, YouTube Shorts and X. Campaigns start at $3,000, and they launch within 24 hours of the onboarding call. Every campaign can be locked to the countries and audience the client chooses (age, gender): only views from that audience count, and clips that miss it are not paid, even if they go viral. Audience data is shown in the client dashboard and every report.
+> NovaEyes is a performance-based clipping agency founded in 2025 by Andrea Corindo in Ferrara, Italy. Clients fund a view pool and pay per 1,000 verified short-form views, delivered by a network of 20,000 clippers across TikTok, Instagram Reels, YouTube Shorts and X. Campaigns start at $3,000. On top of the view pool, NovaEyes charges a management fee: a percentage of the budget, added on top of it or taken out of it, depending on the campaign's complexity, deadlines and scale. Budgets are not refundable; leftover budget moves to a new campaign. Campaigns launch within 24 hours of the onboarding call. Every campaign can be locked to the countries and audience the client chooses (age, gender): only views from that audience count, and clips that miss it are not paid, even if they go viral. Audience data is shown in the client dashboard and every report.
 
 ## Core pages
 
 - [Home](https://nova-eyes.com/): what a clipping agency is and how a NovaEyes campaign works
 - [About](https://nova-eyes.com/about): who runs NovaEyes, the founder and the campaigns we can show
 - [Case studies](https://nova-eyes.com/case-studies): campaign results with views, CPM and clip counts
-- [Pricing](https://nova-eyes.com/pricing): how clipping is priced, what changes the CPM, and CPMs from past campaigns
+- [Pricing](https://nova-eyes.com/pricing): the $3,000 minimum, the view pool and the management fee, what changes the CPM, and CPMs from past campaigns
 - [Reach estimator](https://nova-eyes.com/reach-estimator): views for a budget, or the budget for a view target
 - [All solutions](https://nova-eyes.com/solutions): every kind of content we clip and every market we run campaigns in, on one page
 - [How it works](https://nova-eyes.com/how-it-works): how a campaign runs from brief to final report, who does what and when, where the budget goes and how views are verified

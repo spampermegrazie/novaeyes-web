@@ -1,7 +1,7 @@
 // Full FAQ, rewritten from the old /faq page in plain language.
 // Every answer starts with the direct answer, then adds detail.
 // Fixed from the old page: founded 2025, Alex Schor is music (not podcast), Family Ties is podcast (not music).
-// The fee structure stays off the site until Andrea decides whether to publish it.
+// The management fee is public as a percentage of the budget only (facts.feeClause). The percentage itself stays off the site.
 
 import { facts } from "./facts";
 
@@ -72,11 +72,11 @@ export const faqGroups: FaqGroup[] = [
     items: [
       {
         q: "How does pricing work?",
-        a: "You pay per 1,000 verified views. You fund a view pool, and clippers are paid from it as their clips earn views. There is no retainer, and clips that don't get views cost you nothing.",
+        a: `You fund a view pool, and clippers are paid from it per 1,000 verified views their clips earn. ${facts.feeClause} There is no retainer, and clips that don't get views earn nothing from your pool. Campaigns start at ${facts.minimumBudgetLabel}.`,
       },
       {
         q: "Is the view pool the full cost?",
-        a: "The view pool is what pays the clippers. Your full cost, including our fee for running the campaign, is set out in writing before anything is signed.",
+        a: `No. The view pool pays the clippers. ${facts.feeClause} Your full cost is set out in writing before anything is signed.`,
       },
       {
         q: "What does running the campaign include?",
@@ -88,7 +88,7 @@ export const faqGroups: FaqGroup[] = [
       },
       {
         q: "Do I have to sign a long contract?",
-        a: "No. There is no retainer and no monthly commitment beyond the campaign you fund. You can scale up, scale down, pause or stop.",
+        a: "No. There is no retainer and no monthly commitment beyond the campaign you fund. You can scale up, scale down, pause or stop. If you stop early, what is left of the budget moves to a new campaign.",
       },
       {
         q: "How are clippers paid?",
@@ -100,7 +100,7 @@ export const faqGroups: FaqGroup[] = [
       },
       {
         q: "Do you offer refunds?",
-        a: "The view pool is only spent on verified views. If budget is left at the end of a campaign, it either rolls into the next one or is refunded, depending on your agreement.",
+        a: `No. ${facts.noRefunds} The view pool is only ever spent on verified views.`,
       },
     ],
   },
