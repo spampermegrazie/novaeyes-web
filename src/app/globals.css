@@ -463,3 +463,26 @@ h2, h3, h4 { font-weight: 600; }
 .pr-range::-moz-range-thumb { width: 12px; height: 12px; border-radius: 999px; background: #fff; border: 4px solid var(--accent); box-shadow: 0 0 18px rgb(var(--glow) / 0.75); }
 .pr-range:focus-visible::-webkit-slider-thumb { outline: 2px solid #fff; outline-offset: 2px; }
 .pr-range:focus-visible::-moz-range-thumb { outline: 2px solid #fff; outline-offset: 2px; }
+
+/* Pricing infographics (src/components/pricing/*). */
+.pr-svg-big { font: 700 18px var(--font-manrope), system-ui, sans-serif; fill: var(--fg); }
+.pr-svg-label { font: 600 13px var(--font-manrope), system-ui, sans-serif; fill: var(--fg); }
+.pr-svg-cap { font: 400 9px var(--font-label-face), sans-serif; letter-spacing: 0.06em; text-transform: uppercase; fill: var(--muted); }
+.pr-lit { animation: pr-lit 5.4s ease-in-out infinite backwards; }
+@keyframes pr-lit {
+  0%, 100% { border-color: var(--line); background-color: transparent; color: var(--muted); }
+  18%, 58% { border-color: rgb(var(--glow) / 0.7); background-color: rgb(var(--glow) / 0.14); color: var(--fg); }
+}
+.pr-rise { transform-origin: bottom; animation: pr-rise 5s cubic-bezier(0.22, 1, 0.36, 1) infinite; }
+@keyframes pr-rise {
+  0% { scale: 1 0.15; }
+  35%, 85% { scale: 1 1; }
+  100% { scale: 1 0.15; }
+}
+.pr-bid { transform-origin: bottom; animation: pr-bid 1.8s ease-in-out infinite alternate; }
+@keyframes pr-bid { from { scale: 1 var(--a); } to { scale: 1 var(--b); } }
+.pr-pulse { animation: ne-pulse 2.2s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .pr-lit, .pr-rise, .pr-bid, .pr-pulse { animation: none; }
+  .pr-bid { scale: 1 var(--b); }
+}
