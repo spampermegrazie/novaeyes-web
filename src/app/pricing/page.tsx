@@ -7,7 +7,7 @@ import { ShinyButton } from "@/components/ui/shiny-button";
 import { CountUp } from "@/components/ui/count-up";
 import { FeeSplit } from "@/components/pricing/fee-split";
 import { ViewsCalculator } from "@/components/pricing/views-calculator";
-import { BudgetFlow } from "@/components/pricing/budget-flow";
+import { QuoteCard } from "@/components/pricing/quote-card";
 import { Eyebrow, FeeCovers, FeeDrivers, PayoutClips, CpmChart, CompareTiles } from "@/components/pricing/pricing-visuals";
 import { formatUsd } from "@/lib/estimator";
 import { JsonLd, faqJsonLd, breadcrumbJsonLd, serviceJsonLd } from "@/components/json-ld";
@@ -187,7 +187,7 @@ export default function Pricing() {
                 Updated <time dateTime={UPDATED}>{UPDATED_LABEL}</time>
               </p>
             </div>
-            <BudgetFlow />
+            <QuoteCard />
           </div>
         </header>
 
