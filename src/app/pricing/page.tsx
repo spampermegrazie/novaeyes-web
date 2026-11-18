@@ -4,7 +4,6 @@ import { facts } from "@/content/facts";
 import { publicCampaigns } from "@/content/campaigns";
 import { Cta } from "@/components/cta";
 import { ShinyButton } from "@/components/ui/shiny-button";
-import { CountUp } from "@/components/ui/count-up";
 import { FeeSplit } from "@/components/pricing/fee-split";
 import { ViewsCalculator } from "@/components/pricing/views-calculator";
 import { JsonLd, faqJsonLd, breadcrumbJsonLd, serviceJsonLd } from "@/components/json-ld";
@@ -72,13 +71,6 @@ const faqs = [
     q: "How fast does a campaign start?",
     a: facts.launchTime,
   },
-];
-
-const STATS = [
-  { value: facts.minimumBudgetLabel, label: "Minimum campaign" },
-  { value: "$0.13", label: "Lowest past CPM, per 1,000 views" },
-  { value: "15M", label: `Views a ${facts.minimumBudgetLabel} pool buys at a $0.20 CPM` },
-  { value: "24h", label: "From onboarding call to live" },
 ];
 
 const PARTS = [
@@ -149,7 +141,7 @@ export default function Pricing() {
 
       <article>
         {/* header: the answer, nothing else */}
-        <header className="mx-auto max-w-6xl px-6 pt-16 pb-20 sm:px-10 lg:px-12 lg:pt-20 lg:pb-24">
+        <header className="mx-auto max-w-6xl px-6 pt-16 pb-24 sm:px-10 lg:px-12 lg:pt-20 lg:pb-32">
           <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-y-1 font-label text-[10px] tracking-[0.14em] text-muted uppercase">
             <Link href="/" className="transition-colors hover:text-fg">
               Home
@@ -177,27 +169,6 @@ export default function Pricing() {
             Updated <time dateTime={UPDATED}>{UPDATED_LABEL}</time>
           </p>
         </header>
-
-        {/* the numbers, in the same panel as the homepage stats */}
-        <section aria-label="Pricing in numbers" className="mx-auto max-w-6xl px-6 pb-32 sm:px-10 lg:px-12">
-          <div className="relative overflow-hidden rounded-2xl border border-line bg-line">
-            <span aria-hidden className="sb-sweep pointer-events-none absolute top-0 left-0 z-10 h-px w-1/4 bg-gradient-to-r from-transparent via-accent to-transparent" />
-            <dl className="grid grid-cols-2 gap-px md:grid-cols-4">
-              {STATS.map((s, i) => (
-                <div key={s.label} className="group relative flex min-h-36 flex-col overflow-hidden bg-bg px-5 pt-6 pb-6 transition-colors duration-300 hover:bg-[#101016] sm:min-h-44 sm:px-6 sm:pt-7">
-                  <div
-                    aria-hidden
-                    className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-[radial-gradient(60%_100%_at_50%_100%,rgb(var(--glow)/0.12),transparent)] opacity-60 transition-opacity duration-300 group-hover:opacity-100"
-                  />
-                  <dt className="relative order-2 mt-1 text-sm text-muted">{s.label}</dt>
-                  <dd className="relative order-1 font-display text-[28px] leading-tight font-bold tracking-tight sm:text-4xl lg:text-[44px]">
-                    <CountUp value={s.value} delay={i * 0.12} />
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </div>
-        </section>
 
         {/* how it is priced */}
         <section id="how-pricing-works" className="mx-auto max-w-6xl scroll-mt-24 px-6 pb-32 sm:px-10 lg:px-12">
