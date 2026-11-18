@@ -44,7 +44,7 @@ export default function ReachEstimatorPage() {
         </nav>
         <p className="mt-8 font-label text-[10px] tracking-[0.14em] text-muted uppercase">Reach estimator</p>
         <h1 className="mt-4 max-w-4xl text-4xl tracking-tight text-balance sm:text-5xl lg:text-6xl">
-          Estimate your reach. <span className="text-muted">Start from a budget or a view target.</span>
+          Estimate your reach. <span className="text-muted">See what your budget turns into.</span>
         </h1>
         <div className="mt-16">
           <ReachEstimator />
