@@ -64,17 +64,10 @@ export function FeeSplit() {
 
       <div className="relative">
         {/* the switch */}
-        <div className="flex items-center justify-between gap-3">
-          <p className="font-label text-[9px] tracking-[0.14em] text-muted uppercase">Where the fee sits</p>
-          <p className={`flex items-center gap-1.5 text-[11px] text-accent transition-opacity duration-500 ${touched ? "opacity-0" : "opacity-100"}`} aria-hidden>
-            <SwapIcon className="h-3.5 w-3.5 animate-pulse" />
-            Tap to switch
-          </p>
-        </div>
         <div
           role="radiogroup"
           aria-label="Where the management fee sits"
-          className="relative mt-3 grid grid-cols-2 rounded-2xl border border-[var(--line-strong)] bg-bg p-1.5 shadow-[inset_0_1px_0_rgb(255_255_255/0.03)]"
+          className="relative grid grid-cols-2 rounded-2xl border border-[var(--line-strong)] bg-bg p-1.5 shadow-[inset_0_1px_0_rgb(255_255_255/0.03)]"
         >
           <span
             aria-hidden
@@ -112,8 +105,16 @@ export function FeeSplit() {
           })}
         </div>
 
+        <p
+          aria-hidden
+          className={`mt-3 flex items-center justify-center gap-1.5 text-[11px] text-accent transition-opacity duration-500 ${touched ? "opacity-0" : "opacity-100"}`}
+        >
+          <SwapIcon className="h-3.5 w-3.5 animate-pulse" />
+          Tap to switch
+        </p>
+
         {/* the budget bracket and the bar under it */}
-        <div className="relative mt-14" aria-hidden>
+        <div className="relative mt-12" aria-hidden>
           <div className="absolute -top-8 left-0 w-[80%]">
             <span className="absolute -top-1 left-1/2 -translate-x-1/2 font-label text-[9px] tracking-[0.14em] whitespace-nowrap text-fg/70 uppercase">
               Your budget
@@ -136,7 +137,9 @@ export function FeeSplit() {
           </div>
         </div>
 
-        <div className="mt-8 grid gap-4 border-t border-line pt-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">
+        <p className="mt-2 text-right text-[10px] text-muted/70">Not to scale</p>
+
+        <div className="mt-6 grid gap-4 border-t border-line pt-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">
           <p className="text-sm leading-relaxed text-muted" aria-live="polite">
             {m.caption}
           </p>
@@ -145,7 +148,6 @@ export function FeeSplit() {
             <span className="font-display text-2xl font-bold tracking-tight">{m.pay}</span>
           </p>
         </div>
-        <p className="mt-4 text-[11px] text-muted/80">Not to scale. Your percentage is set per campaign.</p>
       </div>
     </div>
   );

@@ -101,7 +101,6 @@ export default function Pricing() {
     .filter((c) => c.cpmUsd !== undefined)
     .sort((a, b) => a.cpmUsd! - b.cpmUsd!)
     .map((c) => ({ client: c.client, cpm: c.cpmUsd! }));
-  const threeK = publicCampaigns.filter((c) => c.spendUsd === facts.minimumBudgetUsd);
 
   const offer = {
     ...serviceJsonLd(
@@ -141,7 +140,7 @@ export default function Pricing() {
 
       <article>
         {/* header: the answer, nothing else */}
-        <header className="mx-auto max-w-6xl px-6 pt-16 pb-24 sm:px-10 lg:px-12 lg:pt-20 lg:pb-32">
+        <header className="mx-auto max-w-6xl px-6 pt-16 pb-16 sm:px-10 lg:px-12 lg:pt-20 lg:pb-24">
           <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-y-1 font-label text-[10px] tracking-[0.14em] text-muted uppercase">
             <Link href="/" className="transition-colors hover:text-fg">
               Home
@@ -171,7 +170,7 @@ export default function Pricing() {
         </header>
 
         {/* how it is priced */}
-        <section id="how-pricing-works" className="mx-auto max-w-6xl scroll-mt-24 px-6 pb-32 sm:px-10 lg:px-12">
+        <section id="how-pricing-works" className="rv mx-auto max-w-6xl scroll-mt-24 px-6 pb-24 sm:px-10 lg:px-12">
           <div className="grid grid-cols-1 items-center gap-14 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-20">
             <div className="min-w-0">
               <Eyebrow>How it is priced</Eyebrow>
@@ -195,7 +194,7 @@ export default function Pricing() {
         </section>
 
         {/* what the minimum buys */}
-        <section id="cpm" className="mx-auto max-w-6xl scroll-mt-24 px-6 pb-32 sm:px-10 lg:px-12">
+        <section id="cpm" className="rv mx-auto max-w-6xl scroll-mt-24 px-6 pb-24 sm:px-10 lg:px-12">
           <div className="text-center">
             <Eyebrow>CPM</Eyebrow>
             <h2 className="mx-auto mt-4 max-w-3xl text-3xl tracking-tight text-balance sm:text-4xl">
@@ -209,24 +208,10 @@ export default function Pricing() {
           <div className="mt-14">
             <ViewsCalculator past={past} />
           </div>
-          {threeK.length > 0 && (
-            <p className="mx-auto mt-8 max-w-2xl text-center text-sm leading-relaxed text-muted">
-              Real {facts.minimumBudgetLabel} campaigns:{" "}
-              {threeK.map((c, i) => (
-                <span key={c.slug}>
-                  {i > 0 && (i === threeK.length - 1 ? " and " : ", ")}
-                  <Link href={`/case-studies/${c.slug}`} className="text-fg underline decoration-line underline-offset-4 transition-colors hover:text-accent">
-                    {c.client}, {c.viewsLabel} views
-                  </Link>
-                </span>
-              ))}
-              .
-            </p>
-          )}
         </section>
 
         {/* compared */}
-        <section id="compare" className="mx-auto max-w-6xl scroll-mt-24 px-6 pb-32 sm:px-10 lg:px-12">
+        <section id="compare" className="rv mx-auto max-w-6xl scroll-mt-24 px-6 pb-24 sm:px-10 lg:px-12">
           <Eyebrow>Compared</Eyebrow>
           <h2 className="mt-4 max-w-3xl text-3xl tracking-tight text-balance sm:text-4xl">
             How does clipping pricing compare? <span className="text-muted">You pay for views, not posts.</span>

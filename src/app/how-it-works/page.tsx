@@ -3,6 +3,7 @@ import Link from "next/link";
 import { facts } from "@/content/facts";
 import { Cta } from "@/components/cta";
 import { StudioTour } from "@/components/studio-tour";
+import { Timeline } from "@/components/timeline";
 import { ShinyButton } from "@/components/ui/shiny-button";
 import { JsonLd, faqJsonLd, breadcrumbJsonLd } from "@/components/json-ld";
 
@@ -155,7 +156,7 @@ export default function HowItWorks() {
 
       <article>
         {/* header */}
-        <header className="mx-auto max-w-6xl px-6 pt-16 pb-20 sm:px-10 lg:px-12 lg:pt-20 lg:pb-28">
+        <header className="mx-auto max-w-6xl px-6 pt-16 pb-16 sm:px-10 lg:px-12 lg:pt-20 lg:pb-24">
           <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-y-1 font-label text-[10px] tracking-[0.14em] text-muted uppercase">
             <Link href="/" className="transition-colors hover:text-fg">
               Home
@@ -196,7 +197,7 @@ export default function HowItWorks() {
         </header>
 
         {/* the studio, in 3D */}
-        <section id="studio" className="mx-auto max-w-6xl scroll-mt-24 px-6 pb-32 sm:px-10 lg:px-12">
+        <section id="studio" className="mx-auto max-w-6xl scroll-mt-24 px-6 pb-24 sm:px-10 lg:px-12">
           <Eyebrow>The studio</Eyebrow>
           <h2 className="mt-4 mb-10 max-w-3xl text-3xl tracking-tight text-balance sm:text-4xl">
             Walk through it. <span className="text-muted">Eight stations, one loop.</span>
@@ -205,43 +206,16 @@ export default function HowItWorks() {
         </section>
 
         {/* timeline: who does what, and when */}
-        <section id="timeline" className="mx-auto max-w-6xl px-6 pb-32 sm:px-10 lg:px-12">
+        <section id="timeline" className="rv mx-auto max-w-6xl px-6 pb-24 sm:px-10 lg:px-12">
           <Eyebrow>Timeline</Eyebrow>
           <h2 className="mt-4 max-w-3xl text-3xl tracking-tight text-balance sm:text-4xl">
             What happens, and when. <span className="text-muted">You make the calls. We run the rest.</span>
           </h2>
-          <ol className="relative mt-16">
-            <span aria-hidden className="absolute top-2 bottom-2 left-[7px] w-px bg-gradient-to-b from-accent/70 via-accent/30 to-accent/0 lg:left-[183px]" />
-            {TIMELINE.map((t, i) => (
-              <li key={t.title} className="relative grid gap-5 pb-14 pl-10 last:pb-0 lg:grid-cols-[160px_minmax(0,1fr)] lg:gap-14 lg:pl-0">
-                <span
-                  aria-hidden
-                  className="absolute top-1.5 left-0 h-[15px] w-[15px] rounded-full border-2 border-accent bg-bg shadow-[0_0_14px_rgb(var(--glow)/0.6)] lg:left-[176px]"
-                />
-                <div className="lg:pt-0.5 lg:text-right">
-                  <p className="font-label text-[10px] tracking-[0.14em] text-accent uppercase">{t.when}</p>
-                  <h3 className="mt-1.5 text-xl tracking-tight">
-                    <span className="sr-only">Step {i + 1}: </span>
-                    {t.title}
-                  </h3>
-                </div>
-                <div className="grid gap-6 sm:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] sm:gap-10">
-                  <div>
-                    <p className="font-label text-[9px] tracking-[0.14em] text-muted uppercase">You</p>
-                    <p className="mt-2 leading-relaxed text-muted">{t.you}</p>
-                  </div>
-                  <div>
-                    <p className="font-label text-[9px] tracking-[0.14em] text-accent uppercase">NovaEyes</p>
-                    <p className="mt-2 leading-relaxed text-fg/85">{t.us}</p>
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ol>
+          <Timeline steps={TIMELINE} />
         </section>
 
         {/* where the budget goes */}
-        <section id="budget" className="mx-auto max-w-6xl scroll-mt-24 px-6 pb-32 sm:px-10 lg:px-12">
+        <section id="budget" className="rv mx-auto max-w-6xl scroll-mt-24 px-6 pb-24 sm:px-10 lg:px-12">
           <Eyebrow>Your budget</Eyebrow>
           <h2 className="mt-4 max-w-3xl text-3xl tracking-tight text-balance sm:text-4xl">
             Where does the budget go? <span className="text-muted">Only verified views get paid.</span>
@@ -294,7 +268,7 @@ export default function HowItWorks() {
         </section>
 
         {/* why it works */}
-        <section id="why" className="mx-auto max-w-6xl px-6 pb-32 sm:px-10 lg:px-12">
+        <section id="why" className="rv mx-auto max-w-6xl px-6 pb-24 sm:px-10 lg:px-12">
           <Eyebrow>Why it works</Eyebrow>
           <h2 className="mt-4 max-w-3xl text-3xl tracking-tight text-balance sm:text-4xl">
             Why does this beat posting on your own? <span className="text-muted">Three reasons.</span>
@@ -313,7 +287,7 @@ export default function HowItWorks() {
         </section>
 
         {/* what you get */}
-        <section id="you-get" className="mx-auto max-w-6xl px-6 pb-32 sm:px-10 lg:px-12">
+        <section id="you-get" className="rv mx-auto max-w-6xl px-6 pb-24 sm:px-10 lg:px-12">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,4fr)_minmax(0,7fr)] lg:gap-20">
             <div className="min-w-0">
               <Eyebrow>What you get</Eyebrow>
@@ -333,7 +307,7 @@ export default function HowItWorks() {
         </section>
 
         {/* fit */}
-        <section id="fit" className="mx-auto grid max-w-6xl grid-cols-1 gap-14 px-6 pb-32 sm:px-10 md:grid-cols-2 md:gap-16 lg:px-12">
+        <section id="fit" className="rv mx-auto grid max-w-6xl grid-cols-1 gap-14 px-6 pb-24 sm:px-10 md:grid-cols-2 md:gap-16 lg:px-12">
           <div className="min-w-0">
             <span aria-hidden className="block h-px bg-gradient-to-r from-accent via-accent/40 to-transparent shadow-[0_0_12px_rgb(var(--glow)/0.6)]" />
             <Eyebrow>

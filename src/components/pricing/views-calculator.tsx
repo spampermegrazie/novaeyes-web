@@ -13,8 +13,6 @@ const MIN = 0.1;
 const MAX = 0.5;
 
 const pct = (cpm: number) => ((cpm - MIN) / (MAX - MIN)) * 100;
-// The thumb is 20px wide, so it travels from 10px to (100% - 10px).
-const along = (cpm: number) => `calc(10px + ${pct(cpm) / 100} * (100% - 20px))`;
 const usd = (n: number) => `$${n.toLocaleString("en-US")}`;
 
 export function ViewsCalculator({ past }: { past: Past[] }) {
@@ -56,16 +54,7 @@ export function ViewsCalculator({ past }: { past: Past[] }) {
         </p>
 
         {/* CPM track with past campaigns marked on it */}
-        <div className="mx-auto mt-12 max-w-2xl">
-          <div className="relative h-5" aria-hidden>
-            {past.map((c) => (
-              <span
-                key={c.client}
-                className="absolute top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#9cc3ff]/70 shadow-[0_0_8px_rgb(var(--glow)/0.8)]"
-                style={{ left: along(c.cpm) }}
-              />
-            ))}
-          </div>
+        <div className="mx-auto mt-14 max-w-2xl">
           <input
             type="range"
             min={MIN}
@@ -85,8 +74,7 @@ export function ViewsCalculator({ past }: { past: Past[] }) {
         </div>
 
         <div className="mx-auto mt-8 max-w-2xl">
-          <p className="font-label text-[9px] tracking-[0.14em] text-muted uppercase">Past campaigns, tap to use their CPM</p>
-          <ul className="mt-3 flex flex-wrap justify-center gap-2">
+          <ul aria-label="Past campaigns: tap to use their CPM" className="flex flex-wrap justify-center gap-2">
             {past.map((c) => {
               const on = Math.abs(c.cpm - cpm) < 0.001;
               return (
@@ -106,9 +94,7 @@ export function ViewsCalculator({ past }: { past: Past[] }) {
             })}
           </ul>
         </div>
-        <p className="mx-auto mt-8 max-w-md text-xs leading-relaxed text-muted/80">
-          Arithmetic, not a forecast. View pool only: if the fee is taken out of the budget, the pool is the budget minus the fee.
-        </p>
+        <p className="mx-auto mt-8 max-w-md text-xs text-muted/70">Arithmetic on the view pool, not a forecast.</p>
       </div>
     </div>
   );
