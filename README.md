@@ -2,12 +2,12 @@
 
 The public NovaEyes site: Next.js 16 on Vercel, every page served as real HTML so search engines and AI crawlers can read it.
 
-## Paused on 19 Nov 2026: open items
+## Open items (updated 19 Nov 2026)
 
-Site work paused to build the X tool. Nothing below is done yet.
+All inner pages now share `src/components/page-kit.tsx`; restyle there, not page by page.
 
 **Bugs**
-- `/how-it-works` timeline: with Reduce motion turned on (macOS/iOS setting), the scroll line and the dots never light up. With motion on it works in Chrome. Fix in `src/components/timeline.tsx`: when reduced, render every step lit and the line full without relying on the scroll event; also test Safari/iOS.
+- Fixed 19 Nov: the how-it-works timeline under Reduce motion. Still to do: test the scroll line on Safari/iOS.
 
 **Before launch (blocking)**
 - Real lead capture: run `supabase/leads.sql`, add the Resend keys in Vercel, delete `LEADS_ALLOW_UNSAVED`.
@@ -30,7 +30,6 @@ Site work paused to build the X tool. Nothing below is done yet.
 **Offered, not started**
 - Mobile homepage speed (Lighthouse 65, target 85+) and accessibility (93, target 100).
 - Vercel Web Analytics.
-- Restyle the remaining old pages: FAQ, About, case studies index, blog index, best-clipping-agencies.
 
 ## Where things live
 
