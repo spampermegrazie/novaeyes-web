@@ -83,7 +83,7 @@ export function EstimatorPhone({ mode, value, nicheId, estimate, unlocked, compa
   const level = mode ? positionOf(mode === "budget" ? BUDGET_SCALE : VIEWS_SCALE, value) : 0;
   const final = unlocked && estimate ? (mode === "views" ? formatRange(estimate.budgetUsd, formatUsd) : formatRange(estimate.views, formatCompact)) : null;
   const heading = mode === null ? "Your estimate" : mode === "budget" ? "Estimated views" : "Estimated budget";
-  const basis = mode === null ? "pick a starting point" : mode === "budget" ? `from a ${formatUsd(value)} budget` : `for ${formatCompact(value)} views`;
+  const basis = mode === null ? "pick a budget or a view target" : mode === "budget" ? `from a ${formatUsd(value)} budget` : `for ${formatCompact(value)} views`;
   // likes, comments and shares are part of the report: they spin until the estimate unlocks,
   // then show the low end of each range (the full ranges sit under the phone)
   const report = unlocked && estimate ? [estimate.likes.low, estimate.comments.low, estimate.shares.low] : null;

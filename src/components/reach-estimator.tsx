@@ -19,7 +19,7 @@ import { ShinyButton } from "./ui/shiny-button";
 import { CountUp } from "./ui/count-up";
 
 type Mode = "budget" | "views";
-const STEP_NAMES = ["Start", "Amount", "Niche", "Estimate"];
+const STEP_NAMES = ["Pick one", "Amount", "Niche", "Estimate"];
 const DEFAULTS = { budget: 10_000, views: 10_000_000 };
 const PLATFORM_ICONS = [
   { name: "TikTok", path: siTiktok.path },
@@ -143,39 +143,61 @@ export function ReachEstimator() {
           <AnimatePresence mode="wait" initial={false}>
             {stage === 0 && (
               <motion.div key="start" {...slide}>
-                <StepHead n={1} title="What are you starting from?" hint="Pick the number you already have in mind." />
-                <div className="mt-8 grid gap-3 sm:grid-cols-2">
-                  {(["budget", "views"] as const).map((opt) => (
-                    <button
-                      key={opt}
-                      type="button"
-                      onClick={() => {
-                        if (opt !== mode) setValue(DEFAULTS[opt]);
-                        setMode(opt);
-                        go(1);
-                      }}
-                      className={`rounded-2xl border p-6 text-left transition-all ${
-                        mode === opt ? "border-accent/70 shadow-[0_0_28px_rgb(var(--glow)/0.3)]" : "border-line hover:border-muted/50"
-                      }`}
-                    >
-                      <p className="font-label text-[9px] tracking-[0.14em] text-accent uppercase">{opt === "budget" ? "Budget" : "Views"}</p>
-                      <p className="mt-3 font-display text-xl font-semibold">{opt === "budget" ? "I have a budget" : "I have a view target"}</p>
-                      <p className="mt-2 text-sm leading-relaxed text-muted">
-                        {opt === "budget" ? "See how many views it can turn into." : "See what budget it takes to get there."}
-                      </p>
-                    </button>
-                  ))}
+                <StepHead
+                  n={1}
+                  title="Pick one: a budget or a view target"
+                  hint="Choose the number you already have. You enter that one, and we estimate the other."
+                />
+                <div
+                  role="radiogroup"
+                  aria-label="Start from a budget or a view target"
+                  className="mt-8 grid items-stretch gap-3 sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] sm:gap-0"
+                >
+                  <ModeCard
+                    opt="budget"
+                    selected={mode === "budget"}
+                    onPick={() => {
+                      if (mode !== "budget") setValue(DEFAULTS.budget);
+                      setMode("budget");
+                      go(1);
+                    }}
+                  />
+                  <OrBadge />
+                  <ModeCard
+                    opt="views"
+                    selected={mode === "views"}
+                    onPick={() => {
+                      if (mode !== "views") setValue(DEFAULTS.views);
+                      setMode("views");
+                      go(1);
+                    }}
+                  />
                 </div>
               </motion.div>
             )}
 
             {stage === 1 && (
               <motion.div key="amount" {...slide}>
-                <StepHead
-                  n={2}
-                  title={m === "budget" ? "What is your budget?" : "How many views do you want?"}
-                  hint="Drag the slider or type an exact number."
+                <ModeSwitch
+                  mode={m}
+                  onChange={(opt) => {
+                    if (opt === m) return;
+                    setValue(DEFAULTS[opt]);
+                    setMode(opt);
+                  }}
+                  reduced={reduced}
                 />
+                <div className="mt-8">
+                  <StepHead
+                    n={2}
+                    title={m === "budget" ? "What is your budget?" : "How many views do you want?"}
+                    hint={
+                      m === "budget"
+                        ? "Drag the slider or type an exact number. We estimate the views."
+                        : "Drag the slider or type an exact number. We estimate the budget."
+                    }
+                  />
+                </div>
                 <AmountPicker key={m} mode={m} value={value} onChange={setValue} reduced={reduced} />
                 <Nav onBack={() => go(0)} onNext={() => go(2)} />
               </motion.div>
@@ -378,6 +400,139 @@ function ResultStats({ result, className = "" }: { result: Estimate; className?:
         </div>
       ))}
     </dl>
+  );
+}
+
+// Step 1: the two ways in, as choice cards. Each shows what you enter and what comes back.
+const MODE_COPY = {
+  budget: {
+    tag: "Option A",
+    title: "I have a budget",
+    body: "Enter what you want to spend. We estimate the views it can buy.",
+    enter: "$10,000",
+    get: "? views",
+    cta: "Start with a budget",
+    icon: "M12 3v18M16.5 7.5c0-1.7-2-3-4.5-3s-4.5 1.3-4.5 3 2 2.6 4.5 3 4.5 1.4 4.5 3.2-2 3.3-4.5 3.3-4.5-1.4-4.5-3.2",
+  },
+  views: {
+    tag: "Option B",
+    title: "I have a view target",
+    body: "Enter how many views you want. We estimate the budget it takes.",
+    enter: "10M views",
+    get: "$ ?",
+    cta: "Start with a view target",
+    icon: "M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12ZM12 14.8a2.8 2.8 0 1 0 0-5.6 2.8 2.8 0 0 0 0 5.6Z",
+  },
+} as const;
+
+function ModeCard({ opt, selected, onPick }: { opt: Mode; selected: boolean; onPick: () => void }) {
+  const c = MODE_COPY[opt];
+  return (
+    <button
+      type="button"
+      role="radio"
+      aria-checked={selected}
+      onClick={onPick}
+      className={`group relative flex h-full cursor-pointer flex-col rounded-2xl border p-6 text-left transition-[border-color,background-color,box-shadow,translate] duration-300 hover:-translate-y-0.5 ${
+        selected
+          ? "border-accent/70 bg-accent/[0.06] shadow-[0_0_28px_rgb(var(--glow)/0.3)]"
+          : "border-line bg-bg-raised/40 hover:border-accent/50 hover:bg-bg-raised/70 hover:shadow-[0_0_24px_rgb(var(--glow)/0.15)]"
+      }`}
+    >
+      <span className="flex items-center justify-between gap-3">
+        <span className="flex items-center gap-3">
+          <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-accent/35 bg-bg text-accent shadow-[0_0_18px_rgb(var(--glow)/0.15)]">
+            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+              <path d={c.icon} />
+            </svg>
+          </span>
+          <span className="font-label text-[9px] tracking-[0.14em] text-accent uppercase">{c.tag}</span>
+        </span>
+        {/* radio dot */}
+        <span
+          aria-hidden
+          className={`flex h-5 w-5 items-center justify-center rounded-full border-2 transition-colors duration-300 ${
+            selected ? "border-accent" : "border-muted/50 group-hover:border-accent/70"
+          }`}
+        >
+          <span className={`h-2 w-2 rounded-full bg-accent transition-opacity duration-300 ${selected ? "opacity-100" : "opacity-0 group-hover:opacity-40"}`} />
+        </span>
+      </span>
+      <span className="mt-5 block font-display text-xl font-semibold">{c.title}</span>
+      <span className="mt-2 block text-sm leading-relaxed text-muted">{c.body}</span>
+
+      {/* you enter, we estimate */}
+      <span className="mt-5 block overflow-hidden rounded-xl border border-line bg-bg" aria-hidden>
+        <span className="flex items-center justify-between gap-3 px-3.5 py-2.5">
+          <span className="text-[11px] text-muted">You enter</span>
+          <span className="font-display text-sm font-bold tabular-nums">{c.enter}</span>
+        </span>
+        <span className="flex items-center justify-between gap-3 border-t border-dashed border-accent/40 bg-accent/[0.06] px-3.5 py-2.5">
+          <span className="flex items-center gap-1.5 text-[11px] text-accent">
+            <svg viewBox="0 0 12 12" className="h-2.5 w-2.5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M6 1v9M2.5 6.5 6 10l3.5-3.5" />
+            </svg>
+            We estimate
+          </span>
+          <span className="font-display text-sm font-bold text-accent tabular-nums">{c.get}</span>
+        </span>
+      </span>
+
+      <span className="mt-6 flex items-center gap-1.5 font-display text-sm font-semibold text-accent">
+        {c.cta}
+        <span aria-hidden className="transition-[translate] duration-300 group-hover:translate-x-1">
+          →
+        </span>
+      </span>
+    </button>
+  );
+}
+
+function OrBadge() {
+  return (
+    <div aria-hidden className="flex items-center gap-3 sm:flex-col sm:justify-center sm:px-3">
+      <span className="h-px flex-1 bg-line sm:h-auto sm:w-px" />
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-line bg-bg font-label text-[9px] tracking-[0.14em] text-muted uppercase">
+        or
+      </span>
+      <span className="h-px flex-1 bg-line sm:h-auto sm:w-px" />
+    </div>
+  );
+}
+
+// Step 2: switch between budget and view target without going back.
+function ModeSwitch({ mode, onChange, reduced }: { mode: Mode; onChange: (m: Mode) => void; reduced: boolean }) {
+  return (
+    <div>
+      <p className="font-label text-[9px] tracking-[0.14em] text-muted uppercase">Starting from</p>
+      <div
+        role="radiogroup"
+        aria-label="Start from a budget or a view target"
+        className="relative mt-2 inline-grid grid-cols-2 rounded-xl border border-[var(--line-strong)] bg-bg p-1"
+      >
+        <span
+          aria-hidden
+          className={`absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] rounded-lg bg-accent shadow-[0_0_18px_rgb(var(--glow)/0.45)] ${
+            reduced ? "" : "transition-[translate] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
+          }`}
+          style={{ translate: mode === "views" ? "100% 0" : "0 0" }}
+        />
+        {(["budget", "views"] as const).map((opt) => (
+          <button
+            key={opt}
+            type="button"
+            role="radio"
+            aria-checked={mode === opt}
+            onClick={() => onChange(opt)}
+            className={`relative z-10 cursor-pointer rounded-lg px-4 py-2 font-display text-sm font-semibold transition-colors duration-300 ${
+              mode === opt ? "text-accent-ink" : "text-muted hover:text-fg"
+            }`}
+          >
+            {opt === "budget" ? "A budget" : "A view target"}
+          </button>
+        ))}
+      </div>
+    </div>
   );
 }
 
