@@ -2,6 +2,36 @@
 
 The public NovaEyes site: Next.js 16 on Vercel, every page served as real HTML so search engines and AI crawlers can read it.
 
+## Paused on 19 Nov 2026: open items
+
+Site work paused to build the X tool. Nothing below is done yet.
+
+**Bugs**
+- `/how-it-works` timeline: with Reduce motion turned on (macOS/iOS setting), the scroll line and the dots never light up. With motion on it works in Chrome. Fix in `src/components/timeline.tsx`: when reduced, render every step lit and the line full without relying on the scroll event; also test Safari/iOS.
+
+**Before launch (blocking)**
+- Real lead capture: run `supabase/leads.sql`, add the Resend keys in Vercel, delete `LEADS_ALLOW_UNSAVED`.
+- Point nova-eyes.com at this Vercel project (the old Lovable site is still live there).
+
+**Decisions waiting on Andrea**
+- About 40 places still say *you pay only for verified views*, which now clashes with the public management fee. Recommendation: reword to *paid per verified view*.
+- Put the no-refund rule into the client contract, not only the site.
+- Reach estimator headline only mentions the budget (kept on request); the view-target option is easy to miss.
+- Pricing page is now light (about 900 words, 5 question headings). Add depth back later if it doesn't rank.
+
+**Waiting on content from Andrea**
+- Real hero clips and client quotes.
+- Case study stories for the six thin case studies.
+- Shorter blog titles in the CMS (62 to 107 characters now).
+- Off-site profiles: Clutch, GoodFirms, Product Hunt, press.
+- Confirm the location FAQ claim that each market's ad labelling rules go into the brief, and the UAE Advertiser Permit implications.
+- Content for the `/working-with-us` placeholder (noindex).
+
+**Offered, not started**
+- Mobile homepage speed (Lighthouse 65, target 85+) and accessibility (93, target 100).
+- Vercel Web Analytics.
+- Restyle the remaining old pages: FAQ, About, case studies index, blog index, best-clipping-agencies.
+
 ## Where things live
 
 | Path | What | Source |
