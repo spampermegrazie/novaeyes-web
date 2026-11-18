@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { facts } from "@/content/facts";
 import { Cta } from "@/components/cta";
+import { CONTAINER, PageHeader, SECTION, SectionHead } from "@/components/page-kit";
 
 // Kept out of search until every competitor row is checked against that
 // agency's own site. A list that only names us is exactly the self-promotion
@@ -38,47 +39,52 @@ const rows: Row[] = [
 export default function BestClippingAgencies() {
   return (
     <>
-      <section className="mx-auto max-w-4xl px-4 pt-24 pb-12 sm:px-6">
-        <h1 className="text-5xl font-bold tracking-tight">How to compare clipping agencies</h1>
-        <p className="mt-6 text-lg text-muted">
-          Most rankings of clipping agencies are written by an agency that ranks itself first. This one shows its criteria, so
-          you can check every row yourself.
-        </p>
-      </section>
-      <section className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
-        <h2 className="text-2xl font-semibold tracking-tight">What to compare</h2>
-        <dl className="mt-6 space-y-4">
+      <PageHeader
+        crumbs={[{ name: "Home", href: "/" }, { name: "Compare agencies" }]}
+        title="How to compare clipping agencies."
+        lead={
+          <p>
+            Most rankings of clipping agencies are written by an agency that ranks itself first. This one shows its criteria, so you can check
+            every row yourself.
+          </p>
+        }
+      />
+      <section className={`${SECTION} grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,4fr)_minmax(0,7fr)] lg:gap-20`}>
+        <div className="min-w-0">
+          <SectionHead title="What to compare" />
+        </div>
+        <dl className="min-w-0 divide-y divide-line border-y border-line">
           {criteria.map((c) => (
-            <div key={c.name} className="rounded-2xl border border-line p-5">
+            <div key={c.name} className="grid gap-2 py-5 sm:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] sm:gap-8">
               <dt className="font-display font-semibold">{c.name}</dt>
-              <dd className="mt-1 text-muted">{c.body}</dd>
+              <dd className="leading-relaxed text-muted">{c.body}</dd>
             </div>
           ))}
         </dl>
       </section>
-      <section className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-        <h2 className="text-2xl font-semibold tracking-tight">Side by side</h2>
-        <div className="mt-6 overflow-x-auto rounded-2xl border border-line">
-          <table className="w-full text-left text-sm">
-            <thead className="border-b border-line text-muted">
-              <tr>
-                <th className="px-5 py-3 font-normal">Agency</th>
+      <section className={`rv ${CONTAINER} pb-16`}>
+        <SectionHead title="Side by side" />
+        <div className="mt-8 overflow-x-auto">
+          <table className="w-full min-w-[720px] text-left text-sm">
+            <thead className="border-b border-line">
+              <tr className="font-label text-[9px] tracking-[0.14em] text-muted uppercase">
+                <th className="py-3 pr-5 font-normal">Agency</th>
                 <th className="px-5 py-3 font-normal">Model</th>
                 <th className="px-5 py-3 font-normal">Minimum</th>
                 <th className="px-5 py-3 font-normal">Network</th>
                 <th className="px-5 py-3 font-normal">Proof</th>
-                <th className="px-5 py-3 font-normal">Checked</th>
+                <th className="py-3 pl-5 font-normal">Checked</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-line">
               {rows.map((r) => (
                 <tr key={r.name}>
-                  <td className="px-5 py-3 font-medium">{r.name}</td>
-                  <td className="px-5 py-3">{r.model}</td>
-                  <td className="px-5 py-3 font-display font-semibold tabular-nums">{r.minimum}</td>
-                  <td className="px-5 py-3">{r.network}</td>
-                  <td className="px-5 py-3">{r.proof}</td>
-                  <td className="px-5 py-3 font-display font-semibold tabular-nums text-muted">{r.verifiedOn}</td>
+                  <td className="py-4 pr-5 font-display font-semibold">{r.name}</td>
+                  <td className="px-5 py-4 text-fg/85">{r.model}</td>
+                  <td className="px-5 py-4 font-display font-semibold tabular-nums">{r.minimum}</td>
+                  <td className="px-5 py-4 text-fg/85">{r.network}</td>
+                  <td className="px-5 py-4 text-fg/85">{r.proof}</td>
+                  <td className="py-4 pl-5 font-display font-semibold text-muted tabular-nums">{r.verifiedOn}</td>
                 </tr>
               ))}
             </tbody>

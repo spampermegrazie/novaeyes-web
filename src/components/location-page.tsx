@@ -5,19 +5,15 @@ import { facts } from "@/content/facts";
 import { getLocation, type Location } from "@/content/locations";
 import { Cta } from "./cta";
 import { JsonLd, faqJsonLd, serviceJsonLd, breadcrumbJsonLd } from "./json-ld";
-import { ShinyButton } from "@/components/ui/shiny-button";
 import { WhoWeClipFor } from "./who-we-clip-for";
+import { Eyebrow, FaqSection, HeaderActions, PageHeader, Rule, SECTION, SectionHead } from "./page-kit";
 
-// Location pages (/clipping-agency/[slug]), in the site style: a hero with the market's
+// Location pages (/clipping-agency/[slug]), in the site style: a header with the market's
 // short-form audience, audience targeting, the market, the ad disclosure rules with a source,
-// results, what we clip, short answers, other markets. Every word is in the server HTML, and the
+// results, what we clip, short answers, other markets. Open layouts, collapsible FAQs. Every word is in the server HTML, and the
 // question headings are H2s for search and AI answers. Data lives in content/locations.ts.
 
 export const LOCATIONS_UPDATED = "November 2026";
-
-function Eyebrow({ children }: { children: React.ReactNode }) {
-  return <p className="font-label text-[10px] tracking-[0.14em] text-muted uppercase">{children}</p>;
-}
 
 function Mark({ ok }: { ok: boolean }) {
   return ok ? (
@@ -64,87 +60,64 @@ export function LocationPage({ location: l }: { location: Location }) {
       />
 
       <article>
-        {/* hero */}
-        <header className="mx-auto grid max-w-6xl gap-12 px-6 pt-16 pb-20 sm:px-10 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:items-center lg:gap-10 lg:px-12 lg:pt-20">
-          <div className="min-w-0">
-            <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-y-1 font-label text-[10px] tracking-[0.14em] text-muted uppercase">
-              <Link href="/" className="transition-colors hover:text-fg">
-                Home
-              </Link>
-              <span className="mx-2 text-muted/50">/</span>
-              <Link href="/solutions" className="transition-colors hover:text-fg">
-                Solutions
-              </Link>
-              <span className="mx-2 text-muted/50">/</span>
-              <span className="text-fg/80">{l.name}</span>
-            </nav>
-            <h1 className="mt-6 text-4xl leading-[1.02] font-bold tracking-tight break-words text-balance min-[400px]:text-5xl sm:text-6xl">
-              {h1}. <span className="text-muted">Paid per verified view.</span>
-            </h1>
-            {l.lead.map((p, i) => (
-              <p key={p} className={`max-w-2xl text-lg leading-relaxed ${i === 0 ? "mt-7 text-fg/85" : "mt-4 text-muted"}`}>
-                {p}
-              </p>
-            ))}
-            <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-              <ShinyButton href="/book">Book a 15-minute reach audit</ShinyButton>
-              <Link
-                href="/reach-estimator"
-                className="rounded-xl border border-line bg-bg/60 px-6 py-3 text-center font-display text-sm font-semibold backdrop-blur transition-colors hover:border-muted/50"
-              >
-                Estimate your reach
-              </Link>
-            </div>
-            <p className="mt-6 text-xs text-muted">Updated {LOCATIONS_UPDATED}</p>
-          </div>
-
-          {/* the market at a glance */}
-          <div className="relative min-w-0">
-            <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(closest-side,rgb(var(--glow)/0.18),transparent)] lg:-inset-10" />
-            <div className="relative overflow-hidden rounded-2xl border border-line bg-bg-raised/60">
-              <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-line px-5 py-4">
-                <p className="min-w-0 font-label text-[10px] tracking-[0.14em] text-muted uppercase">Short-form audience {l.inName}</p>
-                <span className="flex items-center gap-1.5 rounded-full border border-accent/40 bg-accent/10 px-2.5 py-1 text-[11px] font-semibold text-accent">
-                  <Mark ok />
-                  Targetable
-                </span>
-              </div>
-              <dl className="grid grid-cols-2 gap-px bg-line">
-                {stats.map((s) => (
-                  <div key={s.k} className="flex flex-col justify-between bg-bg px-5 py-5">
-                    <dt className="text-xs text-muted">{s.k}</dt>
-                    <dd className="mt-1.5 font-display text-2xl font-bold tracking-tight tabular-nums">{s.v}</dd>
+        <PageHeader
+          crumbs={[{ name: "Home", href: "/" }, { name: "Solutions", href: "/solutions" }, { name: l.name }]}
+          title={`${h1}.`}
+          muted="Paid per verified view."
+          lead={l.lead.map((p) => (
+            <p key={p}>{p}</p>
+          ))}
+          actions={<HeaderActions />}
+          after={<p className="mt-6 text-xs text-muted/70">Updated {LOCATIONS_UPDATED}</p>}
+          aside={
+            <div className="relative">
+              <div aria-hidden className="pointer-events-none absolute -inset-10 hidden bg-[radial-gradient(closest-side,rgb(var(--glow)/0.16),transparent)] lg:block" />
+              <div className="relative">
+                <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+                  <p className="min-w-0 font-label text-[10px] tracking-[0.14em] text-muted uppercase">Short-form audience {l.inName}</p>
+                  <span className="flex items-center gap-1.5 rounded-full border border-accent/40 bg-accent/10 px-2.5 py-1 text-[11px] font-semibold text-accent">
+                    <Mark ok />
+                    Targetable
+                  </span>
+                </div>
+                <dl className="mt-6 grid grid-cols-2 gap-x-8 gap-y-7">
+                  {stats.map((s) => (
+                    <div key={s.k} className="border-t border-line pt-4">
+                      <dt className="text-xs text-muted">{s.k}</dt>
+                      <dd className="mt-1.5 font-display text-2xl font-bold tracking-tight tabular-nums">{s.v}</dd>
+                    </div>
+                  ))}
+                </dl>
+                <dl className="mt-7 space-y-2 border-t border-line pt-4 text-sm">
+                  <div className="flex gap-3">
+                    <dt className="w-24 shrink-0 text-muted">Languages</dt>
+                    <dd className="text-fg/85">{l.languages}</dd>
                   </div>
-                ))}
-              </dl>
-              <dl className="space-y-2 border-t border-line px-5 py-4 text-sm">
-                <div className="flex gap-3">
-                  <dt className="w-24 shrink-0 text-muted">Languages</dt>
-                  <dd className="text-fg/85">{l.languages}</dd>
-                </div>
-                <div className="flex gap-3">
-                  <dt className="w-24 shrink-0 text-muted">Time zone</dt>
-                  <dd className="text-fg/85">{l.timeZone}</dd>
-                </div>
-              </dl>
-              <p className="border-t border-line px-5 py-3 text-[11px] text-muted">
-                Ad reach in late 2025.{" "}
-                <a href={l.stats.sourceUrl} target="_blank" rel="noopener" className="underline decoration-line underline-offset-2 hover:text-fg">
-                  Source: DataReportal, Digital 2026
-                </a>
-              </p>
+                  <div className="flex gap-3">
+                    <dt className="w-24 shrink-0 text-muted">Time zone</dt>
+                    <dd className="text-fg/85">{l.timeZone}</dd>
+                  </div>
+                </dl>
+                <p className="mt-4 text-[11px] text-muted/80">
+                  Ad reach in late 2025.{" "}
+                  <a href={l.stats.sourceUrl} target="_blank" rel="noopener" className="underline decoration-line underline-offset-2 hover:text-fg">
+                    Source: DataReportal, Digital 2026
+                  </a>
+                </p>
+              </div>
             </div>
-          </div>
-        </header>
+          }
+        />
 
         {/* audience targeting */}
-        <section id="targeting" className="mx-auto grid max-w-6xl gap-10 px-6 pb-24 sm:px-10 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:items-center lg:px-12">
-          <div>
-            <Eyebrow>Audience targeting</Eyebrow>
-            <h2 className="mt-4 text-3xl tracking-tight text-balance sm:text-4xl">
-              Can you target viewers {l.inName} only? <span className="text-muted">Yes.</span>
-            </h2>
-            <p className="mt-5 max-w-2xl text-lg leading-relaxed text-fg/85">
+        <section id="targeting" className={`${SECTION} grid grid-cols-1 gap-14 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:items-center lg:gap-20`}>
+          <div className="min-w-0">
+            <SectionHead
+              eyebrow="Audience targeting"
+              title={`Can you target viewers ${l.inName} only?`}
+              muted="Yes."
+            />
+            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-fg/85">
               You choose {l.inName.replace(/^in /, "")} as the target, plus the age groups and genders you want, and
               only views from that audience count. We brief clippers whose audiences are there, track where every clip&apos;s viewers are,
               and show the audience split in your dashboard and every report.
@@ -154,17 +127,17 @@ export function LocationPage({ location: l }: { location: Location }) {
               difference between buying views and buying the right views.
             </p>
           </div>
-          <ul className="space-y-2.5 rounded-2xl border border-line bg-bg-raised/40 p-5 font-[family-name:var(--font-geist-mono)] text-xs sm:p-6" aria-label="Example: which views get paid">
-            <li className="pb-1 font-label text-[9px] tracking-[0.14em] text-muted uppercase">Example: which views get paid</li>
+          <ul className="min-w-0 font-[family-name:var(--font-geist-mono)] text-xs" aria-label="Example: which views get paid">
+            <li className="pb-3 font-label text-[9px] tracking-[0.14em] text-muted uppercase">Example: which views get paid</li>
             {[
               { k: `Viewers ${l.inName}, in your age range`, ok: true },
               { k: "Viewers in other countries", ok: false },
               { k: "Outside your age range", ok: false },
               { k: "Views that cannot be verified", ok: false },
             ].map((r) => (
-              <li key={r.k} className={`flex items-center justify-between gap-4 rounded-lg border px-3.5 py-2.5 ${r.ok ? "border-accent/40 bg-accent/[0.06]" : "border-line bg-bg"}`}>
+              <li key={r.k} className="flex items-center justify-between gap-4 border-t border-line py-4 last:border-b">
                 <span className={r.ok ? "text-fg" : "text-muted"}>{r.k}</span>
-                <span className={`flex items-center gap-1.5 ${r.ok ? "text-accent" : "text-muted/70"}`}>
+                <span className={`flex shrink-0 items-center gap-1.5 ${r.ok ? "text-accent [text-shadow:0_0_12px_rgb(var(--glow)/0.6)]" : "text-muted/70"}`}>
                   <Mark ok={r.ok} />
                   {r.ok ? "paid" : "$0"}
                 </span>
@@ -173,64 +146,57 @@ export function LocationPage({ location: l }: { location: Location }) {
           </ul>
         </section>
 
-        {/* the market */}
-        <section id="market" className="mx-auto max-w-6xl px-6 pb-24 sm:px-10 lg:px-12">
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className="rounded-2xl border border-line bg-bg-raised/40 p-6 sm:p-8">
-              <Eyebrow>The market</Eyebrow>
-              <h2 className="mt-3 text-2xl tracking-tight text-balance">{l.market.heading}</h2>
-              {l.market.body.map((p) => (
-                <p key={p} className="mt-3 leading-relaxed text-muted">
-                  {p}
-                </p>
-              ))}
-            </div>
-            <div className="rounded-2xl border border-line bg-bg-raised/40 p-6 sm:p-8">
-              <Eyebrow>Ad rules</Eyebrow>
-              <h2 className="mt-3 text-2xl tracking-tight text-balance">{l.rules.heading}</h2>
-              {l.rules.body.map((p) => (
-                <p key={p} className="mt-3 leading-relaxed text-muted">
-                  {p}
-                </p>
-              ))}
-              <p className="mt-4 text-xs text-muted">
-                Source:{" "}
-                <a href={l.rules.sourceUrl} target="_blank" rel="noopener" className="underline decoration-line underline-offset-2 hover:text-fg">
-                  {l.rules.sourceLabel}
-                </a>
-                . A summary, not legal advice.
+        {/* the market and the ad rules */}
+        <section id="market" className={`${SECTION} grid grid-cols-1 gap-14 md:grid-cols-2 md:gap-16`}>
+          <div className="min-w-0">
+            <Rule on />
+            <Eyebrow className="mt-6">The market</Eyebrow>
+            <h2 className="mt-3 text-2xl tracking-tight text-balance">{l.market.heading}</h2>
+            {l.market.body.map((p) => (
+              <p key={p} className="mt-3 leading-relaxed text-muted">
+                {p}
               </p>
-            </div>
+            ))}
+          </div>
+          <div className="min-w-0">
+            <Rule />
+            <Eyebrow className="mt-6">Ad rules</Eyebrow>
+            <h2 className="mt-3 text-2xl tracking-tight text-balance">{l.rules.heading}</h2>
+            {l.rules.body.map((p) => (
+              <p key={p} className="mt-3 leading-relaxed text-muted">
+                {p}
+              </p>
+            ))}
+            <p className="mt-4 text-xs text-muted">
+              Source:{" "}
+              <a href={l.rules.sourceUrl} target="_blank" rel="noopener" className="underline decoration-line underline-offset-2 hover:text-fg">
+                {l.rules.sourceLabel}
+              </a>
+              . A summary, not legal advice.
+            </p>
           </div>
         </section>
 
         {/* results */}
         {proof.length > 0 && (
-          <section id="results" className="mx-auto max-w-6xl px-6 pb-24 sm:px-10 lg:px-12">
-            <Eyebrow>Results</Eyebrow>
-            <h2 className="mt-4 max-w-3xl text-3xl tracking-tight text-balance sm:text-4xl">
-              Documented results. <span className="text-muted">Counted on the platforms.</span>
-            </h2>
-            {l.proofNote && <p className="mt-4 max-w-2xl text-muted">{l.proofNote}</p>}
-            <ul className={`mt-8 grid gap-4 ${proof.length > 1 ? "md:grid-cols-2" : ""}`}>
+          <section id="results" className={SECTION}>
+            <SectionHead eyebrow="Results" title="Documented results." muted="Counted on the platforms." intro={l.proofNote} />
+            <ul className="mt-10 divide-y divide-line border-y border-line">
               {proof.map((c) => (
                 <li key={c.slug}>
-                  <Link
-                    href={`/case-studies/${c.slug}`}
-                    className="group flex h-full flex-col gap-5 rounded-2xl border border-line bg-bg-raised/40 p-6 transition-colors hover:border-accent/50"
-                  >
-                    <div className="flex items-center gap-3">
+                  <Link href={`/case-studies/${c.slug}`} className="group flex flex-col gap-4 py-6 sm:flex-row sm:items-center sm:gap-8">
+                    <div className="flex min-w-48 items-center gap-3">
                       {c.visual && (
                         <span className="h-10 w-10 overflow-hidden rounded-full border border-line bg-bg">
                           <Image src={c.visual.avatar} alt="" width={40} height={40} className="h-full w-full object-cover" />
                         </span>
                       )}
                       <div>
-                        <p className="font-display font-semibold">{c.client}</p>
+                        <p className="font-display font-semibold transition-colors group-hover:text-accent">{c.client}</p>
                         <p className="font-label text-[9px] tracking-[0.14em] text-muted uppercase">{c.category}</p>
                       </div>
                     </div>
-                    <dl className="grid grid-cols-3 gap-4">
+                    <dl className="grid flex-1 grid-cols-3 gap-4 sm:flex sm:gap-10">
                       <div>
                         <dt className="text-xs text-muted">Views</dt>
                         <dd className="font-display text-xl font-bold tabular-nums">{c.viewsLabel}</dd>
@@ -248,8 +214,8 @@ export function LocationPage({ location: l }: { location: Location }) {
                         </div>
                       )}
                     </dl>
-                    <span className="mt-auto font-display text-sm font-semibold text-accent transition-colors group-hover:text-fg">
-                      Read the {c.client} case study →
+                    <span className="hidden text-sm text-muted transition-colors group-hover:text-accent sm:inline" aria-hidden>
+                      →
                     </span>
                   </Link>
                 </li>
@@ -270,46 +236,27 @@ export function LocationPage({ location: l }: { location: Location }) {
         id="services"
       />
 
-      {/* short answers + other markets */}
-      <section id="faq" className="mx-auto max-w-6xl px-6 pb-16 sm:px-10 lg:px-12">
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,4fr)_minmax(0,7fr)] lg:gap-16">
-          <div>
-            <Eyebrow>FAQ</Eyebrow>
-            <h2 className="mt-4 text-3xl tracking-tight text-balance sm:text-4xl">
-              Clipping {l.inName}. <span className="text-muted">Short answers.</span>
-            </h2>
-            <div className="mt-10">
-              <Eyebrow>Other markets</Eyebrow>
-              <ul className="mt-3 flex flex-wrap gap-2">
-                {nearby.map((n) => (
-                  <li key={n.slug}>
-                    <Link
-                      href={`/clipping-agency/${n.slug}`}
-                      className="inline-flex rounded-xl border border-line bg-bg-raised/50 px-3.5 py-2 font-display text-sm font-semibold transition-colors hover:border-accent/50"
-                    >
-                      {n.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-              <Link href="/solutions" className="mt-5 inline-block font-display text-sm font-semibold text-accent transition-colors hover:text-fg">
-                All solutions →
-              </Link>
-            </div>
+      <FaqSection
+        items={faqs}
+        title={`Clipping ${l.inName}.`}
+        side={
+          <div className="mt-12">
+            <Eyebrow>Other markets</Eyebrow>
+            <ul className="mt-4 space-y-2.5">
+              {nearby.map((n) => (
+                <li key={n.slug}>
+                  <Link href={`/clipping-agency/${n.slug}`} className="font-display text-sm font-semibold text-fg/85 transition-colors hover:text-accent">
+                    {n.name} →
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <Link href="/solutions" className="mt-5 inline-block font-display text-sm font-semibold text-accent transition-colors hover:text-fg">
+              All solutions →
+            </Link>
           </div>
-          <dl className="space-y-3">
-            {faqs.map((f, i) => (
-              <div key={f.q} className="rounded-2xl border border-line bg-bg-raised/40 p-5 sm:p-6">
-                <dt className="flex gap-4 font-display font-semibold">
-                  <span className="font-label text-[10px] leading-6 tracking-[0.14em] text-accent">{String(i + 1).padStart(2, "0")}</span>
-                  {f.q}
-                </dt>
-                <dd className="mt-2 leading-relaxed text-muted sm:pl-9">{f.a}</dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-      </section>
+        }
+      />
       <Cta />
     </>
   );

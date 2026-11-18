@@ -55,7 +55,7 @@ export function ResultsShowcase({ campaigns }: { campaigns: Campaign[] }) {
     ) : null;
 
   return (
-    <div ref={ref} className="grid gap-10 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] lg:gap-16">
+    <div ref={ref} className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] lg:gap-16">
       {/* Mobile: campaigns as a swipeable row */}
       <div role="tablist" aria-label="Campaigns" className="group/list -mx-6 flex snap-x scroll-px-6 gap-2 overflow-x-auto px-6 pb-1 lg:hidden">
         {campaigns.map((c, i) => (

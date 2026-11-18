@@ -4,6 +4,7 @@ import { getPost, getPosts, sanitizePostHtml, formatDate } from "@/lib/blog";
 import { facts } from "@/content/facts";
 import { Cta } from "@/components/cta";
 import { JsonLd, breadcrumbJsonLd } from "@/components/json-ld";
+import { Breadcrumb } from "@/components/page-kit";
 
 // Cache Components needs at least one param at build time. If the posts can't be
 // fetched during the build, a placeholder keeps the build valid and 404s at runtime.
@@ -69,11 +70,12 @@ export default async function BlogPostPage(props: PageProps<"/blog/[slug]">) {
           { name: post.title, path: `/blog/${post.slug}` },
         ])}
       />
-      <article className="mx-auto max-w-3xl px-4 pt-24 pb-12 sm:px-6">
-        <p className="text-sm text-muted">
+      <article className="mx-auto max-w-3xl px-6 pt-16 pb-16 sm:px-10 lg:pt-20">
+        <Breadcrumb items={[{ name: "Home", href: "/" }, { name: "Blog", href: "/blog" }, { name: "Post" }]} />
+        <p className="mt-8 text-sm text-muted">
           {formatDate(post.published_at)} · {post.author?.name ?? post.author_name}
         </p>
-        <h1 className="mt-4 text-4xl font-bold tracking-tight sm:text-5xl">{post.title}</h1>
+        <h1 className="mt-4 text-4xl leading-[1.05] font-bold tracking-tight text-balance sm:text-5xl">{post.title}</h1>
         <p className="mt-6 text-lg text-muted">{post.excerpt}</p>
         {post.cover_image_url && (
           // eslint-disable-next-line @next/next/no-img-element

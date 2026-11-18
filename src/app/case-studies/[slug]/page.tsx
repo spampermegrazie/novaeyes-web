@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { cpmText, getCampaign, publicCampaigns } from "@/content/campaigns";
 import { Cta } from "@/components/cta";
+import { Breadcrumb, H1_CLASS, Rule } from "@/components/page-kit";
 import { CountUp } from "@/components/ui/count-up";
 import { JsonLd, breadcrumbJsonLd, faqJsonLd } from "@/components/json-ld";
 import { facts } from "@/content/facts";
@@ -69,7 +69,7 @@ export default async function CaseStudy(props: PageProps<"/case-studies/[slug]">
         ])}
       />
       <article>
-        <header className="relative isolate mx-auto max-w-6xl px-6 pt-20 pb-12 sm:px-10 lg:px-12">
+        <header className="relative isolate mx-auto max-w-6xl px-6 pt-16 pb-16 sm:px-10 lg:px-12 lg:pt-20">
           {v && (
             <div
               aria-hidden
@@ -88,18 +88,9 @@ export default async function CaseStudy(props: PageProps<"/case-studies/[slug]">
               />
             </div>
           )}
-          <nav aria-label="Breadcrumb" className="text-sm text-muted">
-            <Link href="/" className="hover:text-fg">
-              Home
-            </Link>{" "}
-            /{" "}
-            <Link href="/case-studies" className="hover:text-fg">
-              Case studies
-            </Link>{" "}
-            / <span>{c.client}</span>
-          </nav>
+          <Breadcrumb items={[{ name: "Home", href: "/" }, { name: "Case studies", href: "/case-studies" }, { name: c.client }]} />
           <p className="mt-8 font-label text-[10px] tracking-[0.14em] text-accent uppercase">{c.category}</p>
-          <h1 className="mt-3 text-5xl tracking-tight sm:text-6xl">{c.client}</h1>
+          <h1 className={`mt-3 ${H1_CLASS}`}>{c.client}</h1>
           <p className="mt-10 font-display text-5xl leading-none font-bold tracking-tight sm:text-7xl lg:text-8xl">
             <CountUp value={exact} />
           </p>
@@ -123,14 +114,15 @@ export default async function CaseStudy(props: PageProps<"/case-studies/[slug]">
             {c.highlight}
           </p>
 
-          <section aria-labelledby="in-short" className="mt-12">
+          <section aria-labelledby="in-short" className="mt-16">
             <h2 id="in-short" className="font-label text-[10px] tracking-[0.14em] text-muted uppercase">
               The {c.client} campaign in short
             </h2>
-            <dl className="mt-4 grid gap-3 md:grid-cols-3">
-              {qa.map((x) => (
-                <div key={x.q} className="rounded-2xl border border-line bg-bg-raised/40 p-5">
-                  <dt className="font-display font-semibold">{x.q}</dt>
+            <dl className="mt-6 grid grid-cols-1 gap-10 md:grid-cols-3">
+              {qa.map((x, i) => (
+                <div key={x.q} className="min-w-0">
+                  <Rule on={i === 0} />
+                  <dt className="mt-5 font-display font-semibold">{x.q}</dt>
                   <dd className="mt-2 text-sm leading-relaxed text-muted">{x.a}</dd>
                 </div>
               ))}

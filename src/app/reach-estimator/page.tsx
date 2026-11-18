@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { ReachEstimator } from "@/components/reach-estimator";
 import { JsonLd, faqJsonLd, breadcrumbJsonLd } from "@/components/json-ld";
 import { facts } from "@/content/facts";
+import { Breadcrumb, FaqSection, H1_CLASS } from "@/components/page-kit";
 
 export const metadata: Metadata = {
   title: "Clipping Reach Estimator: Views for Your Budget",
@@ -35,15 +35,9 @@ export default function ReachEstimatorPage() {
     <>
       <JsonLd data={faqJsonLd(faqs)} />
       <JsonLd data={breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "Reach estimator", path: "/reach-estimator" }])} />
-      <section className="mx-auto max-w-6xl px-6 pt-20 pb-24 sm:px-10 lg:px-12">
-        <nav aria-label="Breadcrumb" className="text-sm text-muted">
-          <Link href="/" className="hover:text-fg">
-            Home
-          </Link>{" "}
-          / <span>Reach estimator</span>
-        </nav>
-        <p className="mt-8 font-label text-[10px] tracking-[0.14em] text-muted uppercase">Reach estimator</p>
-        <h1 className="mt-4 max-w-4xl text-4xl tracking-tight text-balance sm:text-5xl lg:text-6xl">
+      <section className="mx-auto max-w-6xl px-6 pt-16 pb-24 sm:px-10 lg:px-12 lg:pt-20">
+        <Breadcrumb items={[{ name: "Home", href: "/" }, { name: "Reach estimator" }]} />
+        <h1 className={`mt-8 max-w-4xl ${H1_CLASS}`}>
           Estimate your reach. <span className="text-muted">See what your budget turns into.</span>
         </h1>
         <div className="mt-16">
@@ -51,17 +45,7 @@ export default function ReachEstimatorPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-6 pb-24 sm:px-10 lg:px-12 *:max-w-3xl">
-        <h2 className="text-3xl tracking-tight sm:text-4xl">Questions about the estimate</h2>
-        <dl className="mt-10 divide-y divide-line border-y border-line">
-          {faqs.map((f) => (
-            <div key={f.q} className="py-6">
-              <dt className="font-display font-semibold">{f.q}</dt>
-              <dd className="mt-2 leading-relaxed text-muted">{f.a}</dd>
-            </div>
-          ))}
-        </dl>
-      </section>
+      <FaqSection items={faqs} title="Questions about the estimate." />
     </>
   );
 }

@@ -75,9 +75,9 @@ export function EngineSteps({ steps, intro }: { steps: [EngineStep, EngineStep, 
                     <span
                       aria-hidden
                       className={`absolute top-0 left-0 z-10 flex h-8 w-8 items-center justify-center rounded-full border font-label text-[11px] transition-all duration-500 lg:hidden ${
-                        reached || reduced
+                        reached
                           ? "border-accent bg-accent text-accent-ink shadow-[0_0_24px_rgb(var(--glow)/0.5)]"
-                          : "border-line bg-bg text-muted"
+                          : "border-line bg-bg text-muted motion-reduce:border-accent motion-reduce:bg-accent motion-reduce:text-accent-ink"
                       }`}
                     >
                       {i + 1}

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { publicCampaigns, totalPublicViews } from "@/content/campaigns";
 import { CampaignCard } from "@/components/campaign-card";
 import { Cta } from "@/components/cta";
+import { CONTAINER, PageHeader } from "@/components/page-kit";
+import { breadcrumbJsonLd, JsonLd } from "@/components/json-ld";
 import { formatCompact } from "@/lib/estimator";
 
 export const metadata: Metadata = {
@@ -14,17 +16,21 @@ export const metadata: Metadata = {
 export default function CaseStudies() {
   return (
     <>
-      <section className="mx-auto max-w-6xl px-4 pt-24 pb-12 sm:px-6">
-        <h1 className="text-5xl font-bold tracking-tight sm:text-6xl">Case studies</h1>
-        <p className="mt-6 max-w-2xl text-lg text-muted">
-          {formatCompact(totalPublicViews)} views across {publicCampaigns.length} published campaigns. Every figure comes from
-          the campaign dashboard.
-        </p>
-      </section>
-      <section className="mx-auto grid max-w-6xl gap-4 px-4 pb-12 sm:px-6 md:grid-cols-2 lg:grid-cols-3">
-        {publicCampaigns.map((c) => (
-          <CampaignCard key={c.slug} campaign={c} />
-        ))}
+      <JsonLd data={breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "Case studies", path: "/case-studies" }])} />
+      <PageHeader
+        crumbs={[{ name: "Home", href: "/" }, { name: "Case studies" }]}
+        title="Case studies."
+        muted={`${formatCompact(totalPublicViews)} views across ${publicCampaigns.length} published campaigns.`}
+        lead={<p>Every figure comes from the campaign dashboard.</p>}
+      />
+      <section className={`${CONTAINER} pb-24`}>
+        <ul className="grid grid-cols-1 gap-x-10 gap-y-16 md:grid-cols-2 lg:grid-cols-3">
+          {publicCampaigns.map((c, i) => (
+            <li key={c.slug} className="min-w-0">
+              <CampaignCard campaign={c} first={i === 0} />
+            </li>
+          ))}
+        </ul>
       </section>
       <Cta />
     </>
