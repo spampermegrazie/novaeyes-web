@@ -464,28 +464,3 @@ h2, h3, h4 { font-weight: 600; }
 .pr-range:focus-visible::-webkit-slider-thumb { outline: 2px solid #fff; outline-offset: 2px; }
 .pr-range:focus-visible::-moz-range-thumb { outline: 2px solid #fff; outline-offset: 2px; }
 
-/* Pricing infographics (src/components/pricing/*). */
-.pr-lit { animation: pr-lit 5.4s ease-in-out infinite backwards; }
-@keyframes pr-lit {
-  0%, 100% { border-color: var(--line); background-color: transparent; color: var(--muted); }
-  18%, 58% { border-color: rgb(var(--glow) / 0.7); background-color: rgb(var(--glow) / 0.14); color: var(--fg); }
-}
-.pr-rise { transform-origin: bottom; animation: pr-rise 5s cubic-bezier(0.22, 1, 0.36, 1) infinite; }
-@keyframes pr-rise {
-  0% { scale: 1 0.15; }
-  35%, 85% { scale: 1 1; }
-  100% { scale: 1 0.15; }
-}
-.pr-bid { transform-origin: bottom; animation: pr-bid 1.8s ease-in-out infinite alternate; }
-@keyframes pr-bid { from { scale: 1 var(--a); } to { scale: 1 var(--b); } }
-.pr-pulse { animation: ne-pulse 2.2s ease-in-out infinite; }
-.pr-draw { stroke-dasharray: 1; animation: pr-draw 5.5s cubic-bezier(0.45, 0, 0.25, 1) infinite backwards; }
-@keyframes pr-draw {
-  0% { stroke-dashoffset: 1; opacity: 1; }
-  55%, 88% { stroke-dashoffset: 0; opacity: 1; }
-  100% { stroke-dashoffset: 0; opacity: 0; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .pr-lit, .pr-rise, .pr-bid, .pr-pulse, .pr-draw { animation: none; }
-  .pr-bid { scale: 1 var(--b); }
-}

@@ -59,10 +59,6 @@ export function FeeSplit() {
     <div className="relative overflow-hidden rounded-3xl border border-line bg-bg-raised/30 p-5 sm:p-8">
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(var(--line)_1px,transparent_1px)] [mask-image:radial-gradient(ellipse_70%_60%_at_50%_55%,#000_30%,transparent_100%)] [background-size:22px_22px]"
-      />
-      <div
-        aria-hidden
         className="pointer-events-none absolute top-1/2 left-1/2 h-72 w-[36rem] max-w-[140%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgb(var(--glow)/0.14),transparent)]"
       />
 
