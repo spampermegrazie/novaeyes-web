@@ -157,7 +157,7 @@ export default function Pricing() {
             <span className="mx-2 text-muted/50">/</span>
             <span className="text-fg/80">Pricing</span>
           </nav>
-          <h1 className="mt-8 max-w-4xl text-[2.6rem] leading-[1.02] font-bold tracking-tight text-balance min-[400px]:text-5xl sm:text-6xl lg:text-7xl">
+          <h1 className="mt-8 max-w-3xl text-[2.6rem] leading-[1.02] font-bold tracking-tight text-balance min-[400px]:text-5xl sm:text-6xl">
             Clipping agency pricing. <span className="text-muted">From {facts.minimumBudgetLabel}, paid per verified view.</span>
           </h1>
           <p className="mt-8 max-w-2xl text-lg leading-relaxed text-muted">
